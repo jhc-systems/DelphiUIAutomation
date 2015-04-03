@@ -8,20 +8,17 @@ uses
 
 type
   TAutomationTabItem = class (TAutomationBase)
-  strict private
-    Felement : IUIAutomationElement;
-  private
-    function getName: string;
   public
     constructor Create(element : IUIAutomationElement);
     procedure Select;
 
-    property Name : string read getName;
+    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.Automation,
   DelphiUIAutomation.AutomationPatternIDs;
 
 { TAutomationTabItem }
@@ -31,13 +28,45 @@ begin
   FElement := element;
 end;
 
-function TAutomationTabItem.getName: string;
+procedure TAutomationTabItem.ListControlsAndStuff(
+  element: IUIAutomationElement);
 var
-  name : widestring;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name, help : widestring;
+  length : integer;
+  retVal : integer;
 
 begin
-  FElement.Get_CurrentName(name);
-  result := name;
+  UIAuto.CreateTrueCondition(condition);
+
+  if (element = nil) then
+    element := self.FElement;
+
+  // Find the element
+  element.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentName(name);
+    element.Get_CurrentControlType(retVal);
+    element.Get_CurrentHelpText(help);
+
+    Write(name + ' - ');
+    Write(retval);
+    Writeln(' - ' + help);
+
+//    if retval = UIA_PaneControlTypeId then
+//    begin
+//      writeln('Looking at children');
+//      ListControlsAndStuff(element);
+ //   end;
+  end;
 end;
 
 procedure TAutomationTabItem.Select;
@@ -55,14 +84,6 @@ begin
       Pattern.Invoke;
     end;
   end;
-
-  // Select it somehow
-(*
-SelectionItemPattern changeTab_aeTabPage = aeTabPage.GetCurrentPattern(SelectionItemPattern.Pattern) as SelectionItemPattern;
-
-changeTab_aeTabPage.Select();
-*)
-
 end;
 
 end.

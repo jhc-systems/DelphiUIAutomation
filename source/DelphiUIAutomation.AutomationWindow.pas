@@ -12,22 +12,15 @@ uses
 
 type
   TAutomationWindow = class (TAutomationBase)
-  strict private
-    FElement : IUIAutomationElement;
-  private
-    function getName: string;
   public
     constructor create(element : IUIAutomationElement);
 
-    //function ModalWindow(const title : string; option : InitializeOption); overload;
     function Window (const title : string) : TAutomationWindow;
     function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
     function GetComboboxByIndex (index : integer) : TAutomationComboBox;
     function GetButton (const title : string) : TAutomationButton;
     function GetTab : TAutomationTab;
     procedure Focus;
-
-    property Name : string read getName;
 
     procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
   end;
@@ -90,15 +83,6 @@ begin
 
   if result = nil then
     raise Exception.Create('Unable to find button');
-end;
-
-function TAutomationWindow.getName: string;
-var
-  name : widestring;
-
-begin
-  FElement.Get_CurrentName(name);
-  result := name;
 end;
 
 function TAutomationWindow.GetComboboxByIndex (index : integer) : TAutomationComboBox;

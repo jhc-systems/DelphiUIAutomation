@@ -11,18 +11,21 @@ uses
 type
   TAutomationTab = class (TAutomationBase)
   strict private
-    Felement : IUIAutomationElement;
     FTabItems : TList<TAutomationTabItem>;
+    FSelectedItem : TAutomationTabItem;
   private
-    function getName: string;
+    function GetSelectedItem: TAutomationTabItem;
   public
     constructor Create(element : IUIAutomationElement);
 
     function Click : HResult;
     procedure SelectTabPage(const value : string);
-    property Name : string read getName;
 
     property Pages : TList<TAutomationTabItem> read FTabItems;
+
+    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
+
+    property SelectedItem : TAutomationTabItem read GetSelectedItem;
   end;
 
 implementation
@@ -90,19 +93,53 @@ begin
     if (retval = UIA_TabItemControlTypeId) then
     begin
       FTabItems.Add(TAutomationTabItem.create(element));
-//      element.Get_CurrentName(name);
-//      writeln(name);
     end;
   end;
 end;
 
-function TAutomationTab.getName: string;
+function TAutomationTab.GetSelectedItem: TAutomationTabItem;
+begin
+  result := self.FSelectedItem;
+end;
+
+procedure TAutomationTab.ListControlsAndStuff(element: IUIAutomationElement);
 var
-  name : widestring;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name, help : widestring;
+  length : integer;
+  retVal : integer;
 
 begin
-  FElement.Get_CurrentName(name);
-  result := name;
+  UIAuto.CreateTrueCondition(condition);
+
+  if (element = nil) then
+    element := self.FElement;
+
+  // Find the element
+  element.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentName(name);
+    element.Get_CurrentControlType(retVal);
+    element.Get_CurrentHelpText(help);
+
+    Write(name + ' - ');
+    Write(retval);
+    Writeln(' - ' + help);
+
+    if retval = UIA_PaneControlTypeId then
+    begin
+      writeln('Looking at children');
+      ListControlsAndStuff(element);
+    end;
+  end;
 end;
 
 procedure TAutomationTab.SelectTabPage(const value: string);
@@ -115,6 +152,7 @@ begin
     if self.FTabItems[count].Name = value then
     begin
       self.FTabItems[count].Select;
+      FSelectedItem := self.FTabItems[count];
       break;
     end;
   end;

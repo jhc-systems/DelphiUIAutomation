@@ -49,6 +49,8 @@ begin
   tab := enquiry.GetTab;
   tab.SelectTabPage('TabSheet2');     // 3 is the magic number
 
+  tab.selectedItem.ListControlsAndStuff(nil);
+
   // 5. Click the fetch button
   mouse := TAutomationMouse.Create;
   mouse.Location := TPoint.Create(370, 160);

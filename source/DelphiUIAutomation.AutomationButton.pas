@@ -8,15 +8,10 @@ uses
 
 type
   TAutomationButton = class (TAutomationBase)
-  strict private
-    Felement : IUIAutomationElement;
-  private
-    function getName: string;
   public
     constructor Create(element : IUIAutomationElement);
 
     function Click : HResult;
-    property Name : string read getName;
   end;
 
 implementation
@@ -50,15 +45,6 @@ end;
 constructor TAutomationButton.Create(element: IUIAutomationElement);
 begin
   Felement := element;
-end;
-
-function TAutomationButton.getName: string;
-var
-  name : widestring;
-
-begin
-  FElement.Get_CurrentName(name);
-  result := name;
 end;
 
 end.

@@ -8,17 +8,13 @@ uses
 
 type
   TAutomationTextBox = class (TAutomationBase)
-  strict private
-    Felement : IUIAutomationElement;
   private
-    function getName: string;
     function getIsPassword: boolean;
     function getIsReadOnly: boolean;
     function getText: string;
     procedure setText(const Value: string);
   public
     constructor Create(element : IUIAutomationElement);
-    property Name : string read getName;
     property Text : string read getText write setText;
     property IsPassword : boolean read getIsPassword;
     property IsReadOnly : boolean read getIsReadOnly;
@@ -50,15 +46,6 @@ end;
 function TAutomationTextBox.getIsReadOnly: boolean;
 begin
   result := false;
-end;
-
-function TAutomationTextBox.getName: string;
-var
-  name : widestring;
-
-begin
-  FElement.Get_CurrentName(name);
-  result := name;
 end;
 
 function TAutomationTextBox.getText: string;

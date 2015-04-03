@@ -8,15 +8,11 @@ uses
 
 type
   TAutomationComboBox = class (TAutomationBase)
-  strict private
-    Felement : IUIAutomationElement;
   private
-    function getName: string;
     function getText: string;
     procedure setText(const Value: string);
   public
     constructor Create(element : IUIAutomationElement);
-    property Name : string read getName;
     property Text : string read getText write setText;
   end;
 
@@ -31,15 +27,6 @@ uses
 constructor TAutomationComboBox.Create(element: IUIAutomationElement);
 begin
   Felement := element;
-end;
-
-function TAutomationComboBox.getName: string;
-var
-  name : widestring;
-
-begin
-  FElement.Get_CurrentName(name);
-  result := name;
 end;
 
 function TAutomationComboBox.getText: string;
