@@ -12,7 +12,6 @@ type
     function getText: string;
     procedure setText(const Value: string);
   public
-    constructor Create(element : IUIAutomationElement);
     property Text : string read getText write setText;
   end;
 
@@ -23,11 +22,6 @@ uses
   sysutils;
 
 { TAutomationComboBox }
-
-constructor TAutomationComboBox.Create(element: IUIAutomationElement);
-begin
-  Felement := element;
-end;
 
 function TAutomationComboBox.getText: string;
 var

@@ -16,8 +16,6 @@ type
   private
     function GetStatusBar : TAutomationStatusbar;
   public
-    constructor create(element : IUIAutomationElement);
-
     function Window (const title : string) : TAutomationWindow;
     function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
     function GetComboboxByIndex (index : integer) : TAutomationComboBox;
@@ -38,11 +36,6 @@ uses
   sysutils;
 
 { TAutomationWindow }
-
-constructor TAutomationWindow.create(element: IUIAutomationElement);
-begin
-  FElement := element;
-end;
 
 procedure TAutomationWindow.Focus;
 begin
@@ -140,7 +133,6 @@ var
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   count : integer;
-  name : widestring;
   length : integer;
   retVal : integer;
 
@@ -175,7 +167,6 @@ var
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   count : integer;
-  name : widestring;
   length : integer;
   retVal : integer;
 
@@ -211,7 +202,6 @@ var
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   count : integer;
-  name : widestring;
   length : integer;
   retVal : integer;
   counter : integer;

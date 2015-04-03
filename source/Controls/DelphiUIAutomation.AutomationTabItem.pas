@@ -9,7 +9,6 @@ uses
 type
   TAutomationTabItem = class (TAutomationBase)
   public
-    constructor Create(element : IUIAutomationElement);
     procedure Select;
 
     procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
@@ -22,11 +21,6 @@ uses
   DelphiUIAutomation.AutomationPatternIDs;
 
 { TAutomationTabItem }
-
-constructor TAutomationTabItem.Create(element: IUIAutomationElement);
-begin
-  FElement := element;
-end;
 
 procedure TAutomationTabItem.ListControlsAndStuff(
   element: IUIAutomationElement);

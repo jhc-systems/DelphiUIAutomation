@@ -16,7 +16,7 @@ type
   private
     function GetSelectedItem: TAutomationTabItem;
   public
-    constructor Create(element : IUIAutomationElement);
+    constructor Create(element : IUIAutomationElement); override;
 
     function Click : HResult;
     procedure SelectTabPage(const value : string);
@@ -43,15 +43,9 @@ function TAutomationTab.Click : HResult;
 var
   unknown: IInterface;
   Pattern  : IUIAutomationInvokePattern;
-  rect : UIAutomationClient_TLB.tagRECT;
-  mouse : TAutomationMouse;
-  gotIt : integer;
-  name : string;
 
 begin
   result := -1;
-
-  name := self.Name;
 
   fElement.GetCurrentPattern(UIA_InvokePatternID, unknown);
 
@@ -71,10 +65,10 @@ var
   count : integer;
   retval : integer;
   length : integer;
-  name : widestring;
 
 begin
-  FElement := element;
+  inherited Create(element);
+
   FTabItems := TList<TAutomationTabItem>.create;
 
   // See what tabs are there???

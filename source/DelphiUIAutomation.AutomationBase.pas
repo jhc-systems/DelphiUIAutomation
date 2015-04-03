@@ -12,9 +12,15 @@ type
     function getName: string; virtual;
   public
     property Name : string read getName;
+    constructor Create(element : IUIAutomationElement); virtual;
   end;
 
 implementation
+
+constructor TAutomationBase.Create(element: IUIAutomationElement);
+begin
+  Felement := element;
+end;
 
 function TAutomationBase.getName: string;
 var

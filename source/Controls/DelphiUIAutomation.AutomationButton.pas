@@ -9,8 +9,6 @@ uses
 type
   TAutomationButton = class (TAutomationBase)
   public
-    constructor Create(element : IUIAutomationElement);
-
     function Click : HResult;
   end;
 
@@ -40,11 +38,6 @@ begin
       result := Pattern.Invoke;
     end;
   end;
-end;
-
-constructor TAutomationButton.Create(element: IUIAutomationElement);
-begin
-  Felement := element;
 end;
 
 end.

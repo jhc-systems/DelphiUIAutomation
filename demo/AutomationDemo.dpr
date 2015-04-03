@@ -10,20 +10,22 @@ uses
   types,
   DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
   UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
-  DelphiUIAutomation.AutomationWindow in '..\source\DelphiUIAutomation.AutomationWindow.pas',
+  DelphiUIAutomation.AutomationWindow in '..\source\Controls\DelphiUIAutomation.AutomationWindow.pas',
   DelphiUIAutomation.AutomationClient in '..\source\DelphiUIAutomation.AutomationClient.pas',
   DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
-  DelphiUIAutomation.AutomationTextBox in '..\source\DelphiUIAutomation.AutomationTextBox.pas',
+  DelphiUIAutomation.AutomationTextBox in '..\source\Controls\DelphiUIAutomation.AutomationTextBox.pas',
   DelphiUIAutomation.AutomationBase in '..\source\DelphiUIAutomation.AutomationBase.pas',
-  DelphiUIAutomation.AutomationButton in '..\source\DelphiUIAutomation.AutomationButton.pas',
+  DelphiUIAutomation.AutomationButton in '..\source\Controls\DelphiUIAutomation.AutomationButton.pas',
   DelphiUIAutomation.AutomationControlTypeIDs in '..\source\DelphiUIAutomation.AutomationControlTypeIDs.pas',
   DelphiUIAutomation.AutomationPatternIDs in '..\source\DelphiUIAutomation.AutomationPatternIDs.pas',
   DelphiUIAutomation.Mouse in '..\source\DelphiUIAutomation.Mouse.pas',
-  DelphiUIAutomation.AutomationComboBox in '..\source\DelphiUIAutomation.AutomationComboBox.pas',
+  DelphiUIAutomation.AutomationComboBox in '..\source\Controls\DelphiUIAutomation.AutomationComboBox.pas',
   DelphiUIAutomation.AutomationPropertyIDs in '..\source\DelphiUIAutomation.AutomationPropertyIDs.pas',
-  DelphiUIAutomation.AutomationTab in '..\source\DelphiUIAutomation.AutomationTab.pas',
-  DelphiUIAutomation.AutomationTabItem in '..\source\DelphiUIAutomation.AutomationTabItem.pas',
-  DelphiUIAutomation.AutomationStatusbar in '..\source\DelphiUIAutomation.AutomationStatusbar.pas';
+  DelphiUIAutomation.AutomationTab in '..\source\Controls\DelphiUIAutomation.AutomationTab.pas',
+  DelphiUIAutomation.AutomationTabItem in '..\source\Controls\DelphiUIAutomation.AutomationTabItem.pas',
+  DelphiUIAutomation.AutomationStatusbar in '..\source\Controls\DelphiUIAutomation.AutomationStatusbar.pas',
+  DelphiUIAutomation.AutomationCheckbox in '..\source\Controls\DelphiUIAutomation.AutomationCheckbox.pas',
+  DelphiUIAutomation.AutomationRadioButton in '..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas';
 
 var
   FApp : TAutomationClient;

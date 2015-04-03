@@ -14,7 +14,6 @@ type
     function getText: string;
     procedure setText(const Value: string);
   public
-    constructor Create(element : IUIAutomationElement);
     property Text : string read getText write setText;
     property IsPassword : boolean read getIsPassword;
     property IsReadOnly : boolean read getIsReadOnly;
@@ -27,11 +26,6 @@ uses
   sysutils;
 
 { TAutomationTextBox }
-
-constructor TAutomationTextBox.Create(element: IUIAutomationElement);
-begin
-  Felement := element;
-end;
 
 function TAutomationTextBox.getIsPassword: boolean;
 var
