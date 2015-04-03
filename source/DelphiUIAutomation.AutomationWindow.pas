@@ -8,10 +8,13 @@ uses
   DelphiUIAutomation.AutomationComboBox,
   DelphiUIAutomation.AutomationButton,
   DelphiUIAutomation.AutomationTab,
+  DelphiUIAutomation.AutomationStatusbar,
   UIAutomationClient_TLB;
 
 type
   TAutomationWindow = class (TAutomationBase)
+  private
+    function GetStatusBar : TAutomationStatusbar;
   public
     constructor create(element : IUIAutomationElement);
 
@@ -23,6 +26,8 @@ type
     procedure Focus;
 
     procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
+
+    property StatusBar : TAutomationStatusBar read GetStatusBar;
   end;
 
 implementation
@@ -127,6 +132,41 @@ begin
 
   if result = nil then
     raise Exception.Create('Unable to find control');
+end;
+
+function TAutomationWindow.GetStatusBar: TAutomationStatusbar;
+var
+  element : IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name : widestring;
+  length : integer;
+  retVal : integer;
+
+begin
+  result := nil;
+
+  UIAuto.CreateTrueCondition(condition);
+
+  // Find the element
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+    element.Get_CurrentControlType(retVal);
+
+    if (retval = UIA_StatusBarControlTypeId) then
+    begin
+      result := TAutomationStatusbar.create(element);
+    end;
+  end;
+
+  if result = nil then
+    raise Exception.Create('Unable to find statusbar');
 end;
 
 function TAutomationWindow.GetTab : TAutomationTab;

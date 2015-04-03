@@ -3,11 +3,13 @@ unit DelphiUIAutomation.AutomationControlTypeIDs;
 interface
 
 const
+  // Control types - see https://msdn.microsoft.com/en-us/library/windows/desktop/ee671198(v=vs.85).aspx
   UIA_ButtonControlTypeId = 50000;
   UIA_CalendarControlTypeId = 50001;
   UIA_CheckBoxControlTypeId = 50002;
   UIA_ComboBoxControlTypeId = 50003;
   UIA_EditControlTypeId = 50004;
+  UIA_StatusBarControlTypeId = 50017;
   UIA_TabControlTypeId = 50018;
   UIA_TabItemControlTypeId = 50019;
   UIA_PaneControlTypeId = 50033;

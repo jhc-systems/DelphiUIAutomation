@@ -22,7 +22,8 @@ uses
   DelphiUIAutomation.AutomationComboBox in '..\source\DelphiUIAutomation.AutomationComboBox.pas',
   DelphiUIAutomation.AutomationPropertyIDs in '..\source\DelphiUIAutomation.AutomationPropertyIDs.pas',
   DelphiUIAutomation.AutomationTab in '..\source\DelphiUIAutomation.AutomationTab.pas',
-  DelphiUIAutomation.AutomationTabItem in '..\source\DelphiUIAutomation.AutomationTabItem.pas';
+  DelphiUIAutomation.AutomationTabItem in '..\source\DelphiUIAutomation.AutomationTabItem.pas',
+  DelphiUIAutomation.AutomationStatusbar in '..\source\DelphiUIAutomation.AutomationStatusbar.pas';
 
 var
   FApp : TAutomationClient;
@@ -39,17 +40,18 @@ var
   price, quantity, netValue : TAutomationTextBox;
   account, stock, buysell : TAutomationComboBox;
   tab : TAutomationTab;
+  statusBar : TAutomationStatusbar;
 
 begin
   // Now wait for a very long time for the enquiry screen to come up
-  enquiry := TAutomationClient.GetDesktopWindow('Form1');
+  enquiry := TAutomationClient.GetDesktopWindow('Enquiry');
   enquiry.Focus;
 
   // 4. Select the correct tab
   tab := enquiry.GetTab;
-  tab.SelectTabPage('TabSheet2');     // 3 is the magic number
+  tab.SelectTabPage('Accounts');     // 3 is the magic number
 
-  tab.selectedItem.ListControlsAndStuff(nil);
+//  tab.selectedItem.ListControlsAndStuff(nil);
 
   // 5. Click the fetch button
   mouse := TAutomationMouse.Create;
@@ -57,6 +59,9 @@ begin
   mouse.LeftClick;
 
   sleep(8000);
+
+  // Now see whether we can get the statusbar
+  statusBar := enquiry.StatusBar;
 
 end.
 

@@ -136,6 +136,7 @@
         <DCCReference Include="..\source\DelphiUIAutomation.AutomationPropertyIDs.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.AutomationTab.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.AutomationTabItem.pas"/>
+        <DCCReference Include="..\source\DelphiUIAutomation.AutomationStatusbar.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
