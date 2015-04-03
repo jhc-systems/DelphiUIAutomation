@@ -15,10 +15,14 @@ type
     procedure setDoubleClickInterval (value : integer);
 
     procedure MouseLeftButtonUpAndDown;
+    procedure MouseRightButtonUpAndDown;
     procedure LeftDown;
     procedure LeftUp;
+    procedure RightDown;
+    procedure RightUp;
 
   public
+    procedure RightClick;
     procedure LeftClick;
     procedure DoubleLeftClick;
     property Location : TPoint read GetLocation write SetLocation;
@@ -60,6 +64,27 @@ procedure TAutomationMouse.MouseLeftButtonUpAndDown;
 begin
   LeftDown;
   LeftUp;
+end;
+
+procedure TAutomationMouse.MouseRightButtonUpAndDown;
+begin
+  RightDown;
+  RightUp;
+end;
+
+procedure TAutomationMouse.RightClick;
+begin
+  MouseRightButtonUpAndDown;
+end;
+
+procedure TAutomationMouse.RightDown;
+begin
+  mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
+end;
+
+procedure TAutomationMouse.RightUp;
+begin
+  mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
 end;
 
 procedure TAutomationMouse.LeftDown;
