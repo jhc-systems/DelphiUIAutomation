@@ -49,8 +49,9 @@ uses
   DelphiUIAutomation.AutomationRadioButton in '..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas',
   DelphiUIAutomation.AutomationMenu in '..\source\Controls\DelphiUIAutomation.AutomationMenu.pas',
   DelphiUIAutomation.AutomationMenuItem in '..\source\Controls\DelphiUIAutomation.AutomationMenuItem.pas',
+  DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas',
   DelphiUIAutomation.Desktop in '..\source\Controls\DelphiUIAutomation.Desktop.pas',
-  DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas';
+  DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas';
 
 var
   FApp : TAutomationApplication;
