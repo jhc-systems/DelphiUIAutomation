@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{                                                                           }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 program AutomationDemo;
 
 {$APPTYPE CONSOLE}
@@ -25,10 +46,14 @@ uses
   DelphiUIAutomation.AutomationTabItem in '..\source\Controls\DelphiUIAutomation.AutomationTabItem.pas',
   DelphiUIAutomation.AutomationStatusbar in '..\source\Controls\DelphiUIAutomation.AutomationStatusbar.pas',
   DelphiUIAutomation.AutomationCheckbox in '..\source\Controls\DelphiUIAutomation.AutomationCheckbox.pas',
-  DelphiUIAutomation.AutomationRadioButton in '..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas';
+  DelphiUIAutomation.AutomationRadioButton in '..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas',
+  DelphiUIAutomation.AutomationMenu in '..\source\Controls\DelphiUIAutomation.AutomationMenu.pas',
+  DelphiUIAutomation.AutomationMenuItem in '..\source\Controls\DelphiUIAutomation.AutomationMenuItem.pas',
+  DelphiUIAutomation.Desktop in '..\source\Controls\DelphiUIAutomation.Desktop.pas',
+  DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas';
 
 var
-  FApp : TAutomationClient;
+  FApp : TAutomationApplication;
   windows : TList<TAutomationWindow>;
   window : TAutomationWindow;
   i : integer;
@@ -46,7 +71,7 @@ var
 
 begin
   // Now wait for a very long time for the enquiry screen to come up
-  enquiry := TAutomationClient.GetDesktopWindow('Enquiry');
+  enquiry := TAutomationDesktop.GetDesktopWindow('Enquiry');
   enquiry.Focus;
 
   // 4. Select the correct tab
@@ -64,6 +89,8 @@ begin
 
   // Now see whether we can get the statusbar
   statusBar := enquiry.StatusBar;
+
+  // Get the textedits form the statusbar???
 
 end.
 

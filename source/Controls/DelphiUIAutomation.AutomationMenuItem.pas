@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationStatusbar;
+unit DelphiUIAutomation.AutomationMenuItem;
 
 interface
 
@@ -29,14 +29,11 @@ uses
 
 type
   /// <summary>
-  ///  Represents a statusbar
+  ///  Represents a menu item
   /// </summary>
-  TAutomationStatusbar = class (TAutomationBase)
+  TAutomationMenuItem = class (TAutomationBase)
   end;
 
 implementation
 
-{ TAutomationStatusbar }
-
 end.
-

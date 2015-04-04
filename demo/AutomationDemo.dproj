@@ -139,6 +139,10 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationStatusbar.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationCheckbox.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationMenu.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationMenuItem.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Desktop.pas"/>
+        <DCCReference Include="..\source\DelphiUIAutomation.Exception.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

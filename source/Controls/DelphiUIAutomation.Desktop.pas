@@ -19,98 +19,91 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationTabItem;
+unit DelphiUIAutomation.Desktop;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
-  UIAutomationClient_TLB;
+  generics.collections,
+  DelphiUIAutomation.AutomationWindow;
 
 type
   /// <summary>
-  ///  Represents a tab item
+  /// Represents the Windows 'desktop'
   /// </summary>
-  TAutomationTabItem = class (TAutomationBase)
+  TAutomationDesktop = class
   public
     /// <summary>
-    ///  Selects this tabitem
+    ///  Gets the list of desktop windows
     /// </summary>
-    procedure Select;
+    class function GetDesktopWindows : TList<TAutomationWindow>;
 
     /// <summary>
-    ///  Prints out the child controls
+    ///  Gets the specified desktop windows
     /// </summary>
-    /// <remarks>
-    ///  For debugging only
-    /// </remarks>
-    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
+    class function GetDesktopWindow (const title : String) : TAutomationWindow;
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation,
-  DelphiUIAutomation.AutomationPatternIDs;
+  UIAutomationClient_TLB,
+  sysutils;
 
-{ TAutomationTabItem }
-
-procedure TAutomationTabItem.ListControlsAndStuff(
-  element: IUIAutomationElement);
+class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
 var
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
+  windows : TList<TAutomationWindow>;
+  window : TAutomationWindow;
   count : integer;
-  name, help : widestring;
-  length : integer;
-  retVal : integer;
 
 begin
+  windows := TAutomationDesktop.GetDesktopWindows;
+
+  for count := 0 to windows.Count -1 do
+  begin
+    window := windows[count];
+
+    if (window.Name = title) then
+    begin
+      result := window;
+      break;
+    end;
+  end;
+
+  if result = nil then
+    raise EDelphiAutomationException.Create('Unable to find window');
+end;
+
+class function TAutomationDesktop.getDesktopWindows: TList<TAutomationWindow>;
+var
+  res : TList<TAutomationWindow>;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  element : IUIAutomationElement;
+  name : WideString;
+  count, length : integer;
+
+begin
+  res := TList<TAutomationWindow>.create();
+
   UIAuto.CreateTrueCondition(condition);
 
-  if (element = nil) then
-    element := self.FElement;
-
-  // Find the element
-  element.FindAll(TreeScope_Descendants, condition, collection);
+  rootElement.FindAll(TreeScope_Children, condition, collection);
 
   collection.Get_Length(length);
 
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
-
     element.Get_CurrentName(name);
-    element.Get_CurrentControlType(retVal);
-    element.Get_CurrentHelpText(help);
+ //   Writeln(name);
 
-    Write(name + ' - ');
-    Write(retval);
-    Writeln(' - ' + help);
-
-//    if retval = UIA_PaneControlTypeId then
-//    begin
-//      writeln('Looking at children');
-//      ListControlsAndStuff(element);
- //   end;
+    res.Add(TAutomationWindow.create(element));
   end;
-end;
 
-procedure TAutomationTabItem.Select;
-var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
-
-begin
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternID, unknown);
-
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationSelectionItemPattern, Pattern) = S_OK then
-    begin
-      Pattern.Invoke;
-    end;
-  end;
+  result := res;
 end;
 
 end.

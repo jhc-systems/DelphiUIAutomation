@@ -19,24 +19,16 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationStatusbar;
+unit DelphiUIAutomation.Exception;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
-  UIAutomationClient_TLB;
+  sysutils;
 
 type
-  /// <summary>
-  ///  Represents a statusbar
-  /// </summary>
-  TAutomationStatusbar = class (TAutomationBase)
-  end;
+  EDelphiAutomationException = exception;
 
 implementation
 
-{ TAutomationStatusbar }
-
 end.
-

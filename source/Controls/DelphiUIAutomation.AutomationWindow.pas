@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{                                                                           }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 unit DelphiUIAutomation.AutomationWindow;
 
 interface
@@ -12,25 +33,64 @@ uses
   UIAutomationClient_TLB;
 
 type
+  /// <summary>
+  ///  Represents a window
+  /// </summary>
   TAutomationWindow = class (TAutomationBase)
   private
     function GetStatusBar : TAutomationStatusbar;
   public
+    /// <summary>
+    /// Finds the child window with the title supplied
+    /// </summary>
     function Window (const title : string) : TAutomationWindow;
+
+    /// <summary>
+    /// Finds the textbox, by index
+    /// </summary>
     function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
+
+    /// <summary>
+    /// Finds the combobox, by index
+    /// </summary>
     function GetComboboxByIndex (index : integer) : TAutomationComboBox;
+
+    /// <summary>
+    /// Finds the button with the title supplied
+    /// </summary>
     function GetButton (const title : string) : TAutomationButton;
+
+    /// <summary>
+    /// Finds the tab
+    /// </summary>
+    /// <remarks>
+    ///  This is the first tab associated with this window
+    /// </remarks>
     function GetTab : TAutomationTab;
+
+    ///<summary>
+    ///  Sets the focus to this window
+    ///</summary>
     procedure Focus;
 
+    /// <summary>
+    ///  Prints out the child controls
+    /// </summary>
+    /// <remarks>
+    ///  For debugging only
+    /// </remarks>
     procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
 
+    ///<summary>
+    /// The status bar associated with this window
+    ///</summary>
     property StatusBar : TAutomationStatusBar read GetStatusBar;
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.AutomationControlTypeIDs,
   DelphiUIAutomation.Automation,
   sysutils;
@@ -80,7 +140,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find button');
+    raise EDelphiAutomationException.Create('Unable to find button');
 end;
 
 function TAutomationWindow.GetComboboxByIndex (index : integer) : TAutomationComboBox;
@@ -124,7 +184,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find control');
+    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
 function TAutomationWindow.GetStatusBar: TAutomationStatusbar;
@@ -158,7 +218,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find statusbar');
+    raise EDelphiAutomationException.Create('Unable to find statusbar');
 end;
 
 function TAutomationWindow.GetTab : TAutomationTab;
@@ -192,7 +252,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find tab');
+    raise EDelphiAutomationException.Create('Unable to find tab');
 
 end;
 
@@ -232,7 +292,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find control');
+    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
 procedure TAutomationWindow.ListControlsAndStuff(element : IUIAutomationElement);
@@ -318,7 +378,7 @@ begin
   end;
 
   if result = nil then
-    raise Exception.Create('Unable to find window');
+    raise EDelphiAutomationException.Create('Unable to find window');
 end;
 
 end.

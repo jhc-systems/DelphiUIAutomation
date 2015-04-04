@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{                                                                           }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 unit DelphiUIAutomation.AutomationClient;
 
 interface
@@ -9,17 +30,37 @@ uses
   UIAutomationClient_TLB;
 
 type
-  TAutomationClient = class
+  /// <summary>
+  ///  The main automation application wrapper
+  /// </summary>
+  TAutomationApplication = class
   strict private
-    FprocessInfo : TProcessInformation;
+    FProcessInfo : TProcessInformation;
+    function getProcID: THandle;
   public
+    /// <summary>
+    /// Creates an application
+    /// </summary>
     constructor Create(processInfo: TProcessInformation);
 
-    function getProcID: THandle;
-    class function Launch(executable, parameters : String) : TAutomationClient;
-    class function GetDesktopWindows : TList<TAutomationWindow>;
-    class function GetDesktopWindow (const title : String) : TAutomationWindow;
+    /// <summary>
+    ///  Launches an application
+    /// </summary>
+    class function Launch(executable, parameters : String) : TAutomationApplication;
 
+    /// <summary>
+    ///  Attaches to an already running application
+    /// </summary>
+    class function Attach (exectable : String) : TAutomationApplication;
+
+    /// <summary>
+    ///  Launches or attaches to an application
+    /// </summary>
+    class function LaunchOrAttach(executable, parameters : String) : TAutomationApplication;
+
+    /// <summary>
+    ///  Gets the process
+    /// </summary>
     property Process : THandle read getProcID;
   end;
 
@@ -31,81 +72,39 @@ uses
   sysutils,
   ActiveX;
 
-{ TAutomationClient }
+{ TAutomationApplication }
 
-constructor TAutomationClient.Create(processInfo: TProcessInformation);
+class function TAutomationApplication.Attach(
+  exectable: String): TAutomationApplication;
+begin
+  raise Exception.Create('Not yet implemented');
+end;
+
+constructor TAutomationApplication.Create(processInfo: TProcessInformation);
 begin
   FprocessInfo := processInfo;
 end;
 
-class function TAutomationClient.GetDesktopWindow(const title : String): TAutomationWindow;
-var
-  windows : TList<TAutomationWindow>;
-  window : TAutomationWindow;
-  count : integer;
-
-begin
-  windows := TAutomationClient.GetDesktopWindows;
-
-  for count := 0 to windows.Count -1 do
-  begin
-    window := windows[count];
-
-    if (window.Name = title) then
-    begin
-      result := window;
-      break;
-    end;
-  end;
-
-  if result = nil then
-    raise Exception.Create('Unable to find window');
-end;
-
-class function TAutomationClient.getDesktopWindows: TList<TAutomationWindow>;
-var
-  res : TList<TAutomationWindow>;
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  element : IUIAutomationElement;
-  name : WideString;
-  count, length : integer;
-
-begin
-  res := TList<TAutomationWindow>.create();
-
-  UIAuto.CreateTrueCondition(condition);
-
-  rootElement.FindAll(TreeScope_Children, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-    element.Get_CurrentName(name);
- //   Writeln(name);
-
-    res.Add(TAutomationWindow.create(element));
-  end;
-
-  result := res;
-end;
-
-function TAutomationClient.getProcID: THandle;
+function TAutomationApplication.getProcID: THandle;
 begin
   result := FprocessInfo.hProcess;
 end;
 
-class function TAutomationClient.Launch(executable,
-  parameters: String): TAutomationClient;
+class function TAutomationApplication.Launch(executable,
+  parameters: String): TAutomationApplication;
 var
   info : TProcessInformation;
 
 begin
   info := ExecNewProcess(executable, parameters, false);
 
-  result := TAutomationClient.Create(info);
+  result := TAutomationApplication.Create(info);
+end;
+
+class function TAutomationApplication.LaunchOrAttach(executable,
+  parameters: String): TAutomationApplication;
+begin
+  raise Exception.Create('Not yet implemented');
 end;
 
 end.
