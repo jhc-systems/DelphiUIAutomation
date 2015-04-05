@@ -19,97 +19,79 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationTabItem;
+unit DelphiUIAutomation.ComboBox;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
+  generics.collections,
+  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  Represents a tab item
+  ///  Represents a combobox control
   /// </summary>
-  TAutomationTabItem = class (TAutomationBase)
+  TAutomationComboBox = class (TAutomationBase)
+  private
+    function getText: string;
+    procedure setText(const Value: string);
+    function getItems: TList<string>;
   public
-    /// <summary>
-    ///  Selects this tabitem
-    /// </summary>
-    procedure Select;
+    ///<summary>
+    ///  Gets or sets the text associated with this combobox
+    ///</summary>
+    property Text : string read getText write setText;
 
-    /// <summary>
-    ///  Prints out the child controls
-    /// </summary>
-    /// <remarks>
-    ///  For debugging only
-    /// </remarks>
-    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
+    ///<summary>
+    ///  Gets the list of items associated with this combobox
+    ///</summary>
+    ///<remarks>
+    ///  To be implemented
+    ///</remarks>
+    property Items : TList<string> read getItems;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.Automation,
-  DelphiUIAutomation.AutomationPatternIDs;
+  DelphiUIAutomation.PatternIDs,
+  sysutils;
 
-{ TAutomationTabItem }
+{ TAutomationComboBox }
 
-procedure TAutomationTabItem.ListControlsAndStuff(
-  element: IUIAutomationElement);
+function TAutomationComboBox.getItems : TList<string>;
+begin
+  result := TList<string>.Create;
+end;
+
+function TAutomationComboBox.getText: string;
 var
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  count : integer;
-  name, help : widestring;
-  length : integer;
-  retVal : integer;
+  Inter: IInterface;
+  ValPattern  : IUIAutomationValuePattern;
+  value : widestring;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
+  result := '';
 
-  if (element = nil) then
-    element := self.FElement;
-
-  // Find the element
-  element.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
+  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, ValPattern) = S_OK then
   begin
-    collection.GetElement(count, element);
-
-    element.Get_CurrentName(name);
-    element.Get_CurrentControlType(retVal);
-    element.Get_CurrentHelpText(help);
-
-    Write(name + ' - ');
-    Write(retval);
-    Writeln(' - ' + help);
-
-//    if retval = UIA_PaneControlTypeId then
-//    begin
-//      writeln('Looking at children');
-//      ListControlsAndStuff(element);
- //   end;
+    ValPattern.Get_CurrentValue(value);
+    Result := trim(value);
   end;
 end;
 
-procedure TAutomationTabItem.Select;
+procedure TAutomationComboBox.setText(const Value: string);
 var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
+  Inter: IInterface;
+  ValPattern  : IUIAutomationValuePattern;
 
 begin
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternID, unknown);
-
-  if (unknown <> nil) then
+  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, ValPattern) = S_OK then
   begin
-    if unknown.QueryInterface(IUIAutomationSelectionItemPattern, Pattern) = S_OK then
-    begin
-      Pattern.Invoke;
-    end;
+    ValPattern.SetValue(value);
   end;
 end;
 

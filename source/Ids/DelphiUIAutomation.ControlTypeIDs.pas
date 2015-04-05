@@ -19,24 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationCheckbox;
+unit DelphiUIAutomation.ControlTypeIDs;
 
 interface
 
-uses
-  DelphiUIAutomation.AutomationBase,
-  UIAutomationClient_TLB;
-
-type
-  /// <summary>
-  ///  Represents a checkbox control
-  /// </summary>
-  TAutomationCheckBox = class (TAutomationBase)
-  end;
+const
+  // Control types - see https://msdn.microsoft.com/en-us/library/windows/desktop/ee671198(v=vs.85).aspx
+  UIA_ButtonControlTypeId = 50000;
+  UIA_CalendarControlTypeId = 50001;
+  UIA_CheckBoxControlTypeId = 50002;
+  UIA_ComboBoxControlTypeId = 50003;
+  UIA_EditControlTypeId = 50004;
+  UIA_StatusBarControlTypeId = 50017;
+  UIA_TabControlTypeId = 50018;
+  UIA_TabItemControlTypeId = 50019;
+  UIA_PaneControlTypeId = 50033;
+  UIA_TitleBarControlTypeId = 50037;
+  UIA_HyperlinkControlType = 50005;
 
 implementation
 
-{ TAutomationCheckBox }
-
 end.
-

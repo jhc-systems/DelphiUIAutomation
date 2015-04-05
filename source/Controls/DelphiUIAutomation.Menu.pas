@@ -19,21 +19,36 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationMenuItem;
+unit DelphiUIAutomation.Menu;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
+  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  Represents a menu item
+  ///  Represents a menu
   /// </summary>
-  TAutomationMenuItem = class (TAutomationBase)
+  TAutomationMenu = class (TAutomationBase)
+  end;
+
+  /// <summary>
+  ///  Represents a popup menu
+  /// </summary>
+  TAutomationPopupMenu = class (TAutomationMenu)
+  end;
+
+  /// <summary>
+  ///  Represents a main menu
+  /// </summary>
+  TAutomationMainMenu = class (TAutomationMenu)
   end;
 
 implementation
 
+{ TAutomationStatusbar }
+
 end.
+

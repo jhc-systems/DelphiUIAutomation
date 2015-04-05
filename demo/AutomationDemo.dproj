@@ -123,27 +123,27 @@
         </DelphiCompile>
         <DCCReference Include="..\source\DelphiUIAutomation.Automation.pas"/>
         <DCCReference Include="..\source\UIAutomationClient_TLB.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationWindow.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.AutomationClient.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Window.pas"/>
+        <DCCReference Include="..\source\DelphiUIAutomation.Client.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Utils.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationTextBox.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.AutomationBase.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationButton.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.AutomationControlTypeIDs.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.AutomationPatternIDs.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.TextBox.pas"/>
+        <DCCReference Include="..\source\DelphiUIAutomation.Base.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Button.pas"/>
+        <DCCReference Include="..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas"/>
+        <DCCReference Include="..\source\Ids\DelphiUIAutomation.PatternIDs.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Mouse.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationComboBox.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.AutomationPropertyIDs.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationTab.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationTabItem.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationStatusbar.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationCheckbox.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationRadioButton.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationMenu.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.AutomationMenuItem.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.ComboBox.pas"/>
+        <DCCReference Include="..\source\Ids\DelphiUIAutomation.PropertyIDs.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Tab.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.TabItem.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Statusbar.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Checkbox.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.RadioButton.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.MenuItem.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Exception.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Desktop.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.ScreenShot.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Menu.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

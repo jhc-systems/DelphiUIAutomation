@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationPropertyIDs;
+unit DelphiUIAutomation.PropertyIDs;
 
 interface
 

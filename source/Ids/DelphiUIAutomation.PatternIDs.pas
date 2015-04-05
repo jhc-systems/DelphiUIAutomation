@@ -19,37 +19,18 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.Automation;
+unit DelphiUIAutomation.PatternIDs;
 
 interface
 
-uses
-  generics.collections,
-  winapi.windows,
-  DelphiUIAutomation.Window,
-  UIAutomationClient_TLB;
-
-var
-  /// <summary>
-  ///  The main automation interface
-  /// </summary>
-  UIAuto: IUIAutomation;
-
-  /// <summary>
-  ///  The root of the desktop
-  /// </summary>
-  RootElement: IUIAutomationElement;
+const
+  // Automation Pattern Identifiers
+  UIA_InvokePatternID = 10000;
+  UIA_SelectionPatternId = 10001;
+  UIA_ValuePatternId = 10002;
+  UIA_SelectionItemPatternId = 10010;
+  UIA_TextPatternId = 10014;
 
 implementation
-
-uses
-  DelphiUIAutomation.Exception,
-  sysutils,
-  ActiveX;
-
-initialization
-  UIAuto := CoCUIAutomation.Create;
-  if not Succeeded(UIAuto.GetRootElement(RootElement)) then
-    raise EDelphiAutomationException.Create('Failed to get root element for Automation');
 
 end.

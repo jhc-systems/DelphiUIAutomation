@@ -19,93 +19,98 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationClient;
+unit DelphiUIAutomation.TabItem;
 
 interface
 
 uses
-  generics.collections,
-  winapi.windows,
-  DelphiUIAutomation.AutomationWindow,
+  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  The main automation application wrapper
+  ///  Represents a tab item
   /// </summary>
-  TAutomationApplication = class
-  strict private
-    FProcessInfo : TProcessInformation;
-    function getProcID: THandle;
+  TAutomationTabItem = class (TAutomationBase)
   public
     /// <summary>
-    /// Creates an application
+    ///  Selects this tabitem
     /// </summary>
-    constructor Create(processInfo: TProcessInformation);
+    procedure Select;
 
     /// <summary>
-    ///  Launches an application
+    ///  Prints out the child controls
     /// </summary>
-    class function Launch(executable, parameters : String) : TAutomationApplication;
-
-    /// <summary>
-    ///  Attaches to an already running application
-    /// </summary>
-    class function Attach (exectable : String) : TAutomationApplication;
-
-    /// <summary>
-    ///  Launches or attaches to an application
-    /// </summary>
-    class function LaunchOrAttach(executable, parameters : String) : TAutomationApplication;
-
-    /// <summary>
-    ///  Gets the process
-    /// </summary>
-    property Process : THandle read getProcID;
+    /// <remarks>
+    ///  For debugging only
+    /// </remarks>
+    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.Utils,
   DelphiUIAutomation.Automation,
-  sysutils,
-  ActiveX;
+  DelphiUIAutomation.PatternIDs;
 
-{ TAutomationApplication }
+{ TAutomationTabItem }
 
-class function TAutomationApplication.Attach(
-  exectable: String): TAutomationApplication;
-begin
-  raise Exception.Create('Not yet implemented');
-end;
-
-constructor TAutomationApplication.Create(processInfo: TProcessInformation);
-begin
-  FprocessInfo := processInfo;
-end;
-
-function TAutomationApplication.getProcID: THandle;
-begin
-  result := FprocessInfo.hProcess;
-end;
-
-class function TAutomationApplication.Launch(executable,
-  parameters: String): TAutomationApplication;
+procedure TAutomationTabItem.ListControlsAndStuff(
+  element: IUIAutomationElement);
 var
-  info : TProcessInformation;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name, help : widestring;
+  length : integer;
+  retVal : integer;
 
 begin
-  info := ExecNewProcess(executable, parameters, false);
+  UIAuto.CreateTrueCondition(condition);
 
-  result := TAutomationApplication.Create(info);
+  if (element = nil) then
+    element := self.FElement;
+
+  // Find the element
+  element.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentName(name);
+    element.Get_CurrentControlType(retVal);
+    element.Get_CurrentHelpText(help);
+
+    Write(name + ' - ');
+    Write(retval);
+    Writeln(' - ' + help);
+
+//    if retval = UIA_PaneControlTypeId then
+//    begin
+//      writeln('Looking at children');
+//      ListControlsAndStuff(element);
+ //   end;
+  end;
 end;
 
-class function TAutomationApplication.LaunchOrAttach(executable,
-  parameters: String): TAutomationApplication;
+procedure TAutomationTabItem.Select;
+var
+  unknown: IInterface;
+  Pattern  : IUIAutomationInvokePattern;
+
 begin
-  raise Exception.Create('Not yet implemented');
+  fElement.GetCurrentPattern(UIA_SelectionItemPatternID, unknown);
+
+  if (unknown <> nil) then
+  begin
+    if unknown.QueryInterface(IUIAutomationSelectionItemPattern, Pattern) = S_OK then
+    begin
+      Pattern.Invoke;
+    end;
+  end;
 end;
 
 end.
-

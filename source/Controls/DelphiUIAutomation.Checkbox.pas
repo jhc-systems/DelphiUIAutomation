@@ -19,24 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationRadioButton;
+unit DelphiUIAutomation.Checkbox;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
+  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  Represents a radio button control
+  ///  Represents a checkbox control
   /// </summary>
-  TAutomationRadioButton = class (TAutomationBase)
+  TAutomationCheckBox = class (TAutomationBase)
   end;
 
 implementation
 
-{ TAutomationRadioButton }
+{ TAutomationCheckBox }
 
 end.
 

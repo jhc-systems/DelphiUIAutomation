@@ -32,19 +32,38 @@ type
   ///  Screenshot functionality
   /// </summary>
   TAutomationScreenshot = class
+  strict private
+    FBmp: TBitmap;
   public
-    class function CaptureScreenshot : TBitmap;
+    /// <summary>
+    ///  Captures a screenshot of the desktop
+    /// </summary>
+    procedure CaptureScreenshot;
+
+    ///<summary>
+    ///  Creation
+    ///</summary>
+    constructor Create;
+
+    ///<summary>
+    ///  Destruction
+    ///</summary>
+    destructor Destroy;
+
+    ///<summary>
+    /// Gets the bitmap
+    ///</summary>
+    property bitmap : TBitmap read FBmp;
   end;
 
 implementation
 
 { TAutomationScreenshot }
 
-class function TAutomationScreenshot.CaptureScreenshot: TBitmap;
+procedure TAutomationScreenshot.CaptureScreenshot;
 var
   Win: HWND;
   DC: HDC;
-  Bmp: TBitmap;
   FileName: string;
   WinRect: TRect;
   Width: Integer;
@@ -59,19 +78,24 @@ begin
     Width := WinRect.Right - WinRect.Left;
     Height := WinRect.Bottom - WinRect.Top;
 
-    Bmp := TBitmap.Create;
-  //  try
-    Bmp.Height := Height;
-    Bmp.Width := Width;
-    BitBlt(Bmp.Canvas.Handle, 0, 0, Width, Height, DC, 0, 0, SRCCOPY);
-  //  finally
-   //   Bmp.Free;
-  //  end;
+    FBmp.Height := Height;
+    FBmp.Width := Width;
+    BitBlt(FBmp.Canvas.Handle, 0, 0, Width, Height, DC, 0, 0, SRCCOPY);
+
   finally
     ReleaseDC(Win, DC);
   end;
 
-  result := Bmp;
+end;
+
+constructor TAutomationScreenshot.Create;
+begin
+  FBmp := TBitmap.Create;
+end;
+
+destructor TAutomationScreenshot.Destroy;
+begin
+  FBmp.Free;
 end;
 
 end.

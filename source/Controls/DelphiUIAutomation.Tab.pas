@@ -19,13 +19,13 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationTab;
+unit DelphiUIAutomation.Tab;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
-  DelphiUIAutomation.AutomationTabItem,
+  DelphiUIAutomation.Base,
+  DelphiUIAutomation.TabItem,
   Generics.Collections,
   UIAutomationClient_TLB;
 
@@ -70,8 +70,8 @@ uses
   types,
   DelphiUIAutomation.Mouse,
   DelphiUIAutomation.Automation,
-  DelphiUIAutomation.AutomationControlTypeIDs,
-  DelphiUIAutomation.AutomationPatternIDs;
+  DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.PatternIDs;
 
 { TAutomationTab }
 

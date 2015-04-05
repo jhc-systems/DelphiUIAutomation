@@ -25,7 +25,7 @@ interface
 
 uses
   generics.collections,
-  DelphiUIAutomation.AutomationWindow;
+  DelphiUIAutomation.Window;
 
 type
   /// <summary>

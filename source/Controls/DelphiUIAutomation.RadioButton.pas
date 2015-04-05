@@ -19,53 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationButton;
+unit DelphiUIAutomation.RadioButton;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
+  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  Represents a button control
+  ///  Represents a radio button control
   /// </summary>
-  TAutomationButton = class (TAutomationBase)
-  public
-    /// <summary>
-    ///  Clicks the button
-    /// </summary>
-    function Click : HResult;
+  TAutomationRadioButton = class (TAutomationBase)
   end;
 
 implementation
 
-uses
-  types,
-  DelphiUIAutomation.Mouse,
-  DelphiUIAutomation.AutomationPatternIDs;
-
-{ TAutomationButton }
-
-function TAutomationButton.Click : HResult;
-var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
-
-begin
-  result := -1;
-
-  fElement.GetCurrentPattern(UIA_InvokePatternID, unknown);
-
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationInvokePattern, Pattern) = S_OK then
-    begin
-      result := Pattern.Invoke;
-    end;
-  end;
-end;
+{ TAutomationRadioButton }
 
 end.
 

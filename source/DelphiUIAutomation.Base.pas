@@ -19,24 +19,48 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationControlTypeIDs;
+unit DelphiUIAutomation.Base;
 
 interface
 
-const
-  // Control types - see https://msdn.microsoft.com/en-us/library/windows/desktop/ee671198(v=vs.85).aspx
-  UIA_ButtonControlTypeId = 50000;
-  UIA_CalendarControlTypeId = 50001;
-  UIA_CheckBoxControlTypeId = 50002;
-  UIA_ComboBoxControlTypeId = 50003;
-  UIA_EditControlTypeId = 50004;
-  UIA_StatusBarControlTypeId = 50017;
-  UIA_TabControlTypeId = 50018;
-  UIA_TabItemControlTypeId = 50019;
-  UIA_PaneControlTypeId = 50033;
-  UIA_TitleBarControlTypeId = 50037;
-  UIA_HyperlinkControlType = 50005;
+uses
+  UIAutomationClient_TLB;
+
+type
+  /// <summary>
+  ///  The base class for automation objects
+  /// </summary>
+  TAutomationBase = class
+  protected
+    FElement : IUIAutomationElement;
+    function getName: string; virtual;
+  public
+    /// <summary>
+    ///  Gets the name of the element
+    /// </summary>
+    property Name : string read getName;
+
+    /// <summary>
+    ///  Constructor for the element.
+    /// </summary>
+    constructor Create(element : IUIAutomationElement); virtual;
+  end;
 
 implementation
+
+constructor TAutomationBase.Create(element: IUIAutomationElement);
+begin
+  Felement := element;
+end;
+
+function TAutomationBase.getName: string;
+var
+  name : widestring;
+
+begin
+  FElement.Get_CurrentName(name);
+  result := name;
+end;
+
 
 end.

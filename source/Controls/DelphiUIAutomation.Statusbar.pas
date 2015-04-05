@@ -19,18 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationPatternIDs;
+unit DelphiUIAutomation.Statusbar;
 
 interface
 
-const
-  // Automation Pattern Identifiers
-  UIA_InvokePatternID = 10000;
-  UIA_SelectionPatternId = 10001;
-  UIA_ValuePatternId = 10002;
-  UIA_SelectionItemPatternId = 10010;
-  UIA_TextPatternId = 10014;
+uses
+  DelphiUIAutomation.Base,
+  UIAutomationClient_TLB;
+
+type
+  /// <summary>
+  ///  Represents a statusbar
+  /// </summary>
+  TAutomationStatusbar = class (TAutomationBase)
+  end;
 
 implementation
 
+{ TAutomationStatusbar }
+
 end.
+

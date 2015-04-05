@@ -19,17 +19,17 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationWindow;
+unit DelphiUIAutomation.Window;
 
 interface
 
 uses
-  DelphiUIAutomation.AutomationBase,
-  DelphiUIAutomation.AutomationTextbox,
-  DelphiUIAutomation.AutomationComboBox,
-  DelphiUIAutomation.AutomationButton,
-  DelphiUIAutomation.AutomationTab,
-  DelphiUIAutomation.AutomationStatusbar,
+  DelphiUIAutomation.Base,
+  DelphiUIAutomation.Textbox,
+  DelphiUIAutomation.ComboBox,
+  DelphiUIAutomation.Button,
+  DelphiUIAutomation.Tab,
+  DelphiUIAutomation.Statusbar,
   UIAutomationClient_TLB;
 
 type
@@ -91,7 +91,7 @@ implementation
 
 uses
   DelphiUIAutomation.Exception,
-  DelphiUIAutomation.AutomationControlTypeIDs,
+  DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Automation,
   sysutils;
 

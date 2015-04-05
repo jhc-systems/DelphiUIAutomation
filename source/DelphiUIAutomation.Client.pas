@@ -19,48 +19,93 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.AutomationBase;
+unit DelphiUIAutomation.Client;
 
 interface
 
 uses
+  generics.collections,
+  winapi.windows,
+  DelphiUIAutomation.Window,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  The base class for automation objects
+  ///  The main automation application wrapper
   /// </summary>
-  TAutomationBase = class
-  protected
-    FElement : IUIAutomationElement;
-    function getName: string; virtual;
+  TAutomationApplication = class
+  strict private
+    FProcessInfo : TProcessInformation;
+    function getProcID: THandle;
   public
     /// <summary>
-    ///  Gets the name of the element
+    /// Creates an application
     /// </summary>
-    property Name : string read getName;
+    constructor Create(processInfo: TProcessInformation);
 
     /// <summary>
-    ///  Constructor for the element.
+    ///  Launches an application
     /// </summary>
-    constructor Create(element : IUIAutomationElement); virtual;
+    class function Launch(executable, parameters : String) : TAutomationApplication;
+
+    /// <summary>
+    ///  Attaches to an already running application
+    /// </summary>
+    class function Attach (exectable : String) : TAutomationApplication;
+
+    /// <summary>
+    ///  Launches or attaches to an application
+    /// </summary>
+    class function LaunchOrAttach(executable, parameters : String) : TAutomationApplication;
+
+    /// <summary>
+    ///  Gets the process
+    /// </summary>
+    property Process : THandle read getProcID;
   end;
 
 implementation
 
-constructor TAutomationBase.Create(element: IUIAutomationElement);
+uses
+  DelphiUIAutomation.Utils,
+  DelphiUIAutomation.Automation,
+  sysutils,
+  ActiveX;
+
+{ TAutomationApplication }
+
+class function TAutomationApplication.Attach(
+  exectable: String): TAutomationApplication;
 begin
-  Felement := element;
+  raise Exception.Create('Not yet implemented');
 end;
 
-function TAutomationBase.getName: string;
+constructor TAutomationApplication.Create(processInfo: TProcessInformation);
+begin
+  FprocessInfo := processInfo;
+end;
+
+function TAutomationApplication.getProcID: THandle;
+begin
+  result := FprocessInfo.hProcess;
+end;
+
+class function TAutomationApplication.Launch(executable,
+  parameters: String): TAutomationApplication;
 var
-  name : widestring;
+  info : TProcessInformation;
 
 begin
-  FElement.Get_CurrentName(name);
-  result := name;
+  info := ExecNewProcess(executable, parameters, false);
+
+  result := TAutomationApplication.Create(info);
 end;
 
+class function TAutomationApplication.LaunchOrAttach(executable,
+  parameters: String): TAutomationApplication;
+begin
+  raise Exception.Create('Not yet implemented');
+end;
 
 end.
+
