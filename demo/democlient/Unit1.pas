@@ -19,6 +19,12 @@ type
     Edit3: TEdit;
     Edit4: TEdit;
     Edit5: TEdit;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    StatusBar1: TStatusBar;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private

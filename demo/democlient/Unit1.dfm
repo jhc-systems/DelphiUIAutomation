@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 375
+  ClientHeight = 487
   ClientWidth = 334
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -52,11 +52,10 @@ object Form1: TForm1
     Top = 174
     Width = 289
     Height = 193
-    ActivePage = TabSheet2
+    ActivePage = TabSheet3
     TabOrder = 4
     object TabSheet1: TTabSheet
-      Caption = 'TabSheet1'
-      ExplicitLeft = 0
+      Caption = 'First Tab'
       object Edit3: TEdit
         Left = 24
         Top = 32
@@ -67,7 +66,7 @@ object Form1: TForm1
       end
     end
     object TabSheet2: TTabSheet
-      Caption = 'TabSheet2'
+      Caption = 'Second Tab'
       ImageIndex = 1
       object Edit4: TEdit
         Left = 40
@@ -79,7 +78,7 @@ object Form1: TForm1
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'TabSheet3'
+      Caption = 'Last Tab'
       ImageIndex = 2
       object Edit5: TEdit
         Left = 40
@@ -90,5 +89,62 @@ object Form1: TForm1
         Text = 'Edit3333'
       end
     end
+  end
+  object CheckBox1: TCheckBox
+    Left = 28
+    Top = 384
+    Width = 97
+    Height = 17
+    Caption = 'First'
+    TabOrder = 5
+  end
+  object CheckBox2: TCheckBox
+    Left = 28
+    Top = 407
+    Width = 97
+    Height = 17
+    Caption = 'Second'
+    TabOrder = 6
+  end
+  object RadioButton1: TRadioButton
+    Left = 176
+    Top = 384
+    Width = 113
+    Height = 17
+    Caption = 'Radio 1'
+    TabOrder = 7
+  end
+  object RadioButton2: TRadioButton
+    Left = 176
+    Top = 407
+    Width = 113
+    Height = 17
+    Caption = 'Radio 1 Extra'
+    TabOrder = 8
+  end
+  object RadioButton3: TRadioButton
+    Left = 176
+    Top = 430
+    Width = 113
+    Height = 17
+    Caption = 'Radio 2'
+    TabOrder = 9
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 468
+    Width = 334
+    Height = 19
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Text = 'Statusbar Text'
+        Width = 50
+      end>
+    ExplicitLeft = 176
+    ExplicitTop = 256
+    ExplicitWidth = 0
   end
 end

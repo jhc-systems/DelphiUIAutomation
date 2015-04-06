@@ -58,6 +58,11 @@ type
     /// </summary>
     class function LaunchOrAttach(executable, parameters : String) : TAutomationApplication;
 
+    ///<summary>
+    ///  Kills the application being automated
+    ///</summary>
+    procedure Kill;
+
     /// <summary>
     ///  Gets the process
     /// </summary>
@@ -88,6 +93,15 @@ end;
 function TAutomationApplication.getProcID: THandle;
 begin
   result := FprocessInfo.hProcess;
+end;
+
+procedure TAutomationApplication.Kill;
+begin
+  if FprocessInfo.hProcess <> 0 then
+  begin
+    TerminateProcess(FprocessInfo.hProcess, 0);
+    CloseHandle(FprocessInfo.hProcess);
+  end;
 end;
 
 class function TAutomationApplication.Launch(executable,

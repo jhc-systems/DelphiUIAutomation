@@ -71,27 +71,34 @@ var
   statusBar : TAutomationStatusbar;
 
 begin
+  // First launch the application
+  FApp := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
+
+  sleep(5000);
+
   // Now wait for a very long time for the enquiry screen to come up
-  enquiry := TAutomationDesktop.GetDesktopWindow('Enquiry');
+  enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
   enquiry.Focus;
 
   // 4. Select the correct tab
   tab := enquiry.GetTab;
-  tab.SelectTabPage('Accounts');     // 3 is the magic number
+  tab.SelectTabPage('Second Tab');     // 3 is the magic number
 
 //  tab.selectedItem.ListControlsAndStuff(nil);
 
   // 5. Click the fetch button
-  mouse := TAutomationMouse.Create;
-  mouse.Location := TPoint.Create(370, 160);
-  mouse.LeftClick;
+//  mouse := TAutomationMouse.Create;
+//  mouse.Location := TPoint.Create(370, 160);
+//  mouse.LeftClick;
 
-  sleep(8000);
+//  sleep(8000);
 
   // Now see whether we can get the statusbar
-  statusBar := enquiry.StatusBar;
+//  statusBar := enquiry.StatusBar;
 
   // Get the textedits form the statusbar???
+
+  FApp.Kill;
 
 end.
 

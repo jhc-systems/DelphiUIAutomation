@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1E70C34A-A56D-4FBC-BA5E-081EEF70B3C2}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="AutomationDemo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="democlient\Project1.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="AutomationDemo">
+        <MSBuild Projects="AutomationDemo.dproj"/>
+    </Target>
+    <Target Name="AutomationDemo:Clean">
+        <MSBuild Projects="AutomationDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AutomationDemo:Make">
+        <MSBuild Projects="AutomationDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Project1">
+        <MSBuild Projects="democlient\Project1.dproj"/>
+    </Target>
+    <Target Name="Project1:Clean">
+        <MSBuild Projects="democlient\Project1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Project1:Make">
+        <MSBuild Projects="democlient\Project1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="AutomationDemo;Project1"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="AutomationDemo:Clean;Project1:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="AutomationDemo:Make;Project1:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
