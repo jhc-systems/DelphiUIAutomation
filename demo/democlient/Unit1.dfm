@@ -52,7 +52,7 @@ object Form1: TForm1
     Top = 174
     Width = 289
     Height = 193
-    ActivePage = TabSheet3
+    ActivePage = TabSheet2
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'First Tab'
@@ -143,8 +143,5 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
-    ExplicitLeft = 176
-    ExplicitTop = 256
-    ExplicitWidth = 0
   end
 end

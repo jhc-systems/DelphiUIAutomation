@@ -84,6 +84,11 @@ begin
   tab := enquiry.GetTab;
   tab.SelectTabPage('Second Tab');     // 3 is the magic number
 
+
+
+  tb1 := tab.GetTextBoxByIndex(0);
+  writeln(tb1.Text);
+
 //  tab.selectedItem.ListControlsAndStuff(nil);
 
   // 5. Click the fetch button
@@ -98,7 +103,7 @@ begin
 
   // Get the textedits from the statusbar???
 
-  TAutomationApplication.SaveScreenshot;
+//  TAutomationApplication.SaveScreenshot;
 
   FApp.Kill;
 

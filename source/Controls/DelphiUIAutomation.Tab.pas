@@ -27,6 +27,7 @@ uses
   DelphiUIAutomation.Base,
   DelphiUIAutomation.TabItem,
   Generics.Collections,
+  DelphiUIAutomation.Textbox,
   UIAutomationClient_TLB;
 
 type
@@ -53,6 +54,11 @@ type
     ///</summary>
     procedure SelectTabPage(const value : string);
 
+    /// <summary>
+    /// Finds the textbox, by index
+    /// </summary>
+    function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
+
     ///<summary>
     ///  Gets the list of tabitems associated with this tab
     ///</summary>
@@ -68,6 +74,7 @@ implementation
 
 uses
   types,
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.Mouse,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.ControlTypeIDs,
@@ -111,6 +118,48 @@ end;
 function TAutomationTab.GetSelectedItem: TAutomationTabItem;
 begin
   result := self.FSelectedItem;
+end;
+
+function TAutomationTab.GetTextBoxByIndex(index: integer): TAutomationTextBox;
+var
+  element : IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  length : integer;
+  retVal : integer;
+  counter : integer;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  // Find the element
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  counter := 0;
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentControlType(retVal);
+
+    if (retval = UIA_EditControlTypeId) then
+    begin
+      if counter = index then
+      begin
+        result := TAutomationTextBox.create(element);
+        break;
+      end;
+
+      inc(counter);
+    end;
+  end;
+
+  if result = nil then
+    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
 procedure TAutomationTab.SelectTabPage(const value: string);
