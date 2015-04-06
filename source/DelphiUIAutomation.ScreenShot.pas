@@ -34,12 +34,12 @@ type
   TAutomationScreenshot = class
   strict private
     FBmp: TBitmap;
-  public
+  private
     /// <summary>
     ///  Captures a screenshot of the desktop
     /// </summary>
     procedure CaptureScreenshot;
-
+  public
     ///<summary>
     ///  Creation
     ///</summary>
@@ -50,13 +50,24 @@ type
     ///</summary>
     destructor Destroy;
 
+    /// <summary>
+    ///  Saves a screenshot of the current desktop
+    /// </summary>
+    procedure SaveCurrentScreen;
+
     ///<summary>
     /// Gets the bitmap
     ///</summary>
     property bitmap : TBitmap read FBmp;
+
+
   end;
 
 implementation
+
+uses
+  system.IOUtils,
+  sysutils;
 
 { TAutomationScreenshot }
 
@@ -95,7 +106,20 @@ end;
 
 destructor TAutomationScreenshot.Destroy;
 begin
-  FBmp.Free;
+  FBmp.FreeImage;
+  freeAndNil(FBmp) ;
+end;
+
+procedure TAutomationScreenshot.SaveCurrentScreen;
+var
+  pathname : string;
+
+begin
+  self.CaptureScreenshot;
+
+  pathname := TPath.GetGUIDFileName + '.bmp';
+
+  FBmp.SaveToFile(pathname);
 end;
 
 end.

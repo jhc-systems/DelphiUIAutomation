@@ -96,7 +96,9 @@ begin
   // Now see whether we can get the statusbar
 //  statusBar := enquiry.StatusBar;
 
-  // Get the textedits form the statusbar???
+  // Get the textedits from the statusbar???
+
+  TAutomationApplication.SaveScreenshot;
 
   FApp.Kill;
 

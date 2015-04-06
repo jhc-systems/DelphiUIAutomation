@@ -64,6 +64,11 @@ type
     procedure Kill;
 
     /// <summary>
+    ///  Saves the current screen image to a file
+    /// </summary>
+    class procedure SaveScreenshot;
+
+    /// <summary>
     ///  Gets the process
     /// </summary>
     property Process : THandle read getProcID;
@@ -74,6 +79,7 @@ implementation
 uses
   DelphiUIAutomation.Utils,
   DelphiUIAutomation.Automation,
+  DelphiUIAutomation.ScreenShot,
   sysutils,
   ActiveX;
 
@@ -119,6 +125,20 @@ class function TAutomationApplication.LaunchOrAttach(executable,
   parameters: String): TAutomationApplication;
 begin
   raise Exception.Create('Not yet implemented');
+end;
+
+class procedure TAutomationApplication.SaveScreenshot;
+var
+  screenshot : TAutomationScreenshot;
+begin
+
+  screenshot := TAutomationScreenshot.Create;
+
+  try
+    screenshot.SaveCurrentScreen;
+  finally
+    screenshot.Free;
+  end;
 end;
 
 end.
