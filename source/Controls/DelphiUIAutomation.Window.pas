@@ -48,7 +48,7 @@ type
     /// <remarks>
     ///  This is the first tab associated with this window
     /// </remarks>
-    function GetTab : TAutomationTab;
+//    function GetTab : TAutomationTab;
 
     ///<summary>
     ///  Sets the focus to this window
@@ -117,7 +117,7 @@ begin
   if result = nil then
     raise EDelphiAutomationException.Create('Unable to find statusbar');
 end;
-
+(*
 function TAutomationWindow.GetTab : TAutomationTab;
 var
   element : IUIAutomationElement;
@@ -152,7 +152,7 @@ begin
     raise EDelphiAutomationException.Create('Unable to find tab');
 
 end;
-
+*)
 procedure TAutomationWindow.ListControlsAndStuff(element : IUIAutomationElement);
 var
   //element : IUIAutomationElement;

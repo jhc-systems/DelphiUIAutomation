@@ -30,7 +30,7 @@ type
   /// <summary>
   ///  The base class for automation objects
   /// </summary>
-  TAutomationBase = class
+  TAutomationBase = class (TInterfacedObject)
   protected
     FElement : IUIAutomationElement;
     function getName: string; virtual;

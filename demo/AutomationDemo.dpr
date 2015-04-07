@@ -52,7 +52,9 @@ uses
   DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas',
   DelphiUIAutomation.Menu in '..\source\Controls\DelphiUIAutomation.Menu.pas',
   DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
-  DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas';
+  DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
+  DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
+  DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas';
 
 var
   FApp : TAutomationApplication;
@@ -68,7 +70,7 @@ var
 //  mouse : TAutomationMouse;
 //  price, quantity, netValue : TAutomationTextBox;
 //  account, stock, buysell : TAutomationComboBox;
-  tab : TAutomationTab;
+  tab : IAutomationTab;
   statusBar : TAutomationStatusbar;
 
 begin
@@ -82,10 +84,8 @@ begin
   enquiry.Focus;
 
   // 4. Select the correct tab
-  tab := enquiry.GetTab;
+  tab := enquiry.GetTabByIndex(0);
   tab.SelectTabPage('Second Tab');     // 3 is the magic number
-
-
 
   tb1 := tab.GetTextBoxByIndex(0);
   writeln(tb1.Text);

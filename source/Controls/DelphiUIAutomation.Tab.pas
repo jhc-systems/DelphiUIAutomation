@@ -24,10 +24,11 @@ unit DelphiUIAutomation.Tab;
 interface
 
 uses
+  Generics.Collections,
   DelphiUIAutomation.Container,
   DelphiUIAutomation.TabItem,
-  Generics.Collections,
   DelphiUIAutomation.Textbox,
+  DelphiUIAutomation.Tab.Intf,
   UIAutomationClient_TLB;
 
 type
@@ -37,7 +38,7 @@ type
   /// <remarks>
   ///  TPageControl for example
   /// </remarks>
-  TAutomationTab = class (TAutomationContainer)
+  TAutomationTab = class (TAutomationContainer, IAutomationTab)
   strict private
     FTabItems : TList<TAutomationTabItem>;
     FSelectedItem : TAutomationTabItem;
