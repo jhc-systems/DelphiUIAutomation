@@ -26,12 +26,17 @@ interface
 uses
   DelphiUIAutomation.TextBox,
   DelphiUIAutomation.CheckBox,
+  DelphiUIAutomation.RadioButton,
   DelphiUIAutomation.ComboBox,
   DelphiUIAutomation.Button,
-  DelphiUIAutomation.Base;
+  DelphiUIAutomation.Base,
+  UIAutomationClient_TLB;
 
 type
   TAutomationContainer = class (TAutomationBase)
+  protected
+    function GetControlByControlType (index : integer; id : word) : IUIAutomationElement;
+
   public
     /// <summary>
     /// Finds the textbox, by index
@@ -49,6 +54,11 @@ type
     function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
 
     /// <summary>
+    /// Finds the checkbox, by index
+    /// </summary>
+    function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
+
+    /// <summary>
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
@@ -59,49 +69,11 @@ implementation
 uses
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Exception,
-  DelphiUIAutomation.Automation,
-  UIAutomationClient_TLB;
+  DelphiUIAutomation.Automation;
 
 function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
-var
-  element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  count : integer;
-  length : integer;
-  retVal : integer;
-  counter : integer;
-
 begin
-  UIAuto.CreateTrueCondition(condition);
-
-  // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  counter := 0;
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-
-    element.Get_CurrentControlType(retVal);
-
-    if (retval = UIA_EditControlTypeId) then
-    begin
-      if counter = index then
-      begin
-        result := TAutomationTextBox.create(element);
-        break;
-      end;
-
-      inc(counter);
-    end;
-  end;
-
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find control');
+  result := TAutomationTextBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
 end;
 
 function TAutomationContainer.GetButton(const title: string): TAutomationButton;
@@ -146,50 +118,16 @@ begin
 end;
 
 function TAutomationContainer.GetCheckboxByIndex(index: integer): TAutomationCheckBox;
-var
-  element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  count : integer;
-  name : widestring;
-  length : integer;
-  retVal : integer;
-  counter : integer;
-
 begin
-  UIAuto.CreateTrueCondition(condition);
-
-  // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  counter := 0;
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-
-    element.Get_CurrentControlType(retVal);
-
-    if (retval = UIA_CheckBoxControlTypeId) then
-    begin
-      if counter = index then
-        result := TAutomationCheckBox.create(element);
-
-      element.Get_CurrentName(name);
-
-      writeln (name);
-
-      inc(counter);
-    end;
-  end;
-
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find control');
+  result := TAutomationCheckBox.Create(GetControlByControlType(index, UIA_CheckBoxControlTypeId));
 end;
 
 function TAutomationContainer.GetComboboxByIndex (index : integer) : TAutomationComboBox;
+begin
+  result := TAutomationComboBox.Create(GetControlByControlType(index, UIA_ComboBoxControlTypeId));
+end;
+
+function TAutomationContainer.GetControlByControlType(index : integer;  id: word): IUIAutomationElement;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -216,14 +154,12 @@ begin
 
     element.Get_CurrentControlType(retVal);
 
-    if (retval = UIA_ComboBoxControlTypeId) then
+    if (retval = id) then
     begin
       if counter = index then
-        result := TAutomationComboBox.create(element);
-
-      element.Get_CurrentName(name);
-
-      writeln (name);
+      begin
+        result := element;
+      end;
 
       inc(counter);
     end;
@@ -233,5 +169,9 @@ begin
     raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
+function TAutomationContainer.GetRadioButtonByIndex(index: integer): TAutomationRadioButton;
+begin
+  result := TAutomationRadioButton.Create(GetControlByControlType(index, UIA_RadioButtonControlTypeId));
+end;
 
 end.
