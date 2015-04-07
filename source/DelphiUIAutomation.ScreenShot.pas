@@ -48,7 +48,7 @@ type
     ///<summary>
     ///  Destruction
     ///</summary>
-    destructor Destroy;
+    destructor Destroy; override;
 
     /// <summary>
     ///  Saves a screenshot of the current desktop
@@ -75,7 +75,6 @@ procedure TAutomationScreenshot.CaptureScreenshot;
 var
   Win: HWND;
   DC: HDC;
-  FileName: string;
   WinRect: TRect;
   Width: Integer;
   Height: Integer;
@@ -107,7 +106,9 @@ end;
 destructor TAutomationScreenshot.Destroy;
 begin
   FBmp.FreeImage;
-  freeAndNil(FBmp) ;
+  freeAndNil(FBmp);
+
+  inherited;
 end;
 
 procedure TAutomationScreenshot.SaveCurrentScreen;

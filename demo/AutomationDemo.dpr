@@ -35,7 +35,6 @@ uses
   DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
   DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
-  DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
   DelphiUIAutomation.Button in '..\source\Controls\DelphiUIAutomation.Button.pas',
   DelphiUIAutomation.ControlTypeIDs in '..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas',
   DelphiUIAutomation.PatternIDs in '..\source\Ids\DelphiUIAutomation.PatternIDs.pas',
@@ -51,22 +50,24 @@ uses
   DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas',
   DelphiUIAutomation.Desktop in '..\source\Controls\DelphiUIAutomation.Desktop.pas',
   DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas',
-  DelphiUIAutomation.Menu in '..\source\Controls\DelphiUIAutomation.Menu.pas';
+  DelphiUIAutomation.Menu in '..\source\Controls\DelphiUIAutomation.Menu.pas',
+  DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
+  DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas';
 
 var
   FApp : TAutomationApplication;
-  windows : TList<TAutomationWindow>;
-  window : TAutomationWindow;
-  i : integer;
-  splash : TAutomationWindow;
+//  windows : TList<TAutomationWindow>;
+//  window : TAutomationWindow;
+//  i : integer;
+//  splash : TAutomationWindow;
   enquiry : TAutomationWindow;
-  connect, security, calc : TAutomationWindow;
+//  connect, security, calc : TAutomationWindow;
   tb1 : TAutomationTextBox;
-  tb0 : TAutomationTextBox;
-  btnOK, btnCalc : TAutomationButton;
-  mouse : TAutomationMouse;
-  price, quantity, netValue : TAutomationTextBox;
-  account, stock, buysell : TAutomationComboBox;
+//  tb0 : TAutomationTextBox;
+//  btnOK, btnCalc : TAutomationButton;
+//  mouse : TAutomationMouse;
+//  price, quantity, netValue : TAutomationTextBox;
+//  account, stock, buysell : TAutomationComboBox;
   tab : TAutomationTab;
   statusBar : TAutomationStatusbar;
 

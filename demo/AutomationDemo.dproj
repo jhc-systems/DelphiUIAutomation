@@ -127,7 +127,6 @@
         <DCCReference Include="..\source\DelphiUIAutomation.Client.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Utils.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.TextBox.pas"/>
-        <DCCReference Include="..\source\DelphiUIAutomation.Base.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Button.pas"/>
         <DCCReference Include="..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas"/>
         <DCCReference Include="..\source\Ids\DelphiUIAutomation.PatternIDs.pas"/>
@@ -144,6 +143,8 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Desktop.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.ScreenShot.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Menu.pas"/>
+        <DCCReference Include="..\source\DelphiUIAutomation.Base.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Container.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

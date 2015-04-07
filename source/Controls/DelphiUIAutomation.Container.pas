@@ -19,72 +19,50 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.Window;
+unit DelphiUIAutomation.Container;
 
 interface
 
 uses
-  DelphiUIAutomation.Container,
-  DelphiUIAutomation.Tab,
-  DelphiUIAutomation.Statusbar,
-  UIAutomationClient_TLB;
+  DelphiUIAutomation.TextBox,
+  DelphiUIAutomation.CheckBox,
+  DelphiUIAutomation.ComboBox,
+  DelphiUIAutomation.Button,
+  DelphiUIAutomation.Base;
 
 type
-  /// <summary>
-  ///  Represents a window
-  /// </summary>
-  TAutomationWindow = class (TAutomationContainer)
-  private
-    function GetStatusBar : TAutomationStatusbar;
+  TAutomationContainer = class (TAutomationBase)
   public
     /// <summary>
-    /// Finds the child window with the title supplied
+    /// Finds the textbox, by index
     /// </summary>
-    function Window (const title : string) : TAutomationWindow;
+    function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
 
     /// <summary>
-    /// Finds the tab
+    /// Finds the combobox, by index
     /// </summary>
-    /// <remarks>
-    ///  This is the first tab associated with this window
-    /// </remarks>
-    function GetTab : TAutomationTab;
-
-    ///<summary>
-    ///  Sets the focus to this window
-    ///</summary>
-    procedure Focus;
+    function GetComboboxByIndex (index : integer) : TAutomationComboBox;
 
     /// <summary>
-    ///  Prints out the child controls
+    /// Finds the checkbox, by index
     /// </summary>
-    /// <remarks>
-    ///  For debugging only
-    /// </remarks>
-    procedure ListControlsAndStuff(element : IUIAutomationElement); deprecated;
+    function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
 
-    ///<summary>
-    /// The status bar associated with this window
-    ///</summary>
-    property StatusBar : TAutomationStatusBar read GetStatusBar;
+    /// <summary>
+    /// Finds the button with the title supplied
+    /// </summary>
+    function GetButton (const title : string) : TAutomationButton;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation,
-  sysutils;
+  UIAutomationClient_TLB;
 
-{ TAutomationWindow }
-
-procedure TAutomationWindow.Focus;
-begin
-  self.FElement.SetFocus;
-end;
-
-function TAutomationWindow.GetStatusBar: TAutomationStatusbar;
+function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -92,10 +70,9 @@ var
   count : integer;
   length : integer;
   retVal : integer;
+  counter : integer;
 
 begin
-  result := nil;
-
   UIAuto.CreateTrueCondition(condition);
 
   // Find the element
@@ -103,107 +80,31 @@ begin
 
   collection.Get_Length(length);
 
+  counter := 0;
+
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
+
     element.Get_CurrentControlType(retVal);
 
-    if (retval = UIA_StatusBarControlTypeId) then
+    if (retval = UIA_EditControlTypeId) then
     begin
-      result := TAutomationStatusbar.create(element);
+      if counter = index then
+      begin
+        result := TAutomationTextBox.create(element);
+        break;
+      end;
+
+      inc(counter);
     end;
   end;
 
   if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find statusbar');
+    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
-function TAutomationWindow.GetTab : TAutomationTab;
-var
-  element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  count : integer;
-  length : integer;
-  retVal : integer;
-
-begin
-  result := nil;
-
-  UIAuto.CreateTrueCondition(condition);
-
-  // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-    element.Get_CurrentControlType(retVal);
-
-    if (retval = UIA_TabControlTypeId) then
-    begin
-      result := TAutomationTab.create(element);
-    end;
-  end;
-
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find tab');
-
-end;
-
-procedure TAutomationWindow.ListControlsAndStuff(element : IUIAutomationElement);
-var
-  //element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
-  count : integer;
-  name, help : widestring;
-  length : integer;
-  retVal : integer;
-
-begin
-  UIAuto.CreateTrueCondition(condition);
-
-  if (element = nil) then
-    element := self.FElement;
-
-  // Find the element
-  element.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-
-    element.Get_CurrentName(name);
-    element.Get_CurrentControlType(retVal);
-    element.Get_CurrentHelpText(help);
-
-    Write(name + ' - ');
-    Write(retval);
-    Writeln(' - ' + help);
-
-    if retval = UIA_PaneControlTypeId then
-    begin
-      writeln('Looking at children');
-      ListControlsAndStuff(element);
-    end;
-
-//    if (name = title)then
-//    begin
-//      result := TAutomationWindow.create(element);
-//      break;
-//    end;
-  end;
-
-//  if result = nil then
-//    raise Exception.Create('Unable to find window');
-end;
-
-function TAutomationWindow.Window(const title: string): TAutomationWindow;
+function TAutomationContainer.GetButton(const title: string): TAutomationButton;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -211,6 +112,7 @@ var
   count : integer;
   name : widestring;
   length : integer;
+  retVal : integer;
 
 begin
   result := nil;
@@ -225,18 +127,111 @@ begin
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
+    element.Get_CurrentControlType(retVal);
 
-    element.Get_CurrentName(name);
-
-    if (name = title)then
+    if (retval = UIA_ButtonControlTypeId) then
     begin
-      result := TAutomationWindow.create(element);
-      break;
+      element.Get_CurrentName(name);
+
+      if (name = title)then
+      begin
+        result := TAutomationButton.create(element);
+        break;
+      end;
     end;
   end;
 
   if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find window');
+    raise EDelphiAutomationException.Create('Unable to find button');
 end;
+
+function TAutomationContainer.GetCheckboxByIndex(index: integer): TAutomationCheckBox;
+var
+  element : IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name : widestring;
+  length : integer;
+  retVal : integer;
+  counter : integer;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  // Find the element
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  counter := 0;
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentControlType(retVal);
+
+    if (retval = UIA_CheckBoxControlTypeId) then
+    begin
+      if counter = index then
+        result := TAutomationCheckBox.create(element);
+
+      element.Get_CurrentName(name);
+
+      writeln (name);
+
+      inc(counter);
+    end;
+  end;
+
+  if result = nil then
+    raise EDelphiAutomationException.Create('Unable to find control');
+end;
+
+function TAutomationContainer.GetComboboxByIndex (index : integer) : TAutomationComboBox;
+var
+  element : IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name : widestring;
+  length : integer;
+  retVal : integer;
+  counter : integer;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  // Find the element
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  counter := 0;
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentControlType(retVal);
+
+    if (retval = UIA_ComboBoxControlTypeId) then
+    begin
+      if counter = index then
+        result := TAutomationComboBox.create(element);
+
+      element.Get_CurrentName(name);
+
+      writeln (name);
+
+      inc(counter);
+    end;
+  end;
+
+  if result = nil then
+    raise EDelphiAutomationException.Create('Unable to find control');
+end;
+
 
 end.
