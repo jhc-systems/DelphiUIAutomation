@@ -55,7 +55,8 @@ uses
   DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
   DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
   DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas',
-  DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas';
+  DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas',
+  DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas';
 
 var
   FApp : TAutomationApplication;
