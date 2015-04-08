@@ -28,5 +28,3 @@ Apache Version 2.0 Copyright (C) 2015
 See license.txt for details.
 
 # See also
-http://uiautomation.codeplex.com/documentation
-https://github.com/TestStack/White
