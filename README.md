@@ -28,3 +28,5 @@ Apache Version 2.0 Copyright (C) 2015
 See license.txt for details.
 
 # See also
+[UIAutomation for Powershell](http://uiautomation.codeplex.com/documentation)
+[TestStack.White](https://github.com/TestStack/White)

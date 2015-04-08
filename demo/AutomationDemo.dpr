@@ -111,8 +111,8 @@ begin
   check := enquiry.GetCheckboxByIndex(0);
   check.toggle;
 
-  radio := enquiry.GetRadioButtonByIndex(1);
-  radio.toggle;
+  radio := enquiry.GetRadioButtonByIndex(2);
+  radio.Select;
 
   WriteLn ('Press return to continue');
   ReadLn ;

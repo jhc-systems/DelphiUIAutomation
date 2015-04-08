@@ -33,7 +33,10 @@ type
   /// </summary>
   TAutomationRadioButton = class (TAutomationBase)
   public
-    function Toggle: HRESULT;
+    ///<summary>
+    ///  Selects the control
+    ///</summary>
+    function Select: HRESULT;
   end;
 
 implementation
@@ -43,21 +46,21 @@ uses
 
 { TAutomationRadioButton }
 
-function TAutomationRadioButton.Toggle: HRESULT;
+function TAutomationRadioButton.Select: HRESULT;
 var
   Inter: IInterface;
-  pattern : IUIAutomationTogglePattern;
+  pattern : IUIAutomationSelectionItemPattern;
 
 begin
   result := -1;
 
-  fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
+  fElement.GetCurrentPattern(UIA_SelectionItemPatternId, inter);
 
   if (inter <> nil) then
   begin
-    if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+    if Inter.QueryInterface(IID_IUIAutomationSelectionItemPattern, pattern) = S_OK then
     begin
-      result := pattern.Toggle;
+      result := pattern.Select;
     end;
   end;
 end;
