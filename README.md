@@ -10,12 +10,23 @@ It provides a consistent object-oriented API, hiding the complexity of Microsoft
 ## Getting started
 
 ### Getting hold of a window
-###Finding an item and performing an action
+### Finding a control
+### Invoking actions on controls
+### Context menus
+In Progress
+### Drag and drop
+In Progress
+### Event handling
+To do
 
 # Contributors
 Mark Humphreys
 
 # License
-Apache Version 2.0 Copyright (C) 2015 
+Apache Version 2.0 Copyright (C) 2015
 
 See license.txt for details.
+
+# See also
+http://uiautomation.codeplex.com/documentation
+https://github.com/TestStack/White

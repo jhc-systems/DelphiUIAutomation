@@ -32,11 +32,34 @@ type
   ///  Represents a checkbox control
   /// </summary>
   TAutomationCheckBox = class (TAutomationBase)
+  public
+    ///<summary>
+    ///  Performs a toggle action
+    ///</summary>
+    function Toggle: HRESULT;
   end;
 
 implementation
 
+uses
+  DelphiUIAutomation.PatternIDs;
+
 { TAutomationCheckBox }
+
+function TAutomationCheckBox.Toggle: HRESULT;
+var
+  Inter: IInterface;
+  pattern : IUIAutomationTogglePattern;
+
+begin
+  result := -1;
+
+  fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
+  if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+  begin
+    result := pattern.Toggle;
+  end;
+end;
 
 end.
 

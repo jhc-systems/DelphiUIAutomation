@@ -148,7 +148,6 @@ var
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   count : integer;
-  name : widestring;
   length : integer;
   retVal : integer;
   counter : integer;

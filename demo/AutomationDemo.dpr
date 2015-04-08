@@ -72,12 +72,13 @@ var
 //  account, stock, buysell : TAutomationComboBox;
   tab : IAutomationTab;
   statusBar : TAutomationStatusbar;
+  check : TAutomationCheckBox;
 
 begin
   // First launch the application
   FApp := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
 
-  sleep(5000);
+  sleep(1000);
 
   // Now wait for a very long time for the enquiry screen to come up
   enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
@@ -105,6 +106,9 @@ begin
   // Get the textedits from the statusbar???
 
 //  TAutomationApplication.SaveScreenshot;
+
+  check := tab.GetCheckboxByIndex(0);
+  writeln(check.toggle);
 
   FApp.Kill;
 
