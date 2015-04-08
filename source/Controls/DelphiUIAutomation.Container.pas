@@ -149,7 +149,7 @@ var
   condition : IUIAutomationCondition;
   count : integer;
   length : integer;
-  retVal : integer;
+  controlType : integer;
   counter : integer;
 
 begin
@@ -166,9 +166,9 @@ begin
   begin
     collection.GetElement(count, element);
 
-    element.Get_CurrentControlType(retVal);
+    element.Get_CurrentControlType(controlType);
 
-    if (retval = id) then
+    if (controlType = id) then
     begin
       if counter = index then
       begin

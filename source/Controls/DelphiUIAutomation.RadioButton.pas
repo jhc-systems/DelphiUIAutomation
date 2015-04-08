@@ -32,11 +32,35 @@ type
   ///  Represents a radio button control
   /// </summary>
   TAutomationRadioButton = class (TAutomationBase)
+  public
+    function Toggle: HRESULT;
   end;
 
 implementation
 
+uses
+  DelphiUIAutomation.PatternIDs;
+
 { TAutomationRadioButton }
+
+function TAutomationRadioButton.Toggle: HRESULT;
+var
+  Inter: IInterface;
+  pattern : IUIAutomationTogglePattern;
+
+begin
+  result := -1;
+
+  fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
+
+  if (inter <> nil) then
+  begin
+    if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+    begin
+      result := pattern.Toggle;
+    end;
+  end;
+end;
 
 end.
 

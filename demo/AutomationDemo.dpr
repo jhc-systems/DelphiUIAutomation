@@ -73,6 +73,7 @@ var
   tab : IAutomationTab;
   statusBar : TAutomationStatusbar;
   check : TAutomationCheckBox;
+  radio : TAutomationRadioButton;
 
 begin
   // First launch the application
@@ -107,8 +108,14 @@ begin
 
 //  TAutomationApplication.SaveScreenshot;
 
-  check := tab.GetCheckboxByIndex(0);
-  writeln(check.toggle);
+  check := enquiry.GetCheckboxByIndex(0);
+  check.toggle;
+
+  radio := enquiry.GetRadioButtonByIndex(1);
+  radio.toggle;
+
+  WriteLn ('Press return to continue');
+  ReadLn ;
 
   FApp.Kill;
 
