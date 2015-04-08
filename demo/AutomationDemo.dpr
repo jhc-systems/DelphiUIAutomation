@@ -54,7 +54,8 @@ uses
   DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
   DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
   DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
-  DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas';
+  DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas',
+  DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas';
 
 var
   FApp : TAutomationApplication;
@@ -66,6 +67,7 @@ var
 //  connect, security, calc : TAutomationWindow;
   tb1 : TAutomationTextBox;
 //  tb0 : TAutomationTextBox;
+  combo : TAutomationComboBox;
 //  btnOK, btnCalc : TAutomationButton;
 //  mouse : TAutomationMouse;
 //  price, quantity, netValue : TAutomationTextBox;
@@ -110,6 +112,9 @@ begin
 
   check := enquiry.GetCheckboxByIndex(0);
   check.toggle;
+
+  combo := enquiry.GetComboBoxByIndex(0);
+  //WriteLn(combo.Items[0].Name);
 
   radio := enquiry.GetRadioButtonByIndex(2);
   radio.Select;

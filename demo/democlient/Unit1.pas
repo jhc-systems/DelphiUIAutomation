@@ -25,6 +25,7 @@ type
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
     StatusBar1: TStatusBar;
+    ComboBox1: TComboBox;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private

@@ -75,7 +75,9 @@ type
 implementation
 
 uses
+  ActiveX,
   DelphiUIAutomation.Tab,
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation;
@@ -151,9 +153,13 @@ var
   length : integer;
   controlType : integer;
   counter : integer;
+  varProp : OleVariant;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
+  TVariantArg(varProp).vt := VT_I4;
+  TVariantArg(varProp).lVal := id;
+
+  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
 
   // Find the element
   self.FElement.FindAll(TreeScope_Descendants, condition, collection);
@@ -166,16 +172,9 @@ begin
   begin
     collection.GetElement(count, element);
 
-    element.Get_CurrentControlType(controlType);
-
-    if (controlType = id) then
+    if counter = index then
     begin
-      if counter = index then
-      begin
-        result := element;
-      end;
-
-      inc(counter);
+      result := element;
     end;
   end;
 
