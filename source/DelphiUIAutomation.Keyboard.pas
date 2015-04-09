@@ -27,6 +27,9 @@ type
   /// <summary>
   ///  The representation of the keyboard
   /// </summary>
+  /// <remarks>
+  ///  http://stackoverflow.com/questions/18662637/sendinput-vs-keybd-event
+  /// </remarks>
   TAutomationKeyboard = class
   public
     ///<summary>
@@ -43,13 +46,21 @@ uses
 { TAutomationKeyboard }
 
 procedure SendKeyDown (key : short; specialKey : boolean);
+var
+  KeyInputs: array of TInput;
+
 begin
 
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
 end;
 
 procedure SendKeyUp (key : short; specialKey : boolean);
+var
+  KeyInputs: array of TInput;
+
 begin
 
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
 end;
 
 procedure Press (key : short; specialKey : boolean);
@@ -67,7 +78,7 @@ begin
   for key in keys do
   begin
     // Do we need to hold other keys???
-    Press(key, false);
+    Press(Ord(key), false);
   end;
 end;
 
