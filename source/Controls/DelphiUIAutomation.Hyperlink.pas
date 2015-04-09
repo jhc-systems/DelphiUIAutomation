@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.TabItem;
+unit DelphiUIAutomation.Hyperlink;
 
 interface
 
@@ -29,39 +29,42 @@ uses
 
 type
   /// <summary>
-  ///  Represents a tab item
+  ///  Represents a hyperlink
   /// </summary>
-  TAutomationTabItem = class (TAutomationBase)
+  TAutomationHyperlink = class (TAutomationBase)
   public
     /// <summary>
     ///  Selects this tabitem
     /// </summary>
-    procedure Select;
+    /// <remarks>
+    ///  Has to simulate the click
+    /// </remarks>
+    procedure Click;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.Automation,
-  DelphiUIAutomation.PatternIDs;
+  DelphiUIAutomation.Mouse;
 
-{ TAutomationTabItem }
+{ TAutomationHyperlink }
 
-procedure TAutomationTabItem.Select;
+procedure TAutomationHyperlink.Click;
 var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
+  rect : tagRect;
+  mouse : TAutomationMouse;
 
 begin
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternID, unknown);
+  fElement.Get_CurrentBoundingRectangle(rect);
 
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationSelectionItemPattern, Pattern) = S_OK then
-    begin
-      Pattern.Invoke;
-    end;
+  mouse := TAutomationMouse.Create;
+
+  try
+    mouse.LeftClick(rect.top, rect.left);
+  finally
+    mouse.Free;
   end;
+
 end;
 
 end.

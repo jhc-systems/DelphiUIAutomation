@@ -35,6 +35,9 @@ uses
   UIAutomationClient_TLB;
 
 type
+  /// <summary>
+  /// Finds the tab
+  /// </summary>
   TAutomationContainer = class (TAutomationBase, IAutomationContainer)
   protected
     function GetControlByControlType (index : integer; id : word) : IUIAutomationElement; overload;
