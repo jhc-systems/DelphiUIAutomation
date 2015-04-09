@@ -41,44 +41,35 @@ type
 implementation
 
 uses
+  generics.collections,
   winapi.windows;
 
 { TAutomationKeyboard }
 
-procedure SendKeyDown (key : short; specialKey : boolean);
-var
-  KeyInputs: array of TInput;
-
-begin
-
-  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
-end;
-
-procedure SendKeyUp (key : short; specialKey : boolean);
-var
-  KeyInputs: array of TInput;
-
-begin
-
-  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
-end;
-
-procedure Press (key : short; specialKey : boolean);
-begin
-  SendKeyDown (key, specialKey);
-  SendKeyUp (key, specialKey);
-end;
-
 class procedure TAutomationKeyboard.Enter(const keys: string);
 var
-  count : integer;
-  key : char;
+  c: char;
+  input: TInput;
+  inputList: TList<TInput>;
 
 begin
-  for key in keys do
-  begin
-    // Do we need to hold other keys???
-    Press(Ord(key), false);
+  inputList := TList<TInput>.Create;
+  try
+    for c in keys do
+    begin
+      if c = #10 then
+        continue;
+      input := Default(TInput);
+      input.Itype := INPUT_KEYBOARD;
+      input.ki.dwFlags := KEYEVENTF_UNICODE;
+      input.ki.wScan := ord(c);
+      inputList.Add(Input);
+      input.ki.dwFlags := KEYEVENTF_UNICODE or KEYEVENTF_KEYUP;
+      inputList.Add(Input);
+    end;
+    SendInput(inputList.Count, InputList.List[0], SizeOf(TInput));
+  finally
+    inputList.Free;
   end;
 end;
 

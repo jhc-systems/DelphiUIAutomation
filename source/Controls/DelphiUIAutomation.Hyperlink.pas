@@ -45,6 +45,7 @@ type
 implementation
 
 uses
+  Winapi.Windows,
   DelphiUIAutomation.Mouse;
 
 { TAutomationHyperlink }
@@ -60,7 +61,8 @@ begin
   mouse := TAutomationMouse.Create;
 
   try
-    mouse.LeftClick(rect.top, rect.left);
+    mouse.Location := TPoint.Create(rect.top, rect.left);
+    mouse.LeftClick;
   finally
     mouse.Free;
   end;
