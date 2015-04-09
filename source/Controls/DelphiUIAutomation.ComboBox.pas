@@ -107,7 +107,7 @@ var
 
 begin
   fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) = S_OK then
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
   begin
     raise EDelphiAutomationException.Create('Unable to initialise control pattern');
   end;
@@ -121,7 +121,6 @@ var
   retval : integer;
   length : integer;
   varProp : OleVariant;
-  hres : HRESULT;
 
 begin
   inherited Create(element);
@@ -134,10 +133,10 @@ begin
   TVariantArg(varProp).vt := VT_I4;
   TVariantArg(varProp).lVal := UIA_ListItemControlTypeId;
 
-  hres := UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
+  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
 
   // Find the element
-  hres := self.FElement.FindAll(TreeScope_Element, condition, collection);
+  self.FElement.FindAll(TreeScope_Children, condition, collection);
 
   collection.Get_Length(length);
 
