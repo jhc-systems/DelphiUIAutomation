@@ -31,46 +31,16 @@ type
   /// <summary>
   ///  Represents a text box
   /// </summary>
-  /// <remarks>
-  ///  TEdit for example.
-  /// </remarks>
   TAutomationTextBox = class (TAutomationBase)
-  private
-    function getText: string;
   public
-    ///<summary>
-    ///  Gets or sets the text
-    ///</summary>
-    property Text : string read getText;
+    /// <summary>
+    ///  Gets the text from the control
+    /// </summary>
+    property Text : string read getName;
   end;
 
 implementation
 
-uses
-  DelphiUIAutomation.Exception,
-  DelphiUIAutomation.PatternIDs,
-  sysutils;
-
 { TAutomationTextBox }
-
-function TAutomationTextBox.getText: string;
-var
-  Inter: IInterface;
-  ValPattern  : IUIAutomationValuePattern;
-  value : widestring;
-
-begin
-  result := '';
-  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-
-  if inter <> nil then
-  begin
-    if Inter.QueryInterface(IID_IUIAutomationValuePattern, ValPattern) = S_OK then
-    begin
-      ValPattern.Get_CurrentValue(value);
-      Result := trim(value);
-    end;
-  end;
-end;
 
 end.
