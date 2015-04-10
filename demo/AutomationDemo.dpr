@@ -28,13 +28,13 @@ program AutomationDemo;
 uses
   generics.collections,
   System.SysUtils,
-  types,
+  System.Types,
   DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
   UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
   DelphiUIAutomation.Window in '..\source\Controls\DelphiUIAutomation.Window.pas',
   DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
   DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
-  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
+  DelphiUIAutomation.EditBox in '..\source\Controls\DelphiUIAutomation.EditBox.pas',
   DelphiUIAutomation.Button in '..\source\Controls\DelphiUIAutomation.Button.pas',
   DelphiUIAutomation.ControlTypeIDs in '..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas',
   DelphiUIAutomation.PatternIDs in '..\source\Ids\DelphiUIAutomation.PatternIDs.pas',
@@ -57,7 +57,8 @@ uses
   DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas',
   DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas',
   DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
-  DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas';
+  DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
+  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas';
 
 var
   FApp : TAutomationApplication;
@@ -67,8 +68,8 @@ var
 //  splash : TAutomationWindow;
   enquiry : TAutomationWindow;
 //  connect, security, calc : TAutomationWindow;
-  tb1 : TAutomationTextBox;
-//  tb0 : TAutomationTextBox;
+  tb1 : TAutomationEditBox;
+  eb0 : TAutomationTextBox;
   combo : TAutomationComboBox;
 //  btnOK, btnCalc : TAutomationButton;
 //  mouse : TAutomationMouse;
@@ -93,7 +94,7 @@ begin
   tab := enquiry.GetTabByIndex(0);
   tab.SelectTabPage('Second Tab');     // 3 is the magic number
 
-  tb1 := tab.GetTextBoxByIndex(0);
+  tb1 := tab.GetEditBoxByIndex(0);
   writeln(tb1.Text);
 
 //  tab.selectedItem.ListControlsAndStuff(nil);
@@ -106,9 +107,9 @@ begin
 //  sleep(8000);
 
   // Now see whether we can get the statusbar
-//  statusBar := enquiry.StatusBar;
+  statusBar := enquiry.StatusBar;
 
-  // Get the textedits from the statusbar???
+  statusBar.ListControlsAndStuff(nil);
 
 //  TAutomationApplication.SaveScreenshot;
 
@@ -120,6 +121,10 @@ begin
 
   radio := enquiry.GetRadioButtonByIndex(2);
   radio.Select;
+
+  // Get the textboxes from the statusbar???
+  eb0 := statusBar.GetTextBoxByIndex(1);
+  writeln (eb0.Text);
 
   WriteLn ('Press return to continue');
   ReadLn ;

@@ -4,6 +4,7 @@ interface
 
 uses
   DelphiUIAutomation.TextBox,
+  DelphiUIAutomation.EditBox,
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Combobox,
@@ -26,6 +27,11 @@ type
     /// Finds the textbox, by index
     /// </summary>
     function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
+
+    /// <summary>
+    /// Finds the editbox, by index
+    /// </summary>
+    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
 
     /// <summary>
     /// Finds the combobox, by index

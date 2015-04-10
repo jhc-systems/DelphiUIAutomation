@@ -24,17 +24,23 @@ unit DelphiUIAutomation.Statusbar;
 interface
 
 uses
+
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.Container,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
   ///  Represents a statusbar
   /// </summary>
-  TAutomationStatusbar = class (TAutomationBase)
+  TAutomationStatusbar = class (TAutomationContainer)
   end;
 
 implementation
+
+uses
+  DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.Automation;
 
 { TAutomationStatusbar }
 

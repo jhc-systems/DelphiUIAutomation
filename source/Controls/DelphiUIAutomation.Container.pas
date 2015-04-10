@@ -25,6 +25,7 @@ interface
 
 uses
   DelphiUIAutomation.Tab.Intf,
+  DelphiUIAutomation.EditBox,
   DelphiUIAutomation.TextBox,
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Container.Intf,
@@ -50,9 +51,14 @@ type
     function GetTabByIndex (index : integer) : IAutomationTab;
 
     /// <summary>
+    /// Finds the editbox, by index
+    /// </summary>
+    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
+
+    /// <summary>
     /// Finds the textbox, by index
     /// </summary>
-    function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
+    function GetTextBoxByIndex(index: integer): TAutomationTextBox;
 
     /// <summary>
     /// Finds the combobox, by index
@@ -73,6 +79,16 @@ type
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
+
+{$IFDEF INVESTIGATION}
+    /// <summary>
+    ///  Prints out the child controls
+    /// </summary>
+    /// <remarks>
+    ///  For investigation only
+    /// </remarks>
+    procedure ListControlsAndStuff(element : IUIAutomationElement);
+{$ENDIF}
   end;
 
 implementation
@@ -85,9 +101,65 @@ uses
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation;
 
+{$IFDEF INVESTIGATION}
+procedure TAutomationContainer.ListControlsAndStuff(element : IUIAutomationElement);
+var
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  name, help : widestring;
+  length : integer;
+  retVal : integer;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  if element = nil then
+    element := self.FElement;
+
+  // Find the elements
+  element.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentName(name);
+    element.Get_CurrentControlType(retVal);
+    element.Get_CurrentHelpText(help);
+
+    Write(name + ' - ');
+    Write(retval);
+    Writeln(' - ' + help);
+
+    if retval = UIA_PaneControlTypeId then
+    begin
+      writeln('Looking at children');
+      ListControlsAndStuff(element);
+    end;
+
+//    if (name = title)then
+//    begin
+//      result := TAutomationWindow.create(element);
+//      break;
+//    end;
+  end;
+
+//  if result = nil then
+//    raise Exception.Create('Unable to find window');
+end;
+{$ENDIF}
+
+function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
+begin
+  result := TAutomationEditBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
+end;
+
 function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
 begin
-  result := TAutomationTextBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
+  result := TAutomationTextBox.Create(GetControlByControlType(index, UIA_TextControlTypeId));
 end;
 
 function TAutomationContainer.GetButton(const title: string): TAutomationButton;
@@ -179,6 +251,8 @@ begin
     begin
       result := element;
     end;
+
+    inc (counter);
   end;
 
   if result = nil then

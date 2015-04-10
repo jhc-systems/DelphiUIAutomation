@@ -107,6 +107,7 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_Define>INVESTIGATION;$(DCC_Define)</DCC_Define>
         <Manifest_File>None</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -126,7 +127,7 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Window.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Client.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Utils.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.TextBox.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.EditBox.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Button.pas"/>
         <DCCReference Include="..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas"/>
         <DCCReference Include="..\source\Ids\DelphiUIAutomation.PatternIDs.pas"/>
@@ -150,6 +151,7 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.ListItem.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Keyboard.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Hyperlink.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.TextBox.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -220,6 +222,16 @@
                 <Source>
                     <Source Name="MainSource">AutomationDemo.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\Transactions190.bpl">File C:\Users\Public\Documents\RAD Studio\12.0\Bpl\Transactions190.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\Customer190.bpl">File C:\Users\Public\Documents\RAD Studio\12.0\Bpl\Customer190.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\ClientDetails190.bpl">File C:\Users\Public\Documents\RAD Studio\12.0\Bpl\ClientDetails190.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="C:\Users\Public\Documents\RAD Studio\12.0\Bpl\UID190.bpl">JHC User Interface Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k190.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp190.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k190.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp190.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment/>
             <Platforms>
