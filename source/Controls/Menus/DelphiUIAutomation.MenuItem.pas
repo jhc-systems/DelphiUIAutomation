@@ -32,8 +32,50 @@ type
   ///  Represents a menu item
   /// </summary>
   TAutomationMenuItem = class (TAutomationBase)
+  strict private
+    FInvokePattern : IUIAutomationInvokePattern;
+  private
+    procedure GetInvokePattern;
+  public
+    /// <summary>
+    ///  Constructor for menu items.
+    /// </summary>
+    constructor Create(element : IUIAutomationElement); override;
+
+    /// <summary>
+    ///  Clicks the menuitem
+    /// </summary>
+    function Click: HResult;
   end;
 
 implementation
+
+uses
+  DelphiUIAutomation.Exception,
+  DelphiUIAutomation.PatternIDs;
+
+constructor TAutomationMenuItem.Create(element: IUIAutomationElement);
+begin
+  inherited create(element);
+
+  GetInvokePattern;
+end;
+
+procedure TAutomationMenuItem.GetInvokePattern;
+var
+  inter: IInterface;
+
+begin
+  fElement.GetCurrentPattern(UIA_InvokePatternId, inter);
+  if Inter.QueryInterface(IUIAutomationInvokePattern, FInvokePattern) <> S_OK then
+  begin
+    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+  end;
+end;
+
+function TAutomationMenuItem.Click : HResult;
+begin
+  result := FInvokePattern.Invoke;
+end;
 
 end.

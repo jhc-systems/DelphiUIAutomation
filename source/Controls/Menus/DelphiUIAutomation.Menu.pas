@@ -38,6 +38,7 @@ type
     FItems : TList<TAutomationMenuItem>;
   private
     function getItems: TList<TAutomationMenuItem>;
+    procedure InitialiseList;
   public
     /// <summary>
     ///  Constructor for menu.
@@ -64,19 +65,57 @@ type
 
 implementation
 
+uses
+  DelphiUIAutomation.Automation,
+  DelphiUIAutomation.ControlTypeIDs;
+
 { TAutomationMenu }
 
 constructor TAutomationMenu.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
-  FItems := TList<TAutomationMenuItem>.create;
+  InitialiseList;
 end;
 
 function TAutomationMenu.getItems: TList<TAutomationMenuItem>;
 begin
   result := self.FItems;
 end;
+
+procedure TAutomationMenu.InitialiseList;
+var
+  condition : IUIAutomationCondition;
+  collection : IUIAutomationElementArray;
+  itemElement : IUIAutomationElement;
+  count : integer;
+  length : integer;
+  retVal : integer;
+  item : TAutomationMenuItem;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  FItems := TList<TAutomationMenuItem>.create;
+
+  // Find the elements
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, itemElement);
+    itemElement.Get_CurrentControlType(retVal);
+
+    if (retVal = UIA_MenuItemControlTypeId) then
+    begin
+      item := TAutomationMenuItem.Create(itemElement);
+      FItems.Add(item);
+    end;
+  end;
+end;
+
 
 end.
 
