@@ -115,12 +115,12 @@ end;
 
 constructor TAutomationComboBox.Create(element: IUIAutomationElement);
 var
-  condition : IUIAutomationCondition;
+  condition, condition1 : IUIAutomationCondition;
   collection : IUIAutomationElementArray;
+  listElement : IUIAutomationElement;
   count : integer;
-  retval : integer;
   length : integer;
-  varProp : OleVariant;
+  varProp, varProp1 : OleVariant;
 
 begin
   inherited Create(element);
@@ -128,15 +128,26 @@ begin
   GetExpandCollapsePattern;
   GetValuePattern;
 
+  self.Expand;
+
   FItems := TList<TAutomationListItem>.Create;
 
+  // Get the List child control inside the combo box
   TVariantArg(varProp).vt := VT_I4;
-  TVariantArg(varProp).lVal := UIA_ListItemControlTypeId;
+  TVariantArg(varProp).lVal := UIA_ListControlTypeId;
 
   UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
 
-  // Find the element
-  self.FElement.FindAll(TreeScope_Children, condition, collection);
+  // Find the list element
+  self.FElement.FindFirst(TreeScope_Children, condition, listElement);
+
+  TVariantArg(varProp1).vt := VT_I4;
+  TVariantArg(varProp1).lVal := UIA_ListItemControlTypeId;
+
+  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp1, condition1);
+
+  // Find the list item elements
+  listElement.FindAll(TreeScope_Children, condition1, collection);
 
   collection.Get_Length(length);
 
@@ -147,6 +158,7 @@ begin
     FItems.Add(TAutomationListItem.create(element));
   end;
 
+  self.Collapse;
 end;
 
 function TAutomationComboBox.Expand: HRESULT;

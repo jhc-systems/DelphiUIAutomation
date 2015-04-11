@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 533
+  ClientHeight = 514
   ClientWidth = 334
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -132,7 +132,7 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 514
+    Top = 495
     Width = 334
     Height = 19
     Panels = <
@@ -143,7 +143,7 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
-    ExplicitTop = 468
+    ExplicitTop = 514
   end
   object ComboBox1: TComboBox
     Left = 24

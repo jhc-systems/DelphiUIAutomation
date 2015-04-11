@@ -130,10 +130,6 @@ begin
     element.Get_CurrentControlType(retVal);
     element.Get_CurrentHelpText(help);
 
-    Write(name + ' - ');
-    Write(retval);
-    Writeln(' - ' + help);
-
     if retval = UIA_PaneControlTypeId then
     begin
       writeln('Looking at children');

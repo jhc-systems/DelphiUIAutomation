@@ -79,6 +79,7 @@ var
   statusBar : TAutomationStatusbar;
   check : TAutomationCheckBox;
   radio : TAutomationRadioButton;
+  val : string;
 
 begin
   // First launch the application
@@ -117,7 +118,9 @@ begin
   check.toggle;
 
   combo := enquiry.GetComboBoxByIndex(0);
-  //WriteLn(combo.Items[0].Name);
+
+
+  val := combo.Items[0].Name;
 
   radio := enquiry.GetRadioButtonByIndex(2);
   radio.Select;
