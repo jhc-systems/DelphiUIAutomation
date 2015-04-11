@@ -139,11 +139,11 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Statusbar.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Checkbox.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.RadioButton.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.MenuItem.pas"/>
+        <DCCReference Include="..\source\Controls\Menus\DelphiUIAutomation.MenuItem.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Exception.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Desktop.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.ScreenShot.pas"/>
-        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Menu.pas"/>
+        <DCCReference Include="..\source\Controls\Menus\DelphiUIAutomation.Menu.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Base.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Container.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Tab.Intf.pas"/>

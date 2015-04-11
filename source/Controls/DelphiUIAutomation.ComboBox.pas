@@ -56,9 +56,6 @@ type
     ///<summary>
     ///  Gets the list of items associated with this combobox
     ///</summary>
-    ///<remarks>
-    ///  To be implemented
-    ///</remarks>
     property Items : TList<TAutomationListItem> read getItems;
 
     /// <summary>

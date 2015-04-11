@@ -32,6 +32,7 @@ uses
   DelphiUIAutomation.RadioButton,
   DelphiUIAutomation.ComboBox,
   DelphiUIAutomation.Button,
+  DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
@@ -79,6 +80,11 @@ type
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
+
+    /// <summary>
+    /// Finds the main menu
+    /// </summary>
+    function GetMenuBar(index: integer) : TAutomationMainMenu;
 
 {$IFDEF INVESTIGATION}
     /// <summary>
@@ -151,6 +157,11 @@ end;
 function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
 begin
   result := TAutomationEditBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
+end;
+
+function TAutomationContainer.GetMenuBar(index: integer): TAutomationMainMenu;
+begin
+  result := TAutomationMainMenu.Create(GetControlByControlType(index, UIA_MenuBarControlTypeId));
 end;
 
 function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
@@ -246,6 +257,7 @@ begin
     if counter = index then
     begin
       result := element;
+      break;
     end;
 
     inc (counter);

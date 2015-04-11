@@ -46,11 +46,11 @@ uses
   DelphiUIAutomation.Statusbar in '..\source\Controls\DelphiUIAutomation.Statusbar.pas',
   DelphiUIAutomation.Checkbox in '..\source\Controls\DelphiUIAutomation.Checkbox.pas',
   DelphiUIAutomation.RadioButton in '..\source\Controls\DelphiUIAutomation.RadioButton.pas',
-  DelphiUIAutomation.MenuItem in '..\source\Controls\DelphiUIAutomation.MenuItem.pas',
+  DelphiUIAutomation.MenuItem in '..\source\Controls\Menus\DelphiUIAutomation.MenuItem.pas',
   DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas',
   DelphiUIAutomation.Desktop in '..\source\Controls\DelphiUIAutomation.Desktop.pas',
   DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas',
-  DelphiUIAutomation.Menu in '..\source\Controls\DelphiUIAutomation.Menu.pas',
+  DelphiUIAutomation.Menu in '..\source\Controls\Menus\DelphiUIAutomation.Menu.pas',
   DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
   DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
   DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
@@ -61,7 +61,8 @@ uses
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas';
 
 var
-  FApp : TAutomationApplication;
+  application : TAutomationApplication;
+  menu : TAutomationMainMenu;
 //  windows : TList<TAutomationWindow>;
 //  window : TAutomationWindow;
 //  i : integer;
@@ -83,7 +84,7 @@ var
 
 begin
   // First launch the application
-  FApp := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
+  application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   sleep(1000);
 
@@ -129,10 +130,15 @@ begin
   eb0 := statusBar.GetTextBoxByIndex(1);
   writeln ('Text is ' + eb0.Text);
 
+  menu := enquiry.GetMenuBar(1);
+  writeln(menu.Name);
+
+  writeln(menu.Items[0].Name);
+
   WriteLn ('Press return to continue');
   ReadLn ;
 
-  FApp.Kill;
+  application.Kill;
 
 end.
 

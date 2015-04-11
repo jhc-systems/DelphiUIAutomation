@@ -8,6 +8,7 @@ uses
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Combobox,
+  DelphiUIAutomation.Menu,
   DelphiUIAutomation.RadioButton;
 
 type
@@ -37,6 +38,11 @@ type
     /// Finds the checkbox, by index
     /// </summary>
     function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
+
+    /// <summary>
+    /// Finds the main menu
+    /// </summary>
+    function GetMenuBar (index: integer) : TAutomationMainMenu;
 
     /// <summary>
     /// Finds the button with the title supplied

@@ -24,6 +24,8 @@ unit DelphiUIAutomation.Menu;
 interface
 
 uses
+  generics.collections,
+  DelphiUIAutomation.MenuItem,
   DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
@@ -32,6 +34,20 @@ type
   ///  Represents a menu
   /// </summary>
   TAutomationMenu = class (TAutomationBase)
+  strict private
+    FItems : TList<TAutomationMenuItem>;
+  private
+    function getItems: TList<TAutomationMenuItem>;
+  public
+    /// <summary>
+    ///  Constructor for menu.
+    /// </summary>
+    constructor Create(element : IUIAutomationElement); override;
+
+    ///<summary>
+    ///  Gets the list of items associated with this combobox
+    ///</summary>
+    property Items : TList<TAutomationMenuItem> read getItems;
   end;
 
   /// <summary>
@@ -48,7 +64,19 @@ type
 
 implementation
 
-{ TAutomationStatusbar }
+{ TAutomationMenu }
+
+constructor TAutomationMenu.Create(element: IUIAutomationElement);
+begin
+  inherited create(element);
+
+  FItems := TList<TAutomationMenuItem>.create;
+end;
+
+function TAutomationMenu.getItems: TList<TAutomationMenuItem>;
+begin
+  result := self.FItems;
+end;
 
 end.
 
