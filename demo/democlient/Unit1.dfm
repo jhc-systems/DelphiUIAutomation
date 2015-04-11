@@ -10,6 +10,7 @@ object Form1: TForm1
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
@@ -160,5 +161,21 @@ object Form1: TForm1
       'Third'
       'Forth'
       'Beezer Conference')
+  end
+  object MainMenu1: TMainMenu
+    Left = 24
+    Top = 24
+    object File1: TMenuItem
+      Caption = 'File'
+      object Exit1: TMenuItem
+        Caption = 'Exit'
+      end
+    end
+    object Hel1: TMenuItem
+      Caption = 'Help'
+      object About1: TMenuItem
+        Caption = 'About'
+      end
+    end
   end
 end

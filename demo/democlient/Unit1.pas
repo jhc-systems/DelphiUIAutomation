@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus;
 
 type
   TForm1 = class(TForm)
@@ -26,6 +26,11 @@ type
     RadioButton3: TRadioButton;
     StatusBar1: TStatusBar;
     ComboBox1: TComboBox;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Hel1: TMenuItem;
+    Exit1: TMenuItem;
+    About1: TMenuItem;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private
