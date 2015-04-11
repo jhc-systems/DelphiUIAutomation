@@ -45,6 +45,7 @@ type
     function getItems: TList<TAutomationListItem>;
     procedure GetExpandCollapsePattern;
     procedure GetValuePattern;
+    procedure InitialiseList;
 
   public
     ///<summary>
@@ -114,51 +115,48 @@ begin
 end;
 
 constructor TAutomationComboBox.Create(element: IUIAutomationElement);
-var
-  condition, condition1 : IUIAutomationCondition;
-  collection : IUIAutomationElementArray;
-  listElement : IUIAutomationElement;
-  count : integer;
-  length : integer;
-  varProp, varProp1 : OleVariant;
-
 begin
   inherited Create(element);
 
   GetExpandCollapsePattern;
   GetValuePattern;
 
-  self.Expand;
+  self.Expand; // Have to expand for the list to be available
 
-  FItems := TList<TAutomationListItem>.Create;
+  InitialiseList;
+end;
 
-  // Get the List child control inside the combo box
-  TVariantArg(varProp).vt := VT_I4;
-  TVariantArg(varProp).lVal := UIA_ListControlTypeId;
+procedure TAutomationComboBox.InitialiseList;
+var
+  condition : IUIAutomationCondition;
+  collection : IUIAutomationElementArray;
+  itemElement : IUIAutomationElement;
+  count : integer;
+  length : integer;
+  retVal : integer;
+  item : TAutomationListItem;
 
-  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
+begin
+  UIAuto.CreateTrueCondition(condition);
 
-  // Find the list element
-  self.FElement.FindFirst(TreeScope_Children, condition, listElement);
+  FItems := TList<TAutomationListItem>.create;
 
-  TVariantArg(varProp1).vt := VT_I4;
-  TVariantArg(varProp1).lVal := UIA_ListItemControlTypeId;
-
-  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp1, condition1);
-
-  // Find the list item elements
-  listElement.FindAll(TreeScope_Children, condition1, collection);
+  // Find the elements
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
   collection.Get_Length(length);
 
   for count := 0 to length -1 do
   begin
-    collection.GetElement(count, element);
+    collection.GetElement(count, itemElement);
+    itemElement.Get_CurrentControlType(retVal);
 
-    FItems.Add(TAutomationListItem.create(element));
+    if (retVal = UIA_ListItemControlTypeId) then
+    begin
+      item := TAutomationListItem.Create(itemElement);
+      FItems.Add(item);
+    end;
   end;
-
-  self.Collapse;
 end;
 
 function TAutomationComboBox.Expand: HRESULT;

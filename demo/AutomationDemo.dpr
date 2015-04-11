@@ -119,15 +119,15 @@ begin
 
   combo := enquiry.GetComboBoxByIndex(0);
 
-
-  val := combo.Items[0].Name;
+  val := combo.Items[3].Name;
+  writeln ('Combobox Text (2) is ' + val);
 
   radio := enquiry.GetRadioButtonByIndex(2);
   radio.Select;
 
   // Get the textboxes from the statusbar???
   eb0 := statusBar.GetTextBoxByIndex(1);
-  writeln (eb0.Text);
+  writeln ('Text is ' + eb0.Text);
 
   WriteLn ('Press return to continue');
   ReadLn ;
