@@ -58,7 +58,8 @@ uses
   DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas',
   DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
   DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
-  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas';
+  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
+  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas';
 
 var
   application : TAutomationApplication;
@@ -84,7 +85,7 @@ var
 
 begin
   // First launch the application
-  application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
+  application := TAutomationApplication.LaunchOrAttach('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   sleep(1000);
 

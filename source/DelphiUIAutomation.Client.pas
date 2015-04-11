@@ -77,6 +77,8 @@ type
 implementation
 
 uses
+  TlHelp32,
+  DelphiUIAutomation.Processes,
   DelphiUIAutomation.Utils,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.ScreenShot,
@@ -123,7 +125,42 @@ end;
 
 class function TAutomationApplication.LaunchOrAttach(executable,
   parameters: String): TAutomationApplication;
+var
+  exename : string;
+  Processes : TAutomationProcesses;
+  process, p : TProcessEntry32;
+  found : boolean;
+  count : integer;
+
 begin
+  exename := ExtractFileName(executable);
+
+  processes := TAutomationProcesses.create;
+  found := false;
+  try
+    for count := 0 to Processes.Processes.count -1 do
+    begin
+      p := Processes.Processes[count];
+      if p.szExeFile = exename then
+      begin
+        process := p;
+        found := true;
+        break;
+      end;
+    end;
+  finally
+    processes.Free;
+  end;
+
+  if (found) then
+  begin
+
+  end
+  else
+  begin
+    self.Launch(executable, parameters);
+  end;
+
   raise Exception.Create('Not yet implemented');
 end;
 
