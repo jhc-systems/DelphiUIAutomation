@@ -93,6 +93,9 @@ var
 
 begin
   info.hProcess := process.th32ProcessID;
+  info.hThread := 0;
+  info.dwProcessId := 0;
+  info.dwThreadId := 0;
 
   result := TAutomationApplication.Create(info);
 end;
