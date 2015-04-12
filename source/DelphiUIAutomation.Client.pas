@@ -158,14 +158,12 @@ begin
 
   if (found) then
   begin
-    self.Attach(process);
+    result := self.Attach(process);
   end
   else
   begin
-    self.Launch(executable, parameters);
+    result := self.Launch(executable, parameters);
   end;
-
-  raise Exception.Create('Not yet implemented');
 end;
 
 class procedure TAutomationApplication.SaveScreenshot;

@@ -67,9 +67,13 @@ var
 
 begin
   fElement.GetCurrentPattern(UIA_InvokePatternId, inter);
-  if Inter.QueryInterface(IUIAutomationInvokePattern, FInvokePattern) <> S_OK then
+
+  if (inter <> nil) then
   begin
-    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    if Inter.QueryInterface(IUIAutomationInvokePattern, FInvokePattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
   end;
 end;
 
