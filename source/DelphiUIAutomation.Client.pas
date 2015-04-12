@@ -66,6 +66,16 @@ type
     procedure Kill;
 
     /// <summary>
+    /// Waits while the application is busy - INFINITE timeout
+    /// </summary>
+    procedure WaitWhileBusy; overload;
+
+    /// <summary>
+    /// Waits while the application is busy, with a given timeout
+    /// </summary>
+    procedure WaitWhileBusy(timeout : DWORD); overload;
+
+    /// <summary>
     ///  Saves the current screen image to a file
     /// </summary>
     class procedure SaveScreenshot;
@@ -184,6 +194,16 @@ begin
   finally
     screenshot.Free;
   end;
+end;
+
+procedure TAutomationApplication.WaitWhileBusy(timeout: DWORD);
+begin
+  WaitForInputIdle(self.FProcess, timeout);
+end;
+
+procedure TAutomationApplication.WaitWhileBusy;
+begin
+  WaitWhileBusy(INFINITE);
 end;
 
 end.

@@ -87,7 +87,7 @@ begin
   // First launch the application
   application := TAutomationApplication.LaunchOrAttach('..\..\democlient\Win32\Debug\Project1.exe', '');
 
-  sleep(1000);
+  application.WaitWhileBusy;
 
   // Now wait for a very long time for the enquiry screen to come up
   enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
