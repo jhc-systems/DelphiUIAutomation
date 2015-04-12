@@ -26,6 +26,7 @@ interface
 uses
   generics.collections,
   winapi.windows,
+  TlHelp32,
   DelphiUIAutomation.Window,
   UIAutomationClient_TLB;
 
@@ -51,7 +52,7 @@ type
     /// <summary>
     ///  Attaches to an already running application
     /// </summary>
-    class function Attach (exectable : String) : TAutomationApplication;
+    class function Attach (process: TProcessEntry32) : TAutomationApplication;
 
     /// <summary>
     ///  Launches or attaches to an application
@@ -77,18 +78,16 @@ type
 implementation
 
 uses
-  TlHelp32,
+  sysutils,
+  ActiveX,
   DelphiUIAutomation.Processes,
   DelphiUIAutomation.Utils,
   DelphiUIAutomation.Automation,
-  DelphiUIAutomation.ScreenShot,
-  sysutils,
-  ActiveX;
+  DelphiUIAutomation.ScreenShot;
 
 { TAutomationApplication }
 
-class function TAutomationApplication.Attach(
-  exectable: String): TAutomationApplication;
+class function TAutomationApplication.Attach(process: TProcessEntry32): TAutomationApplication;
 begin
   raise Exception.Create('Not yet implemented');
 end;
@@ -154,7 +153,7 @@ begin
 
   if (found) then
   begin
-
+    self.Attach(process);
   end
   else
   begin
