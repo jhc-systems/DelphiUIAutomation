@@ -140,6 +140,5 @@ begin
   ReadLn ;
 
   application.Kill;
-
 end.
 

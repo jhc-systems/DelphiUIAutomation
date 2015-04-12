@@ -36,13 +36,14 @@ type
   /// </summary>
   TAutomationApplication = class
   strict private
-    FProcessInfo : TProcessInformation;
+//    FProcessInfo : TProcessInformation;
+    FProcess : THandle;
     function getProcID: THandle;
   public
     /// <summary>
     /// Creates an application
     /// </summary>
-    constructor Create(processInfo: TProcessInformation);
+    constructor Create(process: THandle);
 
     /// <summary>
     ///  Launches an application
@@ -88,34 +89,36 @@ uses
 { TAutomationApplication }
 
 class function TAutomationApplication.Attach(process: TProcessEntry32): TAutomationApplication;
-var
-  info : TProcessInformation;
+//var
+//  info : TProcessInformation;
 
 begin
-  info.hProcess := process.th32ProcessID;
-  info.hThread := 0;
-  info.dwProcessId := 0;
-  info.dwThreadId := 0;
+//  info.hProcess := process.th32ProcessID;
+//  info.hThread := 0;
+//  info.dwProcessId := 0;
+//  info.dwThreadId := 0;
 
-  result := TAutomationApplication.Create(info);
+  result := TAutomationApplication.Create(process.th32ProcessID);
 end;
 
-constructor TAutomationApplication.Create(processInfo: TProcessInformation);
+constructor TAutomationApplication.Create(process: THandle);
 begin
-  FprocessInfo := processInfo;
+ // FprocessInfo := processInfo;
+
+  FProcess := process;
 end;
 
 function TAutomationApplication.getProcID: THandle;
 begin
-  result := FprocessInfo.hProcess;
+  result := FProcess;
 end;
 
 procedure TAutomationApplication.Kill;
 begin
-  if FprocessInfo.hProcess <> 0 then
+  if FProcess <> 0 then
   begin
-    TerminateProcess(FprocessInfo.hProcess, 0);
-    CloseHandle(FprocessInfo.hProcess);
+    TerminateProcess(FProcess, 0);
+    CloseHandle(FProcess);
   end;
 end;
 
@@ -127,7 +130,7 @@ var
 begin
   info := ExecNewProcess(executable, parameters, false);
 
-  result := TAutomationApplication.Create(info);
+  result := TAutomationApplication.Create(info.hProcess);
 end;
 
 class function TAutomationApplication.LaunchOrAttach(executable,
