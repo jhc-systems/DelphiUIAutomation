@@ -85,7 +85,7 @@ var
 
 begin
   // First launch the application
-  application := TAutomationApplication.LaunchOrAttach('..\..\democlient\Win32\Debug\Project1.exe', '');
+  application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   application.WaitWhileBusy;
 
