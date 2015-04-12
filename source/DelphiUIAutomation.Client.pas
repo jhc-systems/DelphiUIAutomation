@@ -88,8 +88,13 @@ uses
 { TAutomationApplication }
 
 class function TAutomationApplication.Attach(process: TProcessEntry32): TAutomationApplication;
+var
+  info : TProcessInformation;
+
 begin
-  raise Exception.Create('Not yet implemented');
+  info.hProcess := process.th32ProcessID;
+
+  result := TAutomationApplication.Create(info);
 end;
 
 constructor TAutomationApplication.Create(processInfo: TProcessInformation);
