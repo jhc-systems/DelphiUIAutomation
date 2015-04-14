@@ -35,9 +35,9 @@ type
   /// </summary>
   TAutomationMenu = class (TAutomationBase)
   strict private
-    FItems : TList<TAutomationMenuItem>;
+    FItems : TObjectList<TAutomationMenuItem>;
   private
-    function getItems: TList<TAutomationMenuItem>;
+    function getItems: TObjectList<TAutomationMenuItem>;
     procedure InitialiseList;
   public
     /// <summary>
@@ -45,10 +45,15 @@ type
     /// </summary>
     constructor Create(element : IUIAutomationElement); override;
 
+    /// <summary>
+    ///  Destructor for menu.
+    /// </summary>
+    destructor Destroy; override;
+
     ///<summary>
     ///  Gets the list of items associated with this combobox
     ///</summary>
-    property Items : TList<TAutomationMenuItem> read getItems;
+    property Items : TObjectList<TAutomationMenuItem> read getItems;
   end;
 
   /// <summary>
@@ -78,7 +83,13 @@ begin
   InitialiseList;
 end;
 
-function TAutomationMenu.getItems: TList<TAutomationMenuItem>;
+destructor TAutomationMenu.Destroy;
+begin
+  FItems.free;  
+  inherited;
+end;
+
+function TAutomationMenu.getItems: TObjectList<TAutomationMenuItem>;
 begin
   result := self.FItems;
 end;
@@ -96,7 +107,7 @@ var
 begin
   UIAuto.CreateTrueCondition(condition);
 
-  FItems := TList<TAutomationMenuItem>.create;
+  FItems := TObjectList<TAutomationMenuItem>.create;
 
   // Find the elements
   self.FElement.FindAll(TreeScope_Descendants, condition, collection);
@@ -115,7 +126,6 @@ begin
     end;
   end;
 end;
-
 
 end.
 

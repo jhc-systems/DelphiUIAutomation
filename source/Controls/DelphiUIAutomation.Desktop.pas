@@ -36,7 +36,7 @@ type
     /// <summary>
     ///  Gets the list of desktop windows
     /// </summary>
-    class function GetDesktopWindows : TList<TAutomationWindow>;
+    class function GetDesktopWindows : TObjectList<TAutomationWindow>;
 
     /// <summary>
     ///  Gets the specified desktop windows
@@ -54,13 +54,48 @@ uses
 
 class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
 var
-  windows : TList<TAutomationWindow>;
+  res : TObjectList<TAutomationWindow>;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  element : IUIAutomationElement;
+  name : WideString;
+  count, length : integer;
+  windows : TObjectList<TAutomationWindow>;
   window : TAutomationWindow;
-  count : integer;
 
 begin
-  windows := TAutomationDesktop.GetDesktopWindows;
+  result := nil;
 
+  windows := TObjectList<TAutomationWindow>.create();
+
+  try
+    UIAuto.CreateTrueCondition(condition);
+    rootElement.FindAll(TreeScope_Children, condition, collection);
+
+    collection.Get_Length(length);
+
+    for count := 0 to length -1 do
+    begin
+      collection.GetElement(count, element);
+      element.Get_CurrentName(name);
+
+      if name = title then
+      begin
+        window := TAutomationWindow.Create(element);
+      end;
+    end;
+  finally
+    windows.Free;
+  end;
+
+  result := window;
+
+
+(*
+//  windows := TAutomationDesktop.GetDesktopWindows;
+  result := nil;
+
+//  try
   for count := 0 to windows.Count -1 do
   begin
     window := windows[count];
@@ -71,14 +106,17 @@ begin
       break;
     end;
   end;
-
+//  finally
+//    windows.free;
+//  end;
+*)
   if result = nil then
     raise EDelphiAutomationException.Create('Unable to find window');
 end;
 
-class function TAutomationDesktop.getDesktopWindows: TList<TAutomationWindow>;
+class function TAutomationDesktop.getDesktopWindows: TObjectList<TAutomationWindow>;
 var
-  res : TList<TAutomationWindow>;
+  res : TObjectList<TAutomationWindow>;
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   element : IUIAutomationElement;
@@ -86,7 +124,7 @@ var
   count, length : integer;
 
 begin
-  res := TList<TAutomationWindow>.create();
+  res := TObjectList<TAutomationWindow>.create();
 
   UIAuto.CreateTrueCondition(condition);
 
@@ -98,8 +136,6 @@ begin
   begin
     collection.GetElement(count, element);
     element.Get_CurrentName(name);
- //   Writeln(name);
-
     res.Add(TAutomationWindow.create(element));
   end;
 

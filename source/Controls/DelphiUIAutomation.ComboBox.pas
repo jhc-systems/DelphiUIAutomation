@@ -35,14 +35,14 @@ type
   /// </summary>
   TAutomationComboBox = class (TAutomationBase)
   strict private
-    FItems : TList<TAutomationListItem>;
+    FItems : TObjectList<TAutomationListItem>;
     FExpandCollapsePattern : IUIAutomationExpandCollapsePattern;
     FValuePattern : IUIAutomationValuePattern;
 
   private
     function getText: string;
     procedure setText(const Value: string);
-    function getItems: TList<TAutomationListItem>;
+    function getItems: TObjectList<TAutomationListItem>;
     procedure GetExpandCollapsePattern;
     procedure GetValuePattern;
     procedure InitialiseList;
@@ -56,7 +56,7 @@ type
     ///<summary>
     ///  Gets the list of items associated with this combobox
     ///</summary>
-    property Items : TList<TAutomationListItem> read getItems;
+    property Items : TObjectList<TAutomationListItem> read getItems;
 
     /// <summary>
     ///  Call the expand property
@@ -72,6 +72,12 @@ type
     ///  Constructor for comboboxes.
     /// </summary>
     constructor Create(element : IUIAutomationElement); override;
+
+    /// <summary>
+    ///  Destructor for comboboxes.
+    /// </summary>
+    destructor Destroy; override;
+
   end;
 
 implementation
@@ -123,6 +129,12 @@ begin
   InitialiseList;
 end;
 
+destructor TAutomationComboBox.Destroy;
+begin
+  FItems.free;
+  inherited;
+end;
+
 procedure TAutomationComboBox.InitialiseList;
 var
   condition : IUIAutomationCondition;
@@ -136,7 +148,7 @@ var
 begin
   UIAuto.CreateTrueCondition(condition);
 
-  FItems := TList<TAutomationListItem>.create;
+  FItems := TObjectList<TAutomationListItem>.create;
 
   // Find the elements
   self.FElement.FindAll(TreeScope_Descendants, condition, collection);
@@ -166,7 +178,7 @@ begin
     result := self.FExpandCollapsePattern.Collapse;
 end;
 
-function TAutomationComboBox.getItems : TList<TAutomationListItem>;
+function TAutomationComboBox.getItems : TObjectList<TAutomationListItem>;
 begin
   result := self.FItems;
 end;

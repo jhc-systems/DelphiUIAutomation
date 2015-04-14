@@ -233,7 +233,6 @@ var
   condition : IUIAutomationCondition;
   count : integer;
   length : integer;
-  controlType : integer;
   counter : integer;
   varProp : OleVariant;
 

@@ -40,7 +40,7 @@ type
   /// </remarks>
   TAutomationTab = class (TAutomationContainer, IAutomationTab)
   strict private
-    FTabItems : TList<TAutomationTabItem>;
+    FTabItems : TObjectList<TAutomationTabItem>;
     FSelectedItem : TAutomationTabItem;
   private
     function GetSelectedItem: TAutomationTabItem;
@@ -50,6 +50,11 @@ type
     /// </summary>
     constructor Create(element : IUIAutomationElement); override;
 
+    /// <summary>
+    ///  Destructor for the representation.
+    /// </summary>
+    destructor Destroy; override;
+
     ///<summary>
     ///  Selects the given tab
     ///</summary>
@@ -58,7 +63,7 @@ type
     ///<summary>
     ///  Gets the list of tabitems associated with this tab
     ///</summary>
-    property Pages : TList<TAutomationTabItem> read FTabItems;
+    property Pages : TObjectList<TAutomationTabItem> read FTabItems;
 
     /// <summary>
     ///  Gets the currently selected item
@@ -88,7 +93,7 @@ var
 begin
   inherited Create(element);
 
-  FTabItems := TList<TAutomationTabItem>.create;
+  FTabItems := TObjectList<TAutomationTabItem>.create;
 
   // See what tabs are there???
   UIAuto.CreateTrueCondition(condition);
@@ -108,6 +113,13 @@ begin
       FTabItems.Add(TAutomationTabItem.create(element));
     end;
   end;
+end;
+
+destructor TAutomationTab.Destroy;
+begin
+  FTabItems.free;
+
+  inherited;
 end;
 
 function TAutomationTab.GetSelectedItem: TAutomationTabItem;

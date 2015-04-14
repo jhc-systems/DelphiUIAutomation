@@ -20,12 +20,20 @@ type
     constructor create;
 
     /// <summary>
+    ///  Destructor
+    /// </summary>
+    destructor Destroy; override;
+
+    /// <summary>
     ///  Get the list of processes
     /// </summary>
     property Processes : TList<TProcessEntry32> read getProcesses;
   end;
 
 implementation
+
+uses
+  sysutils;
 
 { TAutomationProcesses }
 
@@ -48,6 +56,13 @@ begin
   finally
     CloseHandle(Snapshot);
   end;
+end;
+
+destructor TAutomationProcesses.Destroy;
+begin
+  FreeAndNil(FItems);
+
+  inherited;
 end;
 
 function TAutomationProcesses.getProcesses: TList<TProcessEntry32>;

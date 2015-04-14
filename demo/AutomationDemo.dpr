@@ -64,19 +64,10 @@ uses
 var
   application : TAutomationApplication;
   menu : TAutomationMainMenu;
-//  windows : TList<TAutomationWindow>;
-//  window : TAutomationWindow;
-//  i : integer;
-//  splash : TAutomationWindow;
   enquiry : TAutomationWindow;
-//  connect, security, calc : TAutomationWindow;
   tb1 : TAutomationEditBox;
   eb0 : TAutomationTextBox;
   combo : TAutomationComboBox;
-//  btnOK, btnCalc : TAutomationButton;
-//  mouse : TAutomationMouse;
-//  price, quantity, netValue : TAutomationTextBox;
-//  account, stock, buysell : TAutomationComboBox;
   tab : IAutomationTab;
   statusBar : TAutomationStatusbar;
   check : TAutomationCheckBox;
@@ -84,61 +75,82 @@ var
   val : string;
 
 begin
+
+  ReportMemoryLeaksOnShutdown := DebugHook <> 0;
+
   // First launch the application
   application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
 
-  application.WaitWhileBusy;
+  try
+    application.WaitWhileBusy;
 
-  // Now wait for a very long time for the enquiry screen to come up
-  enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
-  enquiry.Focus;
+    // Now wait for a very long time for the enquiry screen to come up
+    enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
+    try
+      enquiry.Focus;
 
-  // 4. Select the correct tab
-  tab := enquiry.GetTabByIndex(0);
-  tab.SelectTabPage('Second Tab');     // 3 is the magic number
+      // 4. Select the correct tab
+      tab := enquiry.GetTabByIndex(0);
+      tab.SelectTabPage('Second Tab');     // 3 is the magic number
 
-  tb1 := tab.GetEditBoxByIndex(0);
-  writeln(tb1.Text);
+      tb1 := tab.GetEditBoxByIndex(0);
+      try
+        writeln(tb1.Text);
+      finally
+        tb1.Free;
+      end;
 
-//  tab.selectedItem.ListControlsAndStuff(nil);
+      check := enquiry.GetCheckboxByIndex(0);
+      try
+        check.toggle;
+      finally
+        check.Free;
+      end;
 
-  // 5. Click the fetch button
-//  mouse := TAutomationMouse.Create;
-//  mouse.Location := TPoint.Create(370, 160);
-//  mouse.LeftClick;
+      combo := enquiry.GetComboBoxByIndex(0);
+      try
+        val := combo.Items[3].Name;
+        writeln ('Combobox Text (2) is ' + val);
+      finally
+        combo.Free;
+      end;
 
-//  sleep(8000);
+      radio := enquiry.GetRadioButtonByIndex(2);
+      try
+        radio.Select;
+      finally
+        radio.Free;
+      end;
 
-  // Now see whether we can get the statusbar
-  statusBar := enquiry.StatusBar;
+      // Now see whether we can get the statusbar
+      statusBar := enquiry.StatusBar;
+      try
+        try
+          eb0 := statusBar.GetTextBoxByIndex(1);
+          writeln ('Text is ' + eb0.Text);
+        finally
+          eb0.Free;
+        end;
+      finally
+        statusBar.Free;
+      end;
 
-  statusBar.ListControlsAndStuff(nil);
+      menu := enquiry.GetMenuBar(1);
+      try
+        writeln(menu.Name);
+        writeln(menu.Items[0].Name);
+      finally
+        menu.Free;
+      end;
 
-//  TAutomationApplication.SaveScreenshot;
-
-  check := enquiry.GetCheckboxByIndex(0);
-  check.toggle;
-
-  combo := enquiry.GetComboBoxByIndex(0);
-
-  val := combo.Items[3].Name;
-  writeln ('Combobox Text (2) is ' + val);
-
-  radio := enquiry.GetRadioButtonByIndex(2);
-  radio.Select;
-
-  // Get the textboxes from the statusbar???
-  eb0 := statusBar.GetTextBoxByIndex(1);
-  writeln ('Text is ' + eb0.Text);
-
-  menu := enquiry.GetMenuBar(1);
-  writeln(menu.Name);
-
-  writeln(menu.Items[0].Name);
-
-  WriteLn ('Press return to continue');
-  ReadLn ;
-
-  application.Kill;
+      WriteLn ('Press return to continue');
+      ReadLn ;
+    finally
+      enquiry.Free;
+    end;
+  finally
+    application.Kill;
+    application.free
+  end;
 end.
 
