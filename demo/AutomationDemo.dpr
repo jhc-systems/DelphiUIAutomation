@@ -139,6 +139,10 @@ begin
       try
         writeln(menu.Name);
         writeln(menu.Items[0].Name);
+        writeln(menu.Items[1].Name);
+
+        //menu.Items[0].items[0].Name;
+
       finally
         menu.Free;
       end;

@@ -51,7 +51,7 @@ type
     destructor Destroy; override;
 
     ///<summary>
-    ///  Gets the list of items associated with this combobox
+    ///  Gets the list of items associated with this menu
     ///</summary>
     property Items : TObjectList<TAutomationMenuItem> read getItems;
   end;
@@ -85,7 +85,7 @@ end;
 
 destructor TAutomationMenu.Destroy;
 begin
-  FItems.free;  
+  FItems.free;
   inherited;
 end;
 
@@ -110,7 +110,7 @@ begin
   FItems := TObjectList<TAutomationMenuItem>.create;
 
   // Find the elements
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  self.FElement.FindAll(TreeScope_Children, condition, collection);
 
   collection.Get_Length(length);
 
