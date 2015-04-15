@@ -84,7 +84,6 @@ uses
 
 constructor TAutomationTab.Create(element: IUIAutomationElement);
 var
-  condition : IUIAutomationCondition;
   collection : IUIAutomationElementArray;
   count : integer;
   retval : integer;
@@ -95,11 +94,8 @@ begin
 
   FTabItems := TObjectList<TAutomationTabItem>.create;
 
-  // See what tabs are there???
-  UIAuto.CreateTrueCondition(condition);
-
   // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  collection := self.FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
 

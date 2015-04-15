@@ -97,7 +97,7 @@ end;
 
 procedure TAutomationMenu.InitialiseList;
 var
-  condition : IUIAutomationCondition;
+  condition: IUIAutomationCondition;
   collection : IUIAutomationElementArray;
   itemElement : IUIAutomationElement;
   count : integer;
@@ -106,9 +106,9 @@ var
   item : TAutomationMenuItem;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
-
   FItems := TObjectList<TAutomationMenuItem>.create;
+
+  UIAuto.CreateTrueCondition(condition);
 
   // Find the elements
   self.FElement.FindAll(TreeScope_Children, condition, collection);

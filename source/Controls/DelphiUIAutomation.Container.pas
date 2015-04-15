@@ -106,20 +106,17 @@ uses
 procedure TAutomationContainer.ListControlsAndStuff(element : IUIAutomationElement);
 var
   collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
   count : integer;
   name, help : widestring;
   length : integer;
   retVal : integer;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
-
   if element = nil then
     element := self.FElement;
 
   // Find the elements
-  element.FindAll(TreeScope_Descendants, condition, collection);
+  collection := FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
 
@@ -187,10 +184,8 @@ var
 begin
   result := nil;
 
-  UIAuto.CreateTrueCondition(condition);
-
   // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  collection := self.FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
 

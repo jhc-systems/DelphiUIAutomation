@@ -34,6 +34,22 @@ type
   protected
     FElement : IUIAutomationElement;
     function getName: string; virtual;
+  protected
+    /// <summary>
+    ///  Finds the elements
+    /// </summary>
+    function FindAll : IUIAutomationElementArray; overload;
+
+    /// <summary>
+    ///  Finds the elements, based on scope
+    /// </summary>
+    function FindAll (scope : TreeScope) : IUIAutomationElementArray; overload;
+
+    /// <summary>
+    ///  Finds the elements, based on scope and condition
+    /// </summary>
+    function FindAll (scope : TreeScope; condition : IUIAutomationCondition) : IUIAutomationElementArray; overload;
+
   public
     /// <summary>
     ///  Gets the name of the element
@@ -48,9 +64,43 @@ type
 
 implementation
 
+uses
+  DelphiUIAutomation.Automation;
+
 constructor TAutomationBase.Create(element: IUIAutomationElement);
 begin
   Felement := element;
+end;
+
+function TAutomationBase.FindAll: IUIAutomationElementArray;
+begin
+  result := self.FindAll (TreeScope_Children);
+end;
+
+function TAutomationBase.FindAll(scope: TreeScope): IUIAutomationElementArray;
+var
+  condition : IUIAutomationCondition;
+  collection : IUIAutomationElementArray;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  // Find the elements
+  self.FElement.FindAll(scope, condition, collection);
+
+  result := collection;
+end;
+
+function TAutomationBase.FindAll(scope: TreeScope;
+  condition: IUIAutomationCondition): IUIAutomationElementArray;
+var
+  collection : IUIAutomationElementArray;
+
+begin
+  // Find the elements
+  self.FElement.FindAll(scope, condition, collection);
+
+  result := collection;
 end;
 
 function TAutomationBase.getName: string;

@@ -32,6 +32,10 @@ type
   /// <summary>
   ///  Represents a menu item
   /// </summary>
+  /// <remarks>
+  ///  Models Menu items (root or leaf).
+  ///  SubMenus are themselves are Menu(s).
+  /// </remarks>
   TAutomationMenuItem = class (TAutomationBase)
   strict private
     FItems : TObjectList<TAutomationMenuItem>;
@@ -97,8 +101,13 @@ begin
 end;
 
 constructor TAutomationMenuItem.Create(element: IUIAutomationElement);
+var
+  name : widestring;
+
 begin
   inherited create(element);
+
+  FElement.Get_CurrentName(name);
 
   GetExpandCollapsePattern;
   GetInvokePattern;
@@ -114,7 +123,6 @@ end;
 
 procedure TAutomationMenuItem.InitialiseList;
 var
-  condition : IUIAutomationCondition;
   collection : IUIAutomationElementArray;
   itemElement : IUIAutomationElement;
   count : integer;
@@ -124,14 +132,12 @@ var
 
 begin
   self.Expand;
-  sleep(50);
-
-  UIAuto.CreateTrueCondition(condition);
+  sleep(250);
 
   FItems := TObjectList<TAutomationMenuItem>.create;
 
   // Find the elements
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  collection := self.FindAll;
 
   collection.Get_Length(length);
 
@@ -181,7 +187,10 @@ end;
 
 function TAutomationMenuItem.Click : HResult;
 begin
-  result := FInvokePattern.Invoke;
+  if (Assigned (FInvokePattern)) then
+  begin
+    result := FInvokePattern.Invoke;
+  end;
 end;
 
 end.

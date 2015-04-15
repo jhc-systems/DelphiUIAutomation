@@ -137,7 +137,6 @@ end;
 
 procedure TAutomationComboBox.InitialiseList;
 var
-  condition : IUIAutomationCondition;
   collection : IUIAutomationElementArray;
   itemElement : IUIAutomationElement;
   count : integer;
@@ -146,12 +145,10 @@ var
   item : TAutomationListItem;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
-
   FItems := TObjectList<TAutomationListItem>.create;
 
   // Find the elements
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  collection := self.FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
 

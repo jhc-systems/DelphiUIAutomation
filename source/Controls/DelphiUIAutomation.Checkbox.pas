@@ -55,9 +55,13 @@ begin
   result := -1;
 
   fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
-  if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+
+  if (inter <> nil) then
   begin
-    result := pattern.Toggle;
+    if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+    begin
+      result := pattern.Toggle;
+    end;
   end;
 end;
 
