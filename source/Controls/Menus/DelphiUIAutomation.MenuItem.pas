@@ -36,9 +36,12 @@ type
   strict private
     FItems : TObjectList<TAutomationMenuItem>;
     FInvokePattern : IUIAutomationInvokePattern;
+    FExpandCollapsePattern : IUIAutomationExpandCollapsePattern;
+
     function getItems: TObjectList<TAutomationMenuItem>;
   private
     procedure GetInvokePattern;
+    procedure GetExpandCollapsePattern;
     procedure InitialiseList;
   public
     /// <summary>
@@ -50,6 +53,16 @@ type
     ///  Destructor.
     /// </summary>
     destructor Destroy; override;
+
+    /// <summary>
+    ///  Call the expand property
+    /// </summary>
+    function Expand : HRESULT;
+
+    /// <summary>
+    ///  Call the collapse property
+    /// </summary>
+    function Collapse : HRESULT;
 
     /// <summary>
     ///  Clicks the menuitem
@@ -65,16 +78,31 @@ type
 implementation
 
 uses
+  Winapi.Windows,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.Automation;
 
+procedure TAutomationMenuItem.GetExpandCollapsePattern;
+var
+  inter: IInterface;
+
+begin
+  self.fElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, inter);
+  if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
+  begin
+    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+  end;
+end;
+
 constructor TAutomationMenuItem.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
+  GetExpandCollapsePattern;
   GetInvokePattern;
+
   InitialiseList;
 end;
 
@@ -95,12 +123,15 @@ var
   item : TAutomationMenuItem;
 
 begin
+  self.Expand;
+  sleep(50);
+
   UIAuto.CreateTrueCondition(condition);
 
   FItems := TObjectList<TAutomationMenuItem>.create;
 
   // Find the elements
-  self.FElement.FindAll(TreeScope_Children, condition, collection);
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
   collection.Get_Length(length);
 
@@ -115,6 +146,16 @@ begin
       FItems.Add(item);
     end;
   end;
+end;
+
+function TAutomationMenuItem.Expand: HRESULT;
+begin
+  result := self.FExpandCollapsePattern.Expand;
+end;
+
+function TAutomationMenuItem.Collapse: HRESULT;
+begin
+    result := self.FExpandCollapsePattern.Collapse;
 end;
 
 procedure TAutomationMenuItem.GetInvokePattern;

@@ -72,6 +72,7 @@ implementation
 
 uses
   DelphiUIAutomation.Automation,
+  DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.ControlTypeIDs;
 
 { TAutomationMenu }

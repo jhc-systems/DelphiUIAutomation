@@ -40,11 +40,6 @@ type
     function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
 
     /// <summary>
-    /// Finds the main menu
-    /// </summary>
-    function GetMenuBar (index: integer) : TAutomationMainMenu;
-
-    /// <summary>
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;

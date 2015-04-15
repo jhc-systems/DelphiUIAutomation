@@ -135,7 +135,7 @@ begin
         statusBar.Free;
       end;
 
-      menu := enquiry.GetMenuBar(1);
+      menu := enquiry.MainMenu;
       try
         writeln(menu.Name);
         writeln(menu.Items[0].Name);

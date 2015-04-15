@@ -81,11 +81,6 @@ type
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
 
-    /// <summary>
-    /// Finds the main menu
-    /// </summary>
-    function GetMenuBar(index: integer) : TAutomationMainMenu;
-
 {$IFDEF INVESTIGATION}
     /// <summary>
     ///  Prints out the child controls
@@ -157,11 +152,6 @@ end;
 function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
 begin
   result := TAutomationEditBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
-end;
-
-function TAutomationContainer.GetMenuBar(index: integer): TAutomationMainMenu;
-begin
-  result := TAutomationMainMenu.Create(GetControlByControlType(index, UIA_MenuBarControlTypeId));
 end;
 
 function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
