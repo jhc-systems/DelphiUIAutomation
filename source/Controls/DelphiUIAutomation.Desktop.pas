@@ -54,14 +54,12 @@ uses
 
 class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
 var
-  res : TObjectList<TAutomationWindow>;
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   element : IUIAutomationElement;
   name : WideString;
   count, length : integer;
   windows : TObjectList<TAutomationWindow>;
-  window : TAutomationWindow;
 
 begin
   result := nil;
@@ -81,35 +79,13 @@ begin
 
       if name = title then
       begin
-        window := TAutomationWindow.Create(element);
+        result := TAutomationWindow.Create(element);
       end;
     end;
   finally
     windows.Free;
   end;
 
-  result := window;
-
-
-(*
-//  windows := TAutomationDesktop.GetDesktopWindows;
-  result := nil;
-
-//  try
-  for count := 0 to windows.Count -1 do
-  begin
-    window := windows[count];
-
-    if (window.Name = title) then
-    begin
-      result := window;
-      break;
-    end;
-  end;
-//  finally
-//    windows.free;
-//  end;
-*)
   if result = nil then
     raise EDelphiAutomationException.Create('Unable to find window');
 end;

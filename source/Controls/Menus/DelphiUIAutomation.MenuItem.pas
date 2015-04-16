@@ -187,6 +187,8 @@ end;
 
 function TAutomationMenuItem.Click : HResult;
 begin
+  result := -1;
+
   if (Assigned (FInvokePattern)) then
   begin
     result := FInvokePattern.Invoke;
