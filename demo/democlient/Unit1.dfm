@@ -57,6 +57,10 @@ object Form1: TForm1
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'First Tab'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Edit3: TEdit
         Left = 24
         Top = 32
@@ -81,6 +85,10 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Last Tab'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Edit5: TEdit
         Left = 40
         Top = 40
@@ -144,7 +152,6 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
-    ExplicitTop = 514
   end
   object ComboBox1: TComboBox
     Left = 24
