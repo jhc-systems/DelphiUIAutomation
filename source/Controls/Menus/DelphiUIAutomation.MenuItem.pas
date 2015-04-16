@@ -94,9 +94,13 @@ var
 
 begin
   self.fElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, inter);
-  if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
+
+  if (inter <> nil) then
   begin
-    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
   end;
 end;
 
@@ -112,7 +116,8 @@ begin
   GetExpandCollapsePattern;
   GetInvokePattern;
 
-  InitialiseList;
+// This doesn't work as expected
+//  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -156,11 +161,13 @@ end;
 
 function TAutomationMenuItem.Expand: HRESULT;
 begin
-  result := self.FExpandCollapsePattern.Expand;
+  if FExpandCollapsePattern <> nil then
+    result := self.FExpandCollapsePattern.Expand;
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;
 begin
+  if FExpandCollapsePattern <> nil then
     result := self.FExpandCollapsePattern.Collapse;
 end;
 

@@ -222,6 +222,8 @@ var
   varProp : OleVariant;
 
 begin
+  element := nil;
+
   TVariantArg(varProp).vt := VT_I4;
   TVariantArg(varProp).lVal := id;
 
@@ -247,8 +249,8 @@ begin
     inc (counter);
   end;
 
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find control');
+//  if result = nil then
+//    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
 function TAutomationContainer.GetRadioButtonByIndex(index: integer): TAutomationRadioButton;

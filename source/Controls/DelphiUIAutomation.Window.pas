@@ -37,9 +37,11 @@ type
   TAutomationWindow = class (TAutomationContainer)
   strict private
     FMainMenu : TAutomationMainMenu;
+    FControlMenu : TAutomationMenu;
   private
     function GetStatusBar : TAutomationStatusbar;
     function GetMainMenu: TAutomationMainMenu;
+    function GetControlMenu : TAutomationMenu;
   public
     /// <summary>
     ///  Constructor for window.
@@ -75,6 +77,11 @@ type
     /// Gets the main menu associated with this window
     ///</summary>
     property MainMenu : TAutomationMainMenu read GetMainMenu;
+
+    ///<summary>
+    /// Gets the control menu associated with this window
+    ///</summary>
+    property ControlMenu : TAutomationMenu read GetControlMenu;
   end;
 
 implementation
@@ -91,12 +98,14 @@ constructor TAutomationWindow.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
+  self.FControlMenu := GetMenuBar(0);
   self.FMainMenu := GetMenuBar(1);
 end;
 
 destructor TAutomationWindow.Destroy;
 begin
   FMainMenu.Free;
+  FControlMenu.Free;
 
   inherited;
 end;
@@ -104,6 +113,11 @@ end;
 procedure TAutomationWindow.Focus;
 begin
   self.FElement.SetFocus;
+end;
+
+function TAutomationWindow.GetControlMenu: TAutomationMenu;
+begin
+  result := self.FControlMenu;
 end;
 
 function TAutomationWindow.GetMainMenu: TAutomationMainMenu;
@@ -182,8 +196,15 @@ begin
 end;
 
 function TAutomationWindow.GetMenuBar(index: integer): TAutomationMainMenu;
+var
+  element : IUIAutomationElement;
 begin
-  result := TAutomationMainMenu.Create(GetControlByControlType(index, UIA_MenuBarControlTypeId));
+  element := GetControlByControlType(index, UIA_MenuBarControlTypeId);
+
+  if (element <> nil) then
+  begin
+    result := TAutomationMainMenu.Create(element);
+  end;
 end;
 
 end.
