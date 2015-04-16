@@ -83,6 +83,8 @@ implementation
 
 uses
   Winapi.Windows,
+  Winapi.ActiveX,
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.PatternIDs,
@@ -116,8 +118,8 @@ begin
   GetExpandCollapsePattern;
   GetInvokePattern;
 
-// This doesn't work as expected
-//  InitialiseList;
+  // This doesn't work as expected
+  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -133,16 +135,19 @@ var
   count : integer;
   length : integer;
   retVal : integer;
+  condition : IUIAutomationCondition;
   item : TAutomationMenuItem;
 
 begin
   self.Expand;
-  sleep(250);
+  sleep(750);
+
+  UIAuto.CreateTrueCondition(condition);
 
   FItems := TObjectList<TAutomationMenuItem>.create;
 
   // Find the elements
-  collection := self.FindAll;
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
   collection.Get_Length(length);
 

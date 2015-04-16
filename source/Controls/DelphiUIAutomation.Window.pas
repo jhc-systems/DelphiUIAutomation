@@ -98,7 +98,7 @@ constructor TAutomationWindow.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
-  self.FControlMenu := GetMenuBar(0);
+//  self.FControlMenu := GetMenuBar(0);
   self.FMainMenu := GetMenuBar(1);
 end;
 
