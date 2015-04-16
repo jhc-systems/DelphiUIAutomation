@@ -199,6 +199,7 @@ function TAutomationWindow.GetMenuBar(index: integer): TAutomationMainMenu;
 var
   element : IUIAutomationElement;
 begin
+  result := nil;
   element := GetControlByControlType(index, UIA_MenuBarControlTypeId);
 
   if (element <> nil) then

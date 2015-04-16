@@ -175,7 +175,6 @@ function TAutomationContainer.GetControlByControlType(title: string; id: word): 
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
   count : integer;
   name : widestring;
   length : integer;

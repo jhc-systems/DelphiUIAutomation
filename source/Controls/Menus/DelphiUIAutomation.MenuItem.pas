@@ -161,12 +161,14 @@ end;
 
 function TAutomationMenuItem.Expand: HRESULT;
 begin
+  result := -1;
   if FExpandCollapsePattern <> nil then
     result := self.FExpandCollapsePattern.Expand;
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;
 begin
+  result := -1;
   if FExpandCollapsePattern <> nil then
     result := self.FExpandCollapsePattern.Collapse;
 end;

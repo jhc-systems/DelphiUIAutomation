@@ -64,6 +64,7 @@ uses
 var
   application : TAutomationApplication;
   menu : TAutomationMainMenu;
+  cmenu : TAutomationMenu;
   enquiry : TAutomationWindow;
   tb1 : TAutomationEditBox;
   eb0 : TAutomationTextBox;
@@ -125,8 +126,8 @@ begin
       // Now see whether we can get the statusbar
       statusBar := enquiry.StatusBar;
       try
+        eb0 := statusBar.GetTextBoxByIndex(1);
         try
-          eb0 := statusBar.GetTextBoxByIndex(1);
           writeln ('Text is ' + eb0.Text);
         finally
           eb0.Free;
@@ -145,6 +146,13 @@ begin
 
       finally
         menu.Free;
+      end;
+
+      cmenu := enquiry.ControlMenu;
+      try
+        writeln(cmenu.Name);
+      finally
+        cmenu.Free;
       end;
 
       WriteLn ('Press return to continue');
