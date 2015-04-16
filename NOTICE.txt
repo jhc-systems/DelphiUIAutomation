@@ -1,0 +1,5 @@
+DelphiUIAutomation
+Copyright 2015 (C) JHC Systems Limited
+
+This product includes software developed at 
+JHC Systems Limited (http://www.jhc.co.uk/).
