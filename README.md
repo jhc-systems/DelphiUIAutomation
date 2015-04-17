@@ -31,4 +31,5 @@ See license.txt for details.
 * [Microsoft Accessibility](https://msdn.microsoft.com/en-us/library/vstudio/ms753388(v=vs.100).aspx)
 * [UIAutomation for Powershell](http://uiautomation.codeplex.com/documentation)
 * [TestStack.White](https://github.com/TestStack/White)
+* [UI Automation - A wrapper around Microsoft's UI Automation libraries.](https://github.com/vijayakumarsuraj/UIAutomation)
 
