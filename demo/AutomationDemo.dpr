@@ -81,16 +81,16 @@ begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-  application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
+  application := TAutomationApplication.Launch('c:\Windows\notepad.exe', '');
 
   try
     application.WaitWhileBusy;
 
     // Now wait for a very long time for the enquiry screen to come up
-    enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
+    enquiry := TAutomationDesktop.GetDesktopWindow('Untitled - Notepad');
     try
       enquiry.Focus;
-
+(*
       // 4. Select the correct tab
       tab := enquiry.GetTabByIndex(0);
       tab.SelectTabPage('Second Tab');     // 3 is the magic number
@@ -136,7 +136,7 @@ begin
       finally
         statusBar.Free;
       end;
-
+*)
       menu := enquiry.MainMenu;
       try
         writeln(menu.Name);
@@ -145,7 +145,7 @@ begin
         try
           writeln(fileitem.Name);
 
-          fileitem.ClickSubItem('Exit');
+          fileitem.ClickSubItem('E&xit');
 
           //writeln(menuitem.Items.Count);
 

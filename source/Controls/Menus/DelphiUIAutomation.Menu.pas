@@ -111,7 +111,7 @@ begin
   UIAuto.CreateTrueCondition(condition);
 
   // Find the elements
-  self.FElement.FindAll(TreeScope_Children, condition, collection);
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
   collection.Get_Length(length);
 

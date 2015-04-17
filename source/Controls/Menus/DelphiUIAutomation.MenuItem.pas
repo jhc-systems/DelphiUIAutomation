@@ -124,7 +124,7 @@ begin
   GetInvokePattern;
 
   // This doesn't work as expected
-//  InitialiseList;
+  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -178,25 +178,38 @@ end;
 
 function TAutomationMenuItem.ClickSubItem(const name : string): HResult;
 var
+  items : IUIAutomationElementArray;
   item : IUIAutomationElement;
+  menu : TAutomationMenuItem;
+  count, length : integer;
   condition : IUIAutomationCondition;
-  varProp : OleVariant;
+  retVal : integer;
 
 begin
-  TVariantArg(varProp).vt := VT_BSTR;
-  TVariantArg(varProp).bstrVal := pchar(name);
+//  TVariantArg(varProp).vt := VT_BSTR;
+//  TVariantArg(varProp).bstrVal := pchar(name);
 
-  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
+  UIAuto.CreateTrueCondition(condition);
+
+//  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
 
   self.Expand;
   sleep(3000);
 
-  self.FElement.FindFirst(TreeScope_Children, condition, item);
+  self.FElement.FindAll(TreeScope_Children, condition, items);
 
-  if (item <> nil) then
+  items.Get_Length(length);
+
+  for count := 0 to length -1 do
   begin
+    items.GetElement(count, item);
+    item.Get_CurrentControlType(retVal);
 
-  end;
+    if (retVal = UIA_MenuItemControlTypeId) then
+    begin
+      // should check the name is the same
+    end;
+  end;;
 
 end;
 
