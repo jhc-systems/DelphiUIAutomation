@@ -67,7 +67,7 @@ begin
   windows := TObjectList<TAutomationWindow>.create();
 
   try
-    UIAuto.CreateTrueCondition(condition);
+    condition := TUIAuto.CreateTrueCondition;
     rootElement.FindAll(TreeScope_Children, condition, collection);
 
     collection.Get_Length(length);
@@ -102,7 +102,7 @@ var
 begin
   res := TObjectList<TAutomationWindow>.create();
 
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
   rootElement.FindAll(TreeScope_Children, condition, collection);
 

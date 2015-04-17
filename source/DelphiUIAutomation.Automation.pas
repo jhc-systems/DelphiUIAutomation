@@ -29,15 +29,18 @@ uses
   DelphiUIAutomation.Window,
   UIAutomationClient_TLB;
 
-var
-  /// <summary>
-  ///  The main automation interface
-  /// </summary>
-  UIAuto: IUIAutomation;
+type
+  TUIAuto = class
+  public
+   /// <summary>
+    ///  Creates a true condition
+    /// </summary>
+    class function CreateTrueCondition : IUIAutomationCondition;
+  end;
 
-  /// <summary>
-  ///  The root of the desktop
-  /// </summary>
+
+var
+  UIAuto: IUIAutomation;
   RootElement: IUIAutomationElement;
 
 implementation
@@ -46,6 +49,18 @@ uses
   DelphiUIAutomation.Exception,
   sysutils,
   ActiveX;
+
+{ TUIAuto }
+
+class function TUIAuto.CreateTrueCondition: IUIAutomationCondition;
+var
+  condition : IUIAutomationCondition;
+
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  result := condition;
+end;
 
 initialization
   UIAuto := CoCUIAutomation.Create;

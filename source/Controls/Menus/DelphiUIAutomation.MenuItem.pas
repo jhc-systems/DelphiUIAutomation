@@ -147,7 +147,7 @@ begin
   self.Expand;
   sleep(750);
 
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
   FItems := TObjectList<TAutomationMenuItem>.create;
 
@@ -189,7 +189,7 @@ begin
 //  TVariantArg(varProp).vt := VT_BSTR;
 //  TVariantArg(varProp).bstrVal := pchar(name);
 
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
 //  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
 

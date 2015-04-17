@@ -108,7 +108,7 @@ var
 begin
   FItems := TObjectList<TAutomationMenuItem>.create;
 
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
   // Find the elements
   self.FElement.FindAll(TreeScope_Descendants, condition, collection);

@@ -83,7 +83,7 @@ var
   collection : IUIAutomationElementArray;
 
 begin
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
   // Find the elements
   self.FElement.FindAll(scope, condition, collection);

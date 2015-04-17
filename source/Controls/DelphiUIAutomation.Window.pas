@@ -137,7 +137,7 @@ var
 begin
   result := nil;
 
-  UIAuto.CreateTrueCondition(condition);
+  condition := TUIAuto.CreateTrueCondition;
 
   // Find the element
   self.FElement.FindAll(TreeScope_Descendants, condition, collection);
