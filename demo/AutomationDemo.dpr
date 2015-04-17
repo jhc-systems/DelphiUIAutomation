@@ -64,7 +64,7 @@ uses
 var
   application : TAutomationApplication;
   menu : TAutomationMainMenu;
-  menuitem : TAutomationMenuItem;
+  fileitem : TAutomationMenuItem;
   cmenu : TAutomationMenu;
   enquiry : TAutomationWindow;
   tb1 : TAutomationEditBox;
@@ -141,17 +141,19 @@ begin
       try
         writeln(menu.Name);
 
-        menuitem := menu.Items[1];
+        fileitem := menu.Items[0];
         try
-          writeln(menuitem.Name);
+          writeln(fileitem.Name);
+
+          fileitem.ClickSubItem('Exit');
 
           //writeln(menuitem.Items.Count);
 
         finally
-          menuitem.Free;
+          fileitem.Free;
         end;
 
-        writeln(menu.Items[0].Name);
+//        writeln(menu.Items[0].Name);
 
         //menu.Items[0].items[0].Name;
 

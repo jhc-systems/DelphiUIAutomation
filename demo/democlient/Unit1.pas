@@ -54,6 +54,7 @@ type
     About1: TMenuItem;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Exit1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -75,6 +76,11 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   ShowMessage ('Cancelled');
+end;
+
+procedure TForm1.Exit1Click(Sender: TObject);
+begin
+  ShowMessage('Oh well done');
 end;
 
 end.

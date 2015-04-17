@@ -73,6 +73,11 @@ type
     /// </summary>
     function Click: HResult;
 
+    /// <summary>
+    ///  Clicks the sub-menuitem
+    /// </summary>
+    function ClickSubItem(const name : string) : HResult;
+
     ///<summary>
     ///  Gets the list of items associated with this menu
     ///</summary>
@@ -119,7 +124,7 @@ begin
   GetInvokePattern;
 
   // This doesn't work as expected
-  InitialiseList;
+//  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -169,6 +174,30 @@ begin
   result := -1;
   if FExpandCollapsePattern <> nil then
     result := self.FExpandCollapsePattern.Expand;
+end;
+
+function TAutomationMenuItem.ClickSubItem(const name : string): HResult;
+var
+  item : IUIAutomationElement;
+  condition : IUIAutomationCondition;
+  varProp : OleVariant;
+
+begin
+  TVariantArg(varProp).vt := VT_BSTR;
+  TVariantArg(varProp).bstrVal := pchar(name);
+
+  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
+
+  self.Expand;
+  sleep(3000);
+
+  self.FElement.FindFirst(TreeScope_Children, condition, item);
+
+  if (item <> nil) then
+  begin
+
+  end;
+
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;
