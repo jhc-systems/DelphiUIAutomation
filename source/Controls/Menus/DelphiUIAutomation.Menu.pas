@@ -86,6 +86,7 @@ end;
 
 destructor TAutomationMenu.Destroy;
 begin
+  writeln ('Freeing ' + self.Name);
   FItems.free;
   inherited;
 end;

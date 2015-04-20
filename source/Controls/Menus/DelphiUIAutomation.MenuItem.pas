@@ -124,12 +124,14 @@ begin
   GetInvokePattern;
 
   // This doesn't work as expected
-  InitialiseList;
+  //InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
 begin
-  FItems.free;
+  if FItems <> nil then
+    FItems.free;
+
   inherited;
 end;
 
@@ -170,10 +172,18 @@ begin
 end;
 
 function TAutomationMenuItem.Expand: HRESULT;
+var
+  retVal : TOleEnum;
+
 begin
   result := -1;
   if FExpandCollapsePattern <> nil then
-    result := self.FExpandCollapsePattern.Expand;
+  begin
+    FExpandCollapsePattern.Get_CurrentExpandCollapseState(retval);
+
+    if retval <> ExpandCollapseState_Expanded then
+      result := self.FExpandCollapsePattern.Expand;
+  end;
 end;
 
 function TAutomationMenuItem.ClickSubItem(const name : string): HResult;
@@ -194,7 +204,7 @@ begin
 //  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
 
   self.Expand;
-  sleep(3000);
+  sleep(750);
 
   self.FElement.FindAll(TreeScope_Children, condition, items);
 
@@ -214,10 +224,18 @@ begin
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;
+var
+  retVal : TOleEnum;
+
 begin
   result := -1;
   if FExpandCollapsePattern <> nil then
-    result := self.FExpandCollapsePattern.Collapse;
+  begin
+    FExpandCollapsePattern.Get_CurrentExpandCollapseState(retval);
+
+    if (retval <> ExpandCollapseState_Collapsed) then
+      result := self.FExpandCollapsePattern.Collapse;
+  end;
 end;
 
 procedure TAutomationMenuItem.GetInvokePattern;

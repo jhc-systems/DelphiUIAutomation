@@ -107,6 +107,8 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_DebugInformation>true</DCC_DebugInformation>
+        <DCC_MapFile>3</DCC_MapFile>
         <DCC_Define>INVESTIGATION;$(DCC_Define)</DCC_Define>
         <Manifest_File>None</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>

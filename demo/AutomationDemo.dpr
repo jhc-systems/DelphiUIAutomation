@@ -145,12 +145,13 @@ begin
         try
           writeln(fileitem.Name);
 
-          fileitem.ClickSubItem('E&xit');
+          //fileitem.ClickSubItem('Exit');
 
           //writeln(menuitem.Items.Count);
 
         finally
-          fileitem.Free;
+        // This free causes issues
+       //   fileitem.Free;
         end;
 
 //        writeln(menu.Items[0].Name);
@@ -160,13 +161,14 @@ begin
       finally
         menu.Free;
       end;
-
+(*
       cmenu := enquiry.ControlMenu;
       try
         writeln(cmenu.Name);
       finally
         cmenu.Free;
       end;
+*)
 
       WriteLn ('Press return to continue');
       ReadLn ;
