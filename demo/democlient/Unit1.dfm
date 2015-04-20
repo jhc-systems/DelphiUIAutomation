@@ -12,6 +12,7 @@ object Form1: TForm1
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
+  PopupMenu = PopupMenu1
   PixelsPerInch = 96
   TextHeight = 13
   object Edit1: TEdit
@@ -176,6 +177,14 @@ object Form1: TForm1
       object About1: TMenuItem
         Caption = 'About'
       end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 24
+    Top = 112
+    object PopupMenu2: TMenuItem
+      Caption = 'Popup Menu '
+      OnClick = PopupMenu2Click
     end
   end
 end

@@ -52,9 +52,12 @@ type
     Hel1: TMenuItem;
     Exit1: TMenuItem;
     About1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    PopupMenu2: TMenuItem;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
+    procedure PopupMenu2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -81,6 +84,11 @@ end;
 procedure TForm1.Exit1Click(Sender: TObject);
 begin
   ShowMessage('Oh well done');
+end;
+
+procedure TForm1.PopupMenu2Click(Sender: TObject);
+begin
+  ShowMessage ('Popup menu clicked');
 end;
 
 end.
