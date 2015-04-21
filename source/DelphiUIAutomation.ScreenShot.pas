@@ -24,6 +24,7 @@ unit DelphiUIAutomation.ScreenShot;
 interface
 
 uses
+  controls,
   winapi.windows,
   Vcl.Graphics;
 
@@ -38,7 +39,9 @@ type
     /// <summary>
     ///  Captures a screenshot of the desktop
     /// </summary>
-    procedure CaptureScreenshot;
+    procedure CaptureScreenshot; overload;
+
+    procedure CaptureScreenshot(Control_: TWinControl); overload;
   public
     ///<summary>
     ///  Creation
@@ -54,6 +57,8 @@ type
     ///  Saves a screenshot of the current desktop
     /// </summary>
     procedure SaveCurrentScreen;
+
+    procedure SaveCurrentControl(Control_: TWinControl);
 
     ///<summary>
     /// Gets the bitmap
@@ -98,6 +103,32 @@ begin
 
 end;
 
+procedure TAutomationScreenshot.CaptureScreenshot(Control_: TWinControl);
+var
+  Win: HWND;
+  DC: HDC;
+  WinRect: TRect;
+  Width: Integer;
+  Height: Integer;
+
+begin
+  GetWindowRect(Win, WinRect);
+  DC := GetWindowDC(Control_.Handle);
+
+  try
+    Width := WinRect.Right - WinRect.Left;
+    Height := WinRect.Bottom - WinRect.Top;
+
+    FBmp.Width := Width;
+    FBmp.Height := Height;
+
+    BitBlt(FBmp.Canvas.Handle, 0, 0, Width, Height, DC, 0, 0, SRCCOPY);
+
+  finally
+    ReleaseDC(Control_.Handle, DC);
+  end;
+end;
+
 constructor TAutomationScreenshot.Create;
 begin
   FBmp := TBitmap.Create;
@@ -117,6 +148,18 @@ var
 
 begin
   self.CaptureScreenshot;
+
+  pathname := TPath.GetGUIDFileName + '.bmp';
+
+  FBmp.SaveToFile(pathname);
+end;
+
+procedure TAutomationScreenshot.SaveCurrentControl(Control_: TWinControl);
+var
+  pathname : string;
+
+begin
+  self.CaptureScreenshot(control_);
 
   pathname := TPath.GetGUIDFileName + '.bmp';
 

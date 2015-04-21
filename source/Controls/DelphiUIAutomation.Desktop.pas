@@ -59,15 +59,14 @@ var
   element : IUIAutomationElement;
   name : WideString;
   count, length : integer;
-  windows : TObjectList<TAutomationWindow>;
 
 begin
   result := nil;
 
-  windows := TObjectList<TAutomationWindow>.create();
+  condition := TUIAuto.CreateTrueCondition;
 
-  try
-    condition := TUIAuto.CreateTrueCondition;
+  while result = nil do
+  begin
     rootElement.FindAll(TreeScope_Children, condition, collection);
 
     collection.Get_Length(length);
@@ -80,10 +79,9 @@ begin
       if name = title then
       begin
         result := TAutomationWindow.Create(element);
+        break;
       end;
     end;
-  finally
-    windows.Free;
   end;
 
   if result = nil then

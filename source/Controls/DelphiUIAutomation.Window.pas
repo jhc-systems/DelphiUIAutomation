@@ -24,6 +24,7 @@ unit DelphiUIAutomation.Window;
 interface
 
 uses
+  Winapi.Windows,
   DelphiUIAutomation.Container,
   DelphiUIAutomation.Tab,
   DelphiUIAutomation.Statusbar,
@@ -82,6 +83,16 @@ type
     /// Gets the control menu associated with this window
     ///</summary>
     property ControlMenu : TAutomationMenu read GetControlMenu;
+
+    ///<summary>
+    /// Waits for the window to be idle, with timeout
+    ///</summary>
+    procedure WaitWhileBusy(timeout: DWORD); overload;
+
+    ///<summary>
+    /// Waits for the window to be idle, infinite timeout
+    ///</summary>
+    procedure WaitWhileBusy; overload;
   end;
 
 implementation
@@ -206,6 +217,20 @@ begin
   begin
     result := TAutomationMainMenu.Create(element);
   end;
+end;
+
+procedure TAutomationWindow.WaitWhileBusy(timeout: DWORD);
+var
+  process : integer;
+begin
+  self.FElement.Get_CurrentProcessId(process);
+
+  WaitForInputIdle(process, timeout);
+end;
+
+procedure TAutomationWindow.WaitWhileBusy;
+begin
+  WaitWhileBusy(INFINITE);
 end;
 
 end.
