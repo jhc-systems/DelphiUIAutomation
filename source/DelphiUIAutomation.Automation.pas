@@ -40,7 +40,7 @@ type
 
 
 var
-  UIAuto: IUIAutomation;
+  UIAuto: TCUIAutomation;
   RootElement: IUIAutomationElement;
 
 implementation
@@ -63,8 +63,13 @@ begin
 end;
 
 initialization
-  UIAuto := CoCUIAutomation.Create;
+  CoInitializeEx(nil, 2);
+  UIAuto := TCUIAutomation.Create(nil);
   if not Succeeded(UIAuto.GetRootElement(RootElement)) then
     raise EDelphiAutomationException.Create('Failed to get root element for Automation');
+
+finalization
+  UIAuto.Free;
+  CoUninitialize;
 
 end.

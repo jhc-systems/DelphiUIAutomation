@@ -12,7 +12,7 @@ unit UIAutomationClient_TLB;
 // ************************************************************************ //
 
 // $Rev: 52393 $
-// File generated on 31/03/2015 10:25:01 from Type Library described below.
+// File generated on 21/04/2015 11:24:22 from Type Library described below.
 
 // ************************************************************************  //
 // Type Lib: C:\Windows\SysWOW64\UIAutomationCore.dll (1)
@@ -32,6 +32,8 @@ unit UIAutomationClient_TLB;
 //   Hint: Parameter 'var' of IUIAutomation.RectToVariant changed to 'var_'
 //   Hint: Parameter 'var' of IUIAutomation.VariantToRect changed to 'var_'
 //   Hint: Parameter 'property' of IUIAutomation.GetPropertyProgrammaticName changed to 'property_'
+//   Error creating palette bitmap of (TCUIAutomation) : Server C:\Windows\SysWOW64\uiautomationcore.dll contains no icons
+//   Error creating palette bitmap of (TCUIAutomation8) : Server C:\Windows\SysWOW64\uiautomationcore.dll contains no icons
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers. 
 {$WARN SYMBOL_PLATFORM OFF}
@@ -1590,6 +1592,137 @@ type
     class function CreateRemote(const MachineName: string): IUIAutomation;
   end;
 
+
+// *********************************************************************//
+// OLE Server Proxy class declaration
+// Server Object    : TCUIAutomation
+// Help String      : The Central Class for UIAutomation
+// Default Interface: IUIAutomation
+// Def. Intf. DISP? : No
+// Event   Interface: 
+// TypeFlags        : (2) CanCreate
+// *********************************************************************//
+  TCUIAutomation = class(TOleServer)
+  private
+    FIntf: IUIAutomation;
+    function GetDefaultInterface: IUIAutomation;
+  protected
+    procedure InitServerData; override;
+    function Get_ControlViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_ContentViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_RawViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_RawViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ControlViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ContentViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ProxyFactoryMapping(out factoryMapping: IUIAutomationProxyFactoryMapping): HResult;
+    function Get_ReservedNotSupportedValue(out notSupportedValue: IUnknown): HResult;
+    function Get_ReservedMixedAttributeValue(out mixedAttributeValue: IUnknown): HResult;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor  Destroy; override;
+    procedure Connect; override;
+    procedure ConnectTo(svrIntf: IUIAutomation);
+    procedure Disconnect; override;
+    function CompareElements(const el1: IUIAutomationElement; const el2: IUIAutomationElement; 
+                             out areSame: Integer): HResult;
+    function CompareRuntimeIds(runtimeId1: PSafeArray; runtimeId2: PSafeArray; out areSame: Integer): HResult;
+    function GetRootElement(out root: IUIAutomationElement): HResult;
+    function ElementFromHandle(hwnd: Pointer; out element: IUIAutomationElement): HResult;
+    function ElementFromPoint(pt: tagPOINT; out element: IUIAutomationElement): HResult;
+    function GetFocusedElement(out element: IUIAutomationElement): HResult;
+    function GetRootElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                      out root: IUIAutomationElement): HResult;
+    function ElementFromHandleBuildCache(hwnd: Pointer; 
+                                         const cacheRequest: IUIAutomationCacheRequest; 
+                                         out element: IUIAutomationElement): HResult;
+    function ElementFromPointBuildCache(pt: tagPOINT; 
+                                        const cacheRequest: IUIAutomationCacheRequest; 
+                                        out element: IUIAutomationElement): HResult;
+    function GetFocusedElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                         out element: IUIAutomationElement): HResult;
+    function CreateTreeWalker(const pCondition: IUIAutomationCondition; 
+                              out walker: IUIAutomationTreeWalker): HResult;
+    function CreateCacheRequest(out cacheRequest: IUIAutomationCacheRequest): HResult;
+    function CreateTrueCondition(out newCondition: IUIAutomationCondition): HResult;
+    function CreateFalseCondition(out newCondition: IUIAutomationCondition): HResult;
+    function CreatePropertyCondition(propertyId: SYSINT; value: OleVariant; 
+                                     out newCondition: IUIAutomationCondition): HResult;
+    function CreatePropertyConditionEx(propertyId: SYSINT; value: OleVariant; 
+                                       flags: PropertyConditionFlags; 
+                                       out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndCondition(const condition1: IUIAutomationCondition; 
+                                const condition2: IUIAutomationCondition; 
+                                out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndConditionFromArray(conditions: PSafeArray; 
+                                         out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                               conditionCount: SYSINT; 
+                                               out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrCondition(const condition1: IUIAutomationCondition; 
+                               const condition2: IUIAutomationCondition; 
+                               out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrConditionFromArray(conditions: PSafeArray; 
+                                        out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                              conditionCount: SYSINT; 
+                                              out newCondition: IUIAutomationCondition): HResult;
+    function CreateNotCondition(const condition: IUIAutomationCondition; 
+                                out newCondition: IUIAutomationCondition): HResult;
+    function AddAutomationEventHandler(eventId: SYSINT; const element: IUIAutomationElement; 
+                                       scope: TreeScope; 
+                                       const cacheRequest: IUIAutomationCacheRequest; 
+                                       const handler: IUIAutomationEventHandler): HResult;
+    function RemoveAutomationEventHandler(eventId: SYSINT; const element: IUIAutomationElement; 
+                                          const handler: IUIAutomationEventHandler): HResult;
+    function AddPropertyChangedEventHandlerNativeArray(const element: IUIAutomationElement; 
+                                                       scope: TreeScope; 
+                                                       const cacheRequest: IUIAutomationCacheRequest; 
+                                                       const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                       var propertyArray: SYSINT; 
+                                                       propertyCount: SYSINT): HResult;
+    function AddPropertyChangedEventHandler(const element: IUIAutomationElement; scope: TreeScope; 
+                                            const cacheRequest: IUIAutomationCacheRequest; 
+                                            const handler: IUIAutomationPropertyChangedEventHandler; 
+                                            propertyArray: PSafeArray): HResult;
+    function RemovePropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                               const handler: IUIAutomationPropertyChangedEventHandler): HResult;
+    function AddStructureChangedEventHandler(const element: IUIAutomationElement; scope: TreeScope; 
+                                             const cacheRequest: IUIAutomationCacheRequest; 
+                                             const handler: IUIAutomationStructureChangedEventHandler): HResult;
+    function RemoveStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                const handler: IUIAutomationStructureChangedEventHandler): HResult;
+    function AddFocusChangedEventHandler(const cacheRequest: IUIAutomationCacheRequest; 
+                                         const handler: IUIAutomationFocusChangedEventHandler): HResult;
+    function RemoveFocusChangedEventHandler(const handler: IUIAutomationFocusChangedEventHandler): HResult;
+    function RemoveAllEventHandlers: HResult;
+    function IntNativeArrayToSafeArray(var array_: SYSINT; arrayCount: SYSINT; 
+                                       out safeArray: PSafeArray): HResult;
+    function IntSafeArrayToNativeArray(intArray: PSafeArray; out array_: PSYSINT1; 
+                                       out arrayCount: SYSINT): HResult;
+    function RectToVariant(rc: tagRECT; out var_: OleVariant): HResult;
+    function VariantToRect(var_: OleVariant; out rc: tagRECT): HResult;
+    function SafeArrayToRectNativeArray(rects: PSafeArray; out rectArray: PUserType3; 
+                                        out rectArrayCount: SYSINT): HResult;
+    function CreateProxyFactoryEntry(const factory: IUIAutomationProxyFactory; 
+                                     out factoryEntry: IUIAutomationProxyFactoryEntry): HResult;
+    function GetPropertyProgrammaticName(property_: SYSINT; out name: WideString): HResult;
+    function GetPatternProgrammaticName(pattern: SYSINT; out name: WideString): HResult;
+    function PollForPotentialSupportedPatterns(const pElement: IUIAutomationElement; 
+                                               out patternIds: PSafeArray; 
+                                               out patternNames: PSafeArray): HResult;
+    function PollForPotentialSupportedProperties(const pElement: IUIAutomationElement; 
+                                                 out propertyIds: PSafeArray; 
+                                                 out propertyNames: PSafeArray): HResult;
+    function CheckNotSupported(value: OleVariant; out isNotSupported: Integer): HResult;
+    function ElementFromIAccessible(const accessible: IAccessible; childId: SYSINT; 
+                                    out element: IUIAutomationElement): HResult;
+    function ElementFromIAccessibleBuildCache(const accessible: IAccessible; childId: SYSINT; 
+                                              const cacheRequest: IUIAutomationCacheRequest; 
+                                              out element: IUIAutomationElement): HResult;
+    property DefaultInterface: IUIAutomation read GetDefaultInterface;
+  published
+  end;
+
 // *********************************************************************//
 // The Class CoCUIAutomation8 provides a Create and CreateRemote method to          
 // create instances of the default interface IUIAutomation2 exposed by              
@@ -1601,6 +1734,150 @@ type
     class function Create: IUIAutomation2;
     class function CreateRemote(const MachineName: string): IUIAutomation2;
   end;
+
+
+// *********************************************************************//
+// OLE Server Proxy class declaration
+// Server Object    : TCUIAutomation8
+// Help String      : The Central Class for UIAutomation8
+// Default Interface: IUIAutomation2
+// Def. Intf. DISP? : No
+// Event   Interface: 
+// TypeFlags        : (2) CanCreate
+// *********************************************************************//
+  TCUIAutomation8 = class(TOleServer)
+  private
+    FIntf: IUIAutomation2;
+    function GetDefaultInterface: IUIAutomation2;
+  protected
+    procedure InitServerData; override;
+    function Get_ControlViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_ContentViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_RawViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+    function Get_RawViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ControlViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ContentViewCondition(out condition: IUIAutomationCondition): HResult;
+    function Get_ProxyFactoryMapping(out factoryMapping: IUIAutomationProxyFactoryMapping): HResult;
+    function Get_ReservedNotSupportedValue(out notSupportedValue: IUnknown): HResult;
+    function Get_ReservedMixedAttributeValue(out mixedAttributeValue: IUnknown): HResult;
+    function Get_AutoSetFocus(out AutoSetFocus: Integer): HResult;
+    function Set_AutoSetFocus(AutoSetFocus: Integer): HResult;
+    function Get_ConnectionTimeout(out timeout: LongWord): HResult;
+    function Set_ConnectionTimeout(timeout: LongWord): HResult;
+    function Get_TransactionTimeout(out timeout: LongWord): HResult;
+    function Set_TransactionTimeout(timeout: LongWord): HResult;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor  Destroy; override;
+    procedure Connect; override;
+    procedure ConnectTo(svrIntf: IUIAutomation2);
+    procedure Disconnect; override;
+    function CompareElements(const el1: IUIAutomationElement; const el2: IUIAutomationElement; 
+                             out areSame: Integer): HResult;
+    function CompareRuntimeIds(runtimeId1: PSafeArray; runtimeId2: PSafeArray; out areSame: Integer): HResult;
+    function GetRootElement(out root: IUIAutomationElement): HResult;
+    function ElementFromHandle(hwnd: Pointer; out element: IUIAutomationElement): HResult;
+    function ElementFromPoint(pt: tagPOINT; out element: IUIAutomationElement): HResult;
+    function GetFocusedElement(out element: IUIAutomationElement): HResult;
+    function GetRootElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                      out root: IUIAutomationElement): HResult;
+    function ElementFromHandleBuildCache(hwnd: Pointer; 
+                                         const cacheRequest: IUIAutomationCacheRequest; 
+                                         out element: IUIAutomationElement): HResult;
+    function ElementFromPointBuildCache(pt: tagPOINT; 
+                                        const cacheRequest: IUIAutomationCacheRequest; 
+                                        out element: IUIAutomationElement): HResult;
+    function GetFocusedElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                         out element: IUIAutomationElement): HResult;
+    function CreateTreeWalker(const pCondition: IUIAutomationCondition; 
+                              out walker: IUIAutomationTreeWalker): HResult;
+    function CreateCacheRequest(out cacheRequest: IUIAutomationCacheRequest): HResult;
+    function CreateTrueCondition(out newCondition: IUIAutomationCondition): HResult;
+    function CreateFalseCondition(out newCondition: IUIAutomationCondition): HResult;
+    function CreatePropertyCondition(propertyId: SYSINT; value: OleVariant; 
+                                     out newCondition: IUIAutomationCondition): HResult;
+    function CreatePropertyConditionEx(propertyId: SYSINT; value: OleVariant; 
+                                       flags: PropertyConditionFlags; 
+                                       out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndCondition(const condition1: IUIAutomationCondition; 
+                                const condition2: IUIAutomationCondition; 
+                                out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndConditionFromArray(conditions: PSafeArray; 
+                                         out newCondition: IUIAutomationCondition): HResult;
+    function CreateAndConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                               conditionCount: SYSINT; 
+                                               out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrCondition(const condition1: IUIAutomationCondition; 
+                               const condition2: IUIAutomationCondition; 
+                               out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrConditionFromArray(conditions: PSafeArray; 
+                                        out newCondition: IUIAutomationCondition): HResult;
+    function CreateOrConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                              conditionCount: SYSINT; 
+                                              out newCondition: IUIAutomationCondition): HResult;
+    function CreateNotCondition(const condition: IUIAutomationCondition; 
+                                out newCondition: IUIAutomationCondition): HResult;
+    function AddAutomationEventHandler(eventId: SYSINT; const element: IUIAutomationElement; 
+                                       scope: TreeScope; 
+                                       const cacheRequest: IUIAutomationCacheRequest; 
+                                       const handler: IUIAutomationEventHandler): HResult;
+    function RemoveAutomationEventHandler(eventId: SYSINT; const element: IUIAutomationElement; 
+                                          const handler: IUIAutomationEventHandler): HResult;
+    function AddPropertyChangedEventHandlerNativeArray(const element: IUIAutomationElement; 
+                                                       scope: TreeScope; 
+                                                       const cacheRequest: IUIAutomationCacheRequest; 
+                                                       const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                       var propertyArray: SYSINT; 
+                                                       propertyCount: SYSINT): HResult;
+    function AddPropertyChangedEventHandler(const element: IUIAutomationElement; scope: TreeScope; 
+                                            const cacheRequest: IUIAutomationCacheRequest; 
+                                            const handler: IUIAutomationPropertyChangedEventHandler; 
+                                            propertyArray: PSafeArray): HResult;
+    function RemovePropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                               const handler: IUIAutomationPropertyChangedEventHandler): HResult;
+    function AddStructureChangedEventHandler(const element: IUIAutomationElement; scope: TreeScope; 
+                                             const cacheRequest: IUIAutomationCacheRequest; 
+                                             const handler: IUIAutomationStructureChangedEventHandler): HResult;
+    function RemoveStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                const handler: IUIAutomationStructureChangedEventHandler): HResult;
+    function AddFocusChangedEventHandler(const cacheRequest: IUIAutomationCacheRequest; 
+                                         const handler: IUIAutomationFocusChangedEventHandler): HResult;
+    function RemoveFocusChangedEventHandler(const handler: IUIAutomationFocusChangedEventHandler): HResult;
+    function RemoveAllEventHandlers: HResult;
+    function IntNativeArrayToSafeArray(var array_: SYSINT; arrayCount: SYSINT; 
+                                       out safeArray: PSafeArray): HResult;
+    function IntSafeArrayToNativeArray(intArray: PSafeArray; out array_: PSYSINT1; 
+                                       out arrayCount: SYSINT): HResult;
+    function RectToVariant(rc: tagRECT; out var_: OleVariant): HResult;
+    function VariantToRect(var_: OleVariant; out rc: tagRECT): HResult;
+    function SafeArrayToRectNativeArray(rects: PSafeArray; out rectArray: PUserType3; 
+                                        out rectArrayCount: SYSINT): HResult;
+    function CreateProxyFactoryEntry(const factory: IUIAutomationProxyFactory; 
+                                     out factoryEntry: IUIAutomationProxyFactoryEntry): HResult;
+    function GetPropertyProgrammaticName(property_: SYSINT; out name: WideString): HResult;
+    function GetPatternProgrammaticName(pattern: SYSINT; out name: WideString): HResult;
+    function PollForPotentialSupportedPatterns(const pElement: IUIAutomationElement; 
+                                               out patternIds: PSafeArray; 
+                                               out patternNames: PSafeArray): HResult;
+    function PollForPotentialSupportedProperties(const pElement: IUIAutomationElement; 
+                                                 out propertyIds: PSafeArray; 
+                                                 out propertyNames: PSafeArray): HResult;
+    function CheckNotSupported(value: OleVariant; out isNotSupported: Integer): HResult;
+    function ElementFromIAccessible(const accessible: IAccessible; childId: SYSINT; 
+                                    out element: IUIAutomationElement): HResult;
+    function ElementFromIAccessibleBuildCache(const accessible: IAccessible; childId: SYSINT; 
+                                              const cacheRequest: IUIAutomationCacheRequest; 
+                                              out element: IUIAutomationElement): HResult;
+    property DefaultInterface: IUIAutomation2 read GetDefaultInterface;
+  published
+  end;
+
+procedure Register;
+
+resourcestring
+  dtlServerPage = 'ActiveX';
+
+  dtlOcxPage = 'ActiveX';
 
 implementation
 
@@ -1616,6 +1893,400 @@ begin
   Result := CreateRemoteComObject(MachineName, CLASS_CUIAutomation) as IUIAutomation;
 end;
 
+procedure TCUIAutomation.InitServerData;
+const
+  CServerData: TServerData = (
+    ClassID:   '{FF48DBA4-60EF-4201-AA87-54103EEF594E}';
+    IntfIID:   '{30CBE57D-D9D0-452A-AB13-7AC5AC4825EE}';
+    EventIID:  '';
+    LicenseKey: nil;
+    Version: 500);
+begin
+  ServerData := @CServerData;
+end;
+
+procedure TCUIAutomation.Connect;
+var
+  punk: IUnknown;
+begin
+  if FIntf = nil then
+  begin
+    punk := GetServer;
+    Fintf:= punk as IUIAutomation;
+  end;
+end;
+
+procedure TCUIAutomation.ConnectTo(svrIntf: IUIAutomation);
+begin
+  Disconnect;
+  FIntf := svrIntf;
+end;
+
+procedure TCUIAutomation.DisConnect;
+begin
+  if Fintf <> nil then
+  begin
+    FIntf := nil;
+  end;
+end;
+
+function TCUIAutomation.GetDefaultInterface: IUIAutomation;
+begin
+  if FIntf = nil then
+    Connect;
+  Assert(FIntf <> nil, 'DefaultInterface is NULL. Component is not connected to Server. You must call "Connect" or "ConnectTo" before this operation');
+  Result := FIntf;
+end;
+
+constructor TCUIAutomation.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TCUIAutomation.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TCUIAutomation.Get_ControlViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_ControlViewWalker(walker);
+end;
+
+function TCUIAutomation.Get_ContentViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_ContentViewWalker(walker);
+end;
+
+function TCUIAutomation.Get_RawViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_RawViewWalker(walker);
+end;
+
+function TCUIAutomation.Get_RawViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_RawViewCondition(condition);
+end;
+
+function TCUIAutomation.Get_ControlViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_ControlViewCondition(condition);
+end;
+
+function TCUIAutomation.Get_ContentViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_ContentViewCondition(condition);
+end;
+
+function TCUIAutomation.Get_ProxyFactoryMapping(out factoryMapping: IUIAutomationProxyFactoryMapping): HResult;
+begin
+  Result := DefaultInterface.Get_ProxyFactoryMapping(factoryMapping);
+end;
+
+function TCUIAutomation.Get_ReservedNotSupportedValue(out notSupportedValue: IUnknown): HResult;
+begin
+  Result := DefaultInterface.Get_ReservedNotSupportedValue(notSupportedValue);
+end;
+
+function TCUIAutomation.Get_ReservedMixedAttributeValue(out mixedAttributeValue: IUnknown): HResult;
+begin
+  Result := DefaultInterface.Get_ReservedMixedAttributeValue(mixedAttributeValue);
+end;
+
+function TCUIAutomation.CompareElements(const el1: IUIAutomationElement; 
+                                        const el2: IUIAutomationElement; out areSame: Integer): HResult;
+begin
+  Result := DefaultInterface.CompareElements(el1, el2, areSame);
+end;
+
+function TCUIAutomation.CompareRuntimeIds(runtimeId1: PSafeArray; runtimeId2: PSafeArray; 
+                                          out areSame: Integer): HResult;
+begin
+  Result := DefaultInterface.CompareRuntimeIds(runtimeId1, runtimeId2, areSame);
+end;
+
+function TCUIAutomation.GetRootElement(out root: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetRootElement(root);
+end;
+
+function TCUIAutomation.ElementFromHandle(hwnd: Pointer; out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromHandle(hwnd, element);
+end;
+
+function TCUIAutomation.ElementFromPoint(pt: tagPOINT; out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromPoint(pt, element);
+end;
+
+function TCUIAutomation.GetFocusedElement(out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetFocusedElement(element);
+end;
+
+function TCUIAutomation.GetRootElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                                 out root: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetRootElementBuildCache(cacheRequest, root);
+end;
+
+function TCUIAutomation.ElementFromHandleBuildCache(hwnd: Pointer; 
+                                                    const cacheRequest: IUIAutomationCacheRequest; 
+                                                    out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromHandleBuildCache(hwnd, cacheRequest, element);
+end;
+
+function TCUIAutomation.ElementFromPointBuildCache(pt: tagPOINT; 
+                                                   const cacheRequest: IUIAutomationCacheRequest; 
+                                                   out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromPointBuildCache(pt, cacheRequest, element);
+end;
+
+function TCUIAutomation.GetFocusedElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                                    out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetFocusedElementBuildCache(cacheRequest, element);
+end;
+
+function TCUIAutomation.CreateTreeWalker(const pCondition: IUIAutomationCondition; 
+                                         out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.CreateTreeWalker(pCondition, walker);
+end;
+
+function TCUIAutomation.CreateCacheRequest(out cacheRequest: IUIAutomationCacheRequest): HResult;
+begin
+  Result := DefaultInterface.CreateCacheRequest(cacheRequest);
+end;
+
+function TCUIAutomation.CreateTrueCondition(out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateTrueCondition(newCondition);
+end;
+
+function TCUIAutomation.CreateFalseCondition(out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateFalseCondition(newCondition);
+end;
+
+function TCUIAutomation.CreatePropertyCondition(propertyId: SYSINT; value: OleVariant; 
+                                                out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreatePropertyCondition(propertyId, value, newCondition);
+end;
+
+function TCUIAutomation.CreatePropertyConditionEx(propertyId: SYSINT; value: OleVariant; 
+                                                  flags: PropertyConditionFlags; 
+                                                  out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreatePropertyConditionEx(propertyId, value, flags, newCondition);
+end;
+
+function TCUIAutomation.CreateAndCondition(const condition1: IUIAutomationCondition; 
+                                           const condition2: IUIAutomationCondition; 
+                                           out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndCondition(condition1, condition2, newCondition);
+end;
+
+function TCUIAutomation.CreateAndConditionFromArray(conditions: PSafeArray; 
+                                                    out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndConditionFromArray(conditions, newCondition);
+end;
+
+function TCUIAutomation.CreateAndConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                                          conditionCount: SYSINT; 
+                                                          out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndConditionFromNativeArray(conditions, conditionCount, 
+                                                               newCondition);
+end;
+
+function TCUIAutomation.CreateOrCondition(const condition1: IUIAutomationCondition; 
+                                          const condition2: IUIAutomationCondition; 
+                                          out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrCondition(condition1, condition2, newCondition);
+end;
+
+function TCUIAutomation.CreateOrConditionFromArray(conditions: PSafeArray; 
+                                                   out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrConditionFromArray(conditions, newCondition);
+end;
+
+function TCUIAutomation.CreateOrConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                                         conditionCount: SYSINT; 
+                                                         out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrConditionFromNativeArray(conditions, conditionCount, 
+                                                              newCondition);
+end;
+
+function TCUIAutomation.CreateNotCondition(const condition: IUIAutomationCondition; 
+                                           out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateNotCondition(condition, newCondition);
+end;
+
+function TCUIAutomation.AddAutomationEventHandler(eventId: SYSINT; 
+                                                  const element: IUIAutomationElement; 
+                                                  scope: TreeScope; 
+                                                  const cacheRequest: IUIAutomationCacheRequest; 
+                                                  const handler: IUIAutomationEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddAutomationEventHandler(eventId, element, scope, cacheRequest, 
+                                                       handler);
+end;
+
+function TCUIAutomation.RemoveAutomationEventHandler(eventId: SYSINT; 
+                                                     const element: IUIAutomationElement; 
+                                                     const handler: IUIAutomationEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveAutomationEventHandler(eventId, element, handler);
+end;
+
+function TCUIAutomation.AddPropertyChangedEventHandlerNativeArray(const element: IUIAutomationElement; 
+                                                                  scope: TreeScope; 
+                                                                  const cacheRequest: IUIAutomationCacheRequest; 
+                                                                  const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                                  var propertyArray: SYSINT; 
+                                                                  propertyCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.AddPropertyChangedEventHandlerNativeArray(element, scope, 
+                                                                       cacheRequest, handler, 
+                                                                       propertyArray, propertyCount);
+end;
+
+function TCUIAutomation.AddPropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                                       scope: TreeScope; 
+                                                       const cacheRequest: IUIAutomationCacheRequest; 
+                                                       const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                       propertyArray: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.AddPropertyChangedEventHandler(element, scope, cacheRequest, handler, 
+                                                            propertyArray);
+end;
+
+function TCUIAutomation.RemovePropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                                          const handler: IUIAutomationPropertyChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemovePropertyChangedEventHandler(element, handler);
+end;
+
+function TCUIAutomation.AddStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                        scope: TreeScope; 
+                                                        const cacheRequest: IUIAutomationCacheRequest; 
+                                                        const handler: IUIAutomationStructureChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddStructureChangedEventHandler(element, scope, cacheRequest, handler);
+end;
+
+function TCUIAutomation.RemoveStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                           const handler: IUIAutomationStructureChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveStructureChangedEventHandler(element, handler);
+end;
+
+function TCUIAutomation.AddFocusChangedEventHandler(const cacheRequest: IUIAutomationCacheRequest; 
+                                                    const handler: IUIAutomationFocusChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddFocusChangedEventHandler(cacheRequest, handler);
+end;
+
+function TCUIAutomation.RemoveFocusChangedEventHandler(const handler: IUIAutomationFocusChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveFocusChangedEventHandler(handler);
+end;
+
+function TCUIAutomation.RemoveAllEventHandlers: HResult;
+begin
+  Result := DefaultInterface.RemoveAllEventHandlers;
+end;
+
+function TCUIAutomation.IntNativeArrayToSafeArray(var array_: SYSINT; arrayCount: SYSINT; 
+                                                  out safeArray: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.IntNativeArrayToSafeArray(array_, arrayCount, safeArray);
+end;
+
+function TCUIAutomation.IntSafeArrayToNativeArray(intArray: PSafeArray; out array_: PSYSINT1; 
+                                                  out arrayCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.IntSafeArrayToNativeArray(intArray, array_, arrayCount);
+end;
+
+function TCUIAutomation.RectToVariant(rc: tagRECT; out var_: OleVariant): HResult;
+begin
+  Result := DefaultInterface.RectToVariant(rc, var_);
+end;
+
+function TCUIAutomation.VariantToRect(var_: OleVariant; out rc: tagRECT): HResult;
+begin
+  Result := DefaultInterface.VariantToRect(var_, rc);
+end;
+
+function TCUIAutomation.SafeArrayToRectNativeArray(rects: PSafeArray; out rectArray: PUserType3; 
+                                                   out rectArrayCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.SafeArrayToRectNativeArray(rects, rectArray, rectArrayCount);
+end;
+
+function TCUIAutomation.CreateProxyFactoryEntry(const factory: IUIAutomationProxyFactory; 
+                                                out factoryEntry: IUIAutomationProxyFactoryEntry): HResult;
+begin
+  Result := DefaultInterface.CreateProxyFactoryEntry(factory, factoryEntry);
+end;
+
+function TCUIAutomation.GetPropertyProgrammaticName(property_: SYSINT; out name: WideString): HResult;
+begin
+  Result := DefaultInterface.GetPropertyProgrammaticName(property_, name);
+end;
+
+function TCUIAutomation.GetPatternProgrammaticName(pattern: SYSINT; out name: WideString): HResult;
+begin
+  Result := DefaultInterface.GetPatternProgrammaticName(pattern, name);
+end;
+
+function TCUIAutomation.PollForPotentialSupportedPatterns(const pElement: IUIAutomationElement; 
+                                                          out patternIds: PSafeArray; 
+                                                          out patternNames: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.PollForPotentialSupportedPatterns(pElement, patternIds, patternNames);
+end;
+
+function TCUIAutomation.PollForPotentialSupportedProperties(const pElement: IUIAutomationElement; 
+                                                            out propertyIds: PSafeArray; 
+                                                            out propertyNames: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.PollForPotentialSupportedProperties(pElement, propertyIds, 
+                                                                 propertyNames);
+end;
+
+function TCUIAutomation.CheckNotSupported(value: OleVariant; out isNotSupported: Integer): HResult;
+begin
+  Result := DefaultInterface.CheckNotSupported(value, isNotSupported);
+end;
+
+function TCUIAutomation.ElementFromIAccessible(const accessible: IAccessible; childId: SYSINT; 
+                                               out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromIAccessible(accessible, childId, element);
+end;
+
+function TCUIAutomation.ElementFromIAccessibleBuildCache(const accessible: IAccessible; 
+                                                         childId: SYSINT; 
+                                                         const cacheRequest: IUIAutomationCacheRequest; 
+                                                         out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromIAccessibleBuildCache(accessible, childId, cacheRequest, 
+                                                              element);
+end;
+
 class function CoCUIAutomation8.Create: IUIAutomation2;
 begin
   Result := CreateComObject(CLASS_CUIAutomation8) as IUIAutomation2;
@@ -1624,6 +2295,435 @@ end;
 class function CoCUIAutomation8.CreateRemote(const MachineName: string): IUIAutomation2;
 begin
   Result := CreateRemoteComObject(MachineName, CLASS_CUIAutomation8) as IUIAutomation2;
+end;
+
+procedure TCUIAutomation8.InitServerData;
+const
+  CServerData: TServerData = (
+    ClassID:   '{E22AD333-B25F-460C-83D0-0581107395C9}';
+    IntfIID:   '{34723AFF-0C9D-49D0-9896-7AB52DF8CD8A}';
+    EventIID:  '';
+    LicenseKey: nil;
+    Version: 500);
+begin
+  ServerData := @CServerData;
+end;
+
+procedure TCUIAutomation8.Connect;
+var
+  punk: IUnknown;
+begin
+  if FIntf = nil then
+  begin
+    punk := GetServer;
+    Fintf:= punk as IUIAutomation2;
+  end;
+end;
+
+procedure TCUIAutomation8.ConnectTo(svrIntf: IUIAutomation2);
+begin
+  Disconnect;
+  FIntf := svrIntf;
+end;
+
+procedure TCUIAutomation8.DisConnect;
+begin
+  if Fintf <> nil then
+  begin
+    FIntf := nil;
+  end;
+end;
+
+function TCUIAutomation8.GetDefaultInterface: IUIAutomation2;
+begin
+  if FIntf = nil then
+    Connect;
+  Assert(FIntf <> nil, 'DefaultInterface is NULL. Component is not connected to Server. You must call "Connect" or "ConnectTo" before this operation');
+  Result := FIntf;
+end;
+
+constructor TCUIAutomation8.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+end;
+
+destructor TCUIAutomation8.Destroy;
+begin
+  inherited Destroy;
+end;
+
+function TCUIAutomation8.Get_ControlViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_ControlViewWalker(walker);
+end;
+
+function TCUIAutomation8.Get_ContentViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_ContentViewWalker(walker);
+end;
+
+function TCUIAutomation8.Get_RawViewWalker(out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.Get_RawViewWalker(walker);
+end;
+
+function TCUIAutomation8.Get_RawViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_RawViewCondition(condition);
+end;
+
+function TCUIAutomation8.Get_ControlViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_ControlViewCondition(condition);
+end;
+
+function TCUIAutomation8.Get_ContentViewCondition(out condition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.Get_ContentViewCondition(condition);
+end;
+
+function TCUIAutomation8.Get_ProxyFactoryMapping(out factoryMapping: IUIAutomationProxyFactoryMapping): HResult;
+begin
+  Result := DefaultInterface.Get_ProxyFactoryMapping(factoryMapping);
+end;
+
+function TCUIAutomation8.Get_ReservedNotSupportedValue(out notSupportedValue: IUnknown): HResult;
+begin
+  Result := DefaultInterface.Get_ReservedNotSupportedValue(notSupportedValue);
+end;
+
+function TCUIAutomation8.Get_ReservedMixedAttributeValue(out mixedAttributeValue: IUnknown): HResult;
+begin
+  Result := DefaultInterface.Get_ReservedMixedAttributeValue(mixedAttributeValue);
+end;
+
+function TCUIAutomation8.Get_AutoSetFocus(out AutoSetFocus: Integer): HResult;
+begin
+  Result := DefaultInterface.Get_AutoSetFocus(AutoSetFocus);
+end;
+
+function TCUIAutomation8.Set_AutoSetFocus(AutoSetFocus: Integer): HResult;
+begin
+  Result := DefaultInterface.Set_AutoSetFocus(AutoSetFocus);
+end;
+
+function TCUIAutomation8.Get_ConnectionTimeout(out timeout: LongWord): HResult;
+begin
+  Result := DefaultInterface.Get_ConnectionTimeout(timeout);
+end;
+
+function TCUIAutomation8.Set_ConnectionTimeout(timeout: LongWord): HResult;
+begin
+  Result := DefaultInterface.Set_ConnectionTimeout(timeout);
+end;
+
+function TCUIAutomation8.Get_TransactionTimeout(out timeout: LongWord): HResult;
+begin
+  Result := DefaultInterface.Get_TransactionTimeout(timeout);
+end;
+
+function TCUIAutomation8.Set_TransactionTimeout(timeout: LongWord): HResult;
+begin
+  Result := DefaultInterface.Set_TransactionTimeout(timeout);
+end;
+
+function TCUIAutomation8.CompareElements(const el1: IUIAutomationElement; 
+                                         const el2: IUIAutomationElement; out areSame: Integer): HResult;
+begin
+  Result := DefaultInterface.CompareElements(el1, el2, areSame);
+end;
+
+function TCUIAutomation8.CompareRuntimeIds(runtimeId1: PSafeArray; runtimeId2: PSafeArray; 
+                                           out areSame: Integer): HResult;
+begin
+  Result := DefaultInterface.CompareRuntimeIds(runtimeId1, runtimeId2, areSame);
+end;
+
+function TCUIAutomation8.GetRootElement(out root: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetRootElement(root);
+end;
+
+function TCUIAutomation8.ElementFromHandle(hwnd: Pointer; out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromHandle(hwnd, element);
+end;
+
+function TCUIAutomation8.ElementFromPoint(pt: tagPOINT; out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromPoint(pt, element);
+end;
+
+function TCUIAutomation8.GetFocusedElement(out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetFocusedElement(element);
+end;
+
+function TCUIAutomation8.GetRootElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                                  out root: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetRootElementBuildCache(cacheRequest, root);
+end;
+
+function TCUIAutomation8.ElementFromHandleBuildCache(hwnd: Pointer; 
+                                                     const cacheRequest: IUIAutomationCacheRequest; 
+                                                     out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromHandleBuildCache(hwnd, cacheRequest, element);
+end;
+
+function TCUIAutomation8.ElementFromPointBuildCache(pt: tagPOINT; 
+                                                    const cacheRequest: IUIAutomationCacheRequest; 
+                                                    out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromPointBuildCache(pt, cacheRequest, element);
+end;
+
+function TCUIAutomation8.GetFocusedElementBuildCache(const cacheRequest: IUIAutomationCacheRequest; 
+                                                     out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.GetFocusedElementBuildCache(cacheRequest, element);
+end;
+
+function TCUIAutomation8.CreateTreeWalker(const pCondition: IUIAutomationCondition; 
+                                          out walker: IUIAutomationTreeWalker): HResult;
+begin
+  Result := DefaultInterface.CreateTreeWalker(pCondition, walker);
+end;
+
+function TCUIAutomation8.CreateCacheRequest(out cacheRequest: IUIAutomationCacheRequest): HResult;
+begin
+  Result := DefaultInterface.CreateCacheRequest(cacheRequest);
+end;
+
+function TCUIAutomation8.CreateTrueCondition(out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateTrueCondition(newCondition);
+end;
+
+function TCUIAutomation8.CreateFalseCondition(out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateFalseCondition(newCondition);
+end;
+
+function TCUIAutomation8.CreatePropertyCondition(propertyId: SYSINT; value: OleVariant; 
+                                                 out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreatePropertyCondition(propertyId, value, newCondition);
+end;
+
+function TCUIAutomation8.CreatePropertyConditionEx(propertyId: SYSINT; value: OleVariant; 
+                                                   flags: PropertyConditionFlags; 
+                                                   out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreatePropertyConditionEx(propertyId, value, flags, newCondition);
+end;
+
+function TCUIAutomation8.CreateAndCondition(const condition1: IUIAutomationCondition; 
+                                            const condition2: IUIAutomationCondition; 
+                                            out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndCondition(condition1, condition2, newCondition);
+end;
+
+function TCUIAutomation8.CreateAndConditionFromArray(conditions: PSafeArray; 
+                                                     out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndConditionFromArray(conditions, newCondition);
+end;
+
+function TCUIAutomation8.CreateAndConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                                           conditionCount: SYSINT; 
+                                                           out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateAndConditionFromNativeArray(conditions, conditionCount, 
+                                                               newCondition);
+end;
+
+function TCUIAutomation8.CreateOrCondition(const condition1: IUIAutomationCondition; 
+                                           const condition2: IUIAutomationCondition; 
+                                           out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrCondition(condition1, condition2, newCondition);
+end;
+
+function TCUIAutomation8.CreateOrConditionFromArray(conditions: PSafeArray; 
+                                                    out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrConditionFromArray(conditions, newCondition);
+end;
+
+function TCUIAutomation8.CreateOrConditionFromNativeArray(var conditions: IUIAutomationCondition; 
+                                                          conditionCount: SYSINT; 
+                                                          out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateOrConditionFromNativeArray(conditions, conditionCount, 
+                                                              newCondition);
+end;
+
+function TCUIAutomation8.CreateNotCondition(const condition: IUIAutomationCondition; 
+                                            out newCondition: IUIAutomationCondition): HResult;
+begin
+  Result := DefaultInterface.CreateNotCondition(condition, newCondition);
+end;
+
+function TCUIAutomation8.AddAutomationEventHandler(eventId: SYSINT; 
+                                                   const element: IUIAutomationElement; 
+                                                   scope: TreeScope; 
+                                                   const cacheRequest: IUIAutomationCacheRequest; 
+                                                   const handler: IUIAutomationEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddAutomationEventHandler(eventId, element, scope, cacheRequest, 
+                                                       handler);
+end;
+
+function TCUIAutomation8.RemoveAutomationEventHandler(eventId: SYSINT; 
+                                                      const element: IUIAutomationElement; 
+                                                      const handler: IUIAutomationEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveAutomationEventHandler(eventId, element, handler);
+end;
+
+function TCUIAutomation8.AddPropertyChangedEventHandlerNativeArray(const element: IUIAutomationElement; 
+                                                                   scope: TreeScope; 
+                                                                   const cacheRequest: IUIAutomationCacheRequest; 
+                                                                   const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                                   var propertyArray: SYSINT; 
+                                                                   propertyCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.AddPropertyChangedEventHandlerNativeArray(element, scope, 
+                                                                       cacheRequest, handler, 
+                                                                       propertyArray, propertyCount);
+end;
+
+function TCUIAutomation8.AddPropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                                        scope: TreeScope; 
+                                                        const cacheRequest: IUIAutomationCacheRequest; 
+                                                        const handler: IUIAutomationPropertyChangedEventHandler; 
+                                                        propertyArray: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.AddPropertyChangedEventHandler(element, scope, cacheRequest, handler, 
+                                                            propertyArray);
+end;
+
+function TCUIAutomation8.RemovePropertyChangedEventHandler(const element: IUIAutomationElement; 
+                                                           const handler: IUIAutomationPropertyChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemovePropertyChangedEventHandler(element, handler);
+end;
+
+function TCUIAutomation8.AddStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                         scope: TreeScope; 
+                                                         const cacheRequest: IUIAutomationCacheRequest; 
+                                                         const handler: IUIAutomationStructureChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddStructureChangedEventHandler(element, scope, cacheRequest, handler);
+end;
+
+function TCUIAutomation8.RemoveStructureChangedEventHandler(const element: IUIAutomationElement; 
+                                                            const handler: IUIAutomationStructureChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveStructureChangedEventHandler(element, handler);
+end;
+
+function TCUIAutomation8.AddFocusChangedEventHandler(const cacheRequest: IUIAutomationCacheRequest; 
+                                                     const handler: IUIAutomationFocusChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.AddFocusChangedEventHandler(cacheRequest, handler);
+end;
+
+function TCUIAutomation8.RemoveFocusChangedEventHandler(const handler: IUIAutomationFocusChangedEventHandler): HResult;
+begin
+  Result := DefaultInterface.RemoveFocusChangedEventHandler(handler);
+end;
+
+function TCUIAutomation8.RemoveAllEventHandlers: HResult;
+begin
+  Result := DefaultInterface.RemoveAllEventHandlers;
+end;
+
+function TCUIAutomation8.IntNativeArrayToSafeArray(var array_: SYSINT; arrayCount: SYSINT; 
+                                                   out safeArray: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.IntNativeArrayToSafeArray(array_, arrayCount, safeArray);
+end;
+
+function TCUIAutomation8.IntSafeArrayToNativeArray(intArray: PSafeArray; out array_: PSYSINT1; 
+                                                   out arrayCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.IntSafeArrayToNativeArray(intArray, array_, arrayCount);
+end;
+
+function TCUIAutomation8.RectToVariant(rc: tagRECT; out var_: OleVariant): HResult;
+begin
+  Result := DefaultInterface.RectToVariant(rc, var_);
+end;
+
+function TCUIAutomation8.VariantToRect(var_: OleVariant; out rc: tagRECT): HResult;
+begin
+  Result := DefaultInterface.VariantToRect(var_, rc);
+end;
+
+function TCUIAutomation8.SafeArrayToRectNativeArray(rects: PSafeArray; out rectArray: PUserType3; 
+                                                    out rectArrayCount: SYSINT): HResult;
+begin
+  Result := DefaultInterface.SafeArrayToRectNativeArray(rects, rectArray, rectArrayCount);
+end;
+
+function TCUIAutomation8.CreateProxyFactoryEntry(const factory: IUIAutomationProxyFactory; 
+                                                 out factoryEntry: IUIAutomationProxyFactoryEntry): HResult;
+begin
+  Result := DefaultInterface.CreateProxyFactoryEntry(factory, factoryEntry);
+end;
+
+function TCUIAutomation8.GetPropertyProgrammaticName(property_: SYSINT; out name: WideString): HResult;
+begin
+  Result := DefaultInterface.GetPropertyProgrammaticName(property_, name);
+end;
+
+function TCUIAutomation8.GetPatternProgrammaticName(pattern: SYSINT; out name: WideString): HResult;
+begin
+  Result := DefaultInterface.GetPatternProgrammaticName(pattern, name);
+end;
+
+function TCUIAutomation8.PollForPotentialSupportedPatterns(const pElement: IUIAutomationElement; 
+                                                           out patternIds: PSafeArray; 
+                                                           out patternNames: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.PollForPotentialSupportedPatterns(pElement, patternIds, patternNames);
+end;
+
+function TCUIAutomation8.PollForPotentialSupportedProperties(const pElement: IUIAutomationElement; 
+                                                             out propertyIds: PSafeArray; 
+                                                             out propertyNames: PSafeArray): HResult;
+begin
+  Result := DefaultInterface.PollForPotentialSupportedProperties(pElement, propertyIds, 
+                                                                 propertyNames);
+end;
+
+function TCUIAutomation8.CheckNotSupported(value: OleVariant; out isNotSupported: Integer): HResult;
+begin
+  Result := DefaultInterface.CheckNotSupported(value, isNotSupported);
+end;
+
+function TCUIAutomation8.ElementFromIAccessible(const accessible: IAccessible; childId: SYSINT; 
+                                                out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromIAccessible(accessible, childId, element);
+end;
+
+function TCUIAutomation8.ElementFromIAccessibleBuildCache(const accessible: IAccessible; 
+                                                          childId: SYSINT; 
+                                                          const cacheRequest: IUIAutomationCacheRequest; 
+                                                          out element: IUIAutomationElement): HResult;
+begin
+  Result := DefaultInterface.ElementFromIAccessibleBuildCache(accessible, childId, cacheRequest, 
+                                                              element);
+end;
+
+procedure Register;
+begin
+  RegisterComponents(dtlServerPage, [TCUIAutomation, TCUIAutomation8]);
 end;
 
 end.

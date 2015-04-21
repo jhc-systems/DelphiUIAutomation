@@ -35,15 +35,17 @@ type
   /// </summary>
   TAutomationMenu = class (TAutomationBase)
   strict private
+    FParentElement : IUIAutomationElement;
     FItems : TObjectList<TAutomationMenuItem>;
   private
     function getItems: TObjectList<TAutomationMenuItem>;
-    procedure InitialiseList;
+    procedure InitialiseList(recurse : Boolean);
+    procedure FindMenuItems(Recurse: Boolean);
   public
     /// <summary>
     ///  Constructor for menu.
     /// </summary>
-    constructor Create(element : IUIAutomationElement); override;
+    constructor Create(parent: IUIAutomationElement; element : IUIAutomationElement); reintroduce;
 
     /// <summary>
     ///  Destructor for menu.
@@ -77,11 +79,58 @@ uses
 
 { TAutomationMenu }
 
-constructor TAutomationMenu.Create(element: IUIAutomationElement);
+constructor TAutomationMenu.Create(parent: IUIAutomationElement; element: IUIAutomationElement);
 begin
   inherited create(element);
 
-  InitialiseList;
+  self.FParentElement := parent;
+
+  FItems := TObjectList<TAutomationMenuItem>.create;
+
+//  InitialiseList(true);
+
+
+  self.FindMenuItems(true);  
+
+end;
+
+procedure TAutomationMenu.FindMenuItems(Recurse: Boolean);   
+var
+  condition: IUIAutomationCondition;
+  collection: IUIAutomationElementArray;
+  lLength: Integer;
+  Count: Integer;
+  itemElement: IUIAutomationElement;
+  retVal: Integer;
+  ExpandCollapsePattern: IUIAutomationExpandCollapsePattern;  
+  item : TAutomationMenuItem;
+  
+begin
+  UIAuto.CreateTrueCondition(condition);
+
+  self.FParentElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(lLength);
+
+  for Count := 0 to lLength - 1 do
+  begin
+    collection.GetElement(Count, itemElement);
+    itemElement.Get_CurrentControlType(retVal);
+
+    if (retVal = UIA_MenuItemControlTypeId) then
+    begin
+      item := TAutomationMenuItem.Create(itemElement);
+      FItems.Add(item);
+      
+      itemElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(ExpandCollapsePattern));
+      if Assigned(ExpandCollapsePattern) then
+      begin
+        ExpandCollapsePattern.Expand;
+        if Recurse = True then
+          FindMenuItems(False);
+      end;
+    end;
+  end;
 end;
 
 destructor TAutomationMenu.Destroy;
@@ -96,8 +145,20 @@ begin
   result := self.FItems;
 end;
 
-procedure TAutomationMenu.InitialiseList;
+procedure TAutomationMenu.InitialiseList(recurse : Boolean);
 var
+  condition: IUIAutomationCondition;
+  collection: IUIAutomationElementArray;
+  Length: Integer;
+  Count: Integer;
+  itemElement: IUIAutomationElement;
+  retVal: Integer;
+  val: WideString;
+  ExpandCollapsePattern: IUIAutomationExpandCollapsePattern;
+//  FElement: IUIAutomationElement;
+  item : TAutomationMenuItem;
+
+(*
   condition: IUIAutomationCondition;
   collection : IUIAutomationElementArray;
   itemElement : IUIAutomationElement;
@@ -105,8 +166,35 @@ var
   length : integer;
   retVal : integer;
   item : TAutomationMenuItem;
-
+*)
 begin
+  condition := TUIAuto.CreateTrueCondition;
+
+  self.Felement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  for Count := 0 to length - 1 do
+  begin
+    collection.GetElement(Count, itemElement);
+    itemElement.Get_CurrentControlType(retVal);
+
+    if (retVal = UIA_MenuItemControlTypeId) then
+    begin
+      item := TAutomationMenuItem.Create(itemElement);
+      FItems.Add(item);
+
+      itemElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(ExpandCollapsePattern));
+      if Assigned(ExpandCollapsePattern) then
+      begin
+        ExpandCollapsePattern.Expand;
+        if recurse then        
+          InitialiseList(false);
+      end;
+    end;
+  end;
+
+(*
   FItems := TObjectList<TAutomationMenuItem>.create;
 
   condition := TUIAuto.CreateTrueCondition;
@@ -127,6 +215,7 @@ begin
       FItems.Add(item);
     end;
   end;
+*)
 end;
 
 end.

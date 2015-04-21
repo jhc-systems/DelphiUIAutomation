@@ -98,6 +98,7 @@ type
 implementation
 
 uses
+  DelphiUIAutomation.MenuItem,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Automation,
@@ -109,7 +110,6 @@ constructor TAutomationWindow.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
-//  self.FControlMenu := GetMenuBar(0);
   self.FMainMenu := GetMenuBar(1);
 end;
 
@@ -209,13 +209,25 @@ end;
 function TAutomationWindow.GetMenuBar(index: integer): TAutomationMainMenu;
 var
   element : IUIAutomationElement;
+  i : integer;
+  item : TAutomationMenuItem;
+
 begin
   result := nil;
   element := GetControlByControlType(index, UIA_MenuBarControlTypeId);
 
   if (element <> nil) then
   begin
-    result := TAutomationMainMenu.Create(element);
+    result := TAutomationMainMenu.Create(self.FElement, element);
+
+    // test it
+    for I := 0 to result.Items.Count -1 do
+    begin
+      item := result.Items[i];
+      writeln (item.name);
+    end;
+
+
   end;
 end;
 

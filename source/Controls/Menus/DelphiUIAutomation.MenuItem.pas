@@ -124,7 +124,7 @@ begin
   GetInvokePattern;
 
   // This doesn't work as expected
-  //InitialiseList;
+//  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -137,6 +137,7 @@ end;
 
 procedure TAutomationMenuItem.InitialiseList;
 var
+  name : widestring;
   collection : IUIAutomationElementArray;
   itemElement : IUIAutomationElement;
   count : integer;
@@ -162,6 +163,10 @@ begin
   begin
     collection.GetElement(count, itemElement);
     itemElement.Get_CurrentControlType(retVal);
+
+
+    itemElement.Get_CurrentName(name);
+    writeln(name);
 
     if (retVal = UIA_MenuItemControlTypeId) then
     begin
