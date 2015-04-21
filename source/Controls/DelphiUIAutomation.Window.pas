@@ -219,15 +219,6 @@ begin
   if (element <> nil) then
   begin
     result := TAutomationMainMenu.Create(self.FElement, element);
-
-    // test it
-    for I := 0 to result.Items.Count -1 do
-    begin
-      item := result.Items[i];
-      writeln (item.name);
-    end;
-
-
   end;
 end;
 
