@@ -30,7 +30,6 @@ uses
   System.SysUtils,
   System.Types,
   DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
-  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
   DelphiUIAutomation.Window in '..\source\Controls\DelphiUIAutomation.Window.pas',
   DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
   DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
@@ -59,7 +58,8 @@ uses
   DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
   DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
-  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas';
+  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
+  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas';
 
 var
   application : TAutomationApplication;
@@ -75,13 +75,19 @@ var
   check : TAutomationCheckBox;
   radio : TAutomationRadioButton;
   val : string;
+  splash : TAutomationWindow;
+  connect, security : TAutomationWindow;
+  user : TAutomationEditBox;
+  passwd : TAutomationEditBox;
+  btnOK : TAutomationButton;
+  exitItem : TAutomationMenuItem;
 
 begin
 
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-  application := TAutomationApplication.Launch('c:\Windows\notepad.exe', '');
+  application := TAutomationApplication.LaunchOrAttach('c:\Windows\notepad.exe', '');
 
   try
     application.WaitWhileBusy;
@@ -90,6 +96,87 @@ begin
     enquiry := TAutomationDesktop.GetDesktopWindow('Untitled - Notepad');
     try
       enquiry.Focus;
+(*
+      menu := enquiry.MainMenu;
+      try
+  //      writeln(menu.Name);
+
+    //    fileitem := menu.Items[0];
+      //  try
+//          writeln(fileitem.Name);
+
+          exitItem := menu.MenuItem('Help|About Notepad');
+
+          if exitItem <> nil then
+            exitItem.Click
+          else
+            WriteLn('Did not find ''File|Exit''');
+
+        finally
+//         fileitem.Free;
+        end;
+  //    finally
+   //     menu.Free;
+    //  end;
+    *)
+
+(*
+  // First launch the application
+  Application := TAutomationApplication.Launch(
+      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe',
+      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe @\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Config\Envs\F63QUALCST\SS3');
+
+  try
+    application.WaitWhileBusy;
+
+    splash := TAutomationDesktop.GetDesktopWindow('splashScreen');
+
+    try
+      connect := splash.Window('Trying to connect to Server.');
+    finally
+      splash.Free;
+    end;
+
+    security := connect.Window('TRACEY System Security');
+
+    try
+      // Now sign in
+      user := connect.GetEditBoxByIndex(1);
+      try
+        user.Text := 'MHDEV';
+      finally
+        user.Free;
+      end;
+
+      passwd := connect.GetEditBoxByIndex(0);
+      try
+        passwd.Text := 'MHDEV';
+      finally
+        passwd.Free;
+      end;
+
+      btnOK := connect.GetButton('OK');
+      try
+        btnOk.Click;
+      finally
+        btnOk.Free;
+      end;
+    finally
+      security.Free;
+    end;
+
+    // Now wait for a very long time for the enquiry screen to come up
+    application.WaitWhileBusy;
+
+    enquiry := TAutomationDesktop.GetDesktopWindow('Enquiry');
+    try
+      // Wait for enquiry to be ready
+      enquiry.WaitWhileBusy;
+
+      // Now set focus
+      enquiry.Focus;
+*)
+
 (*
       // 4. Select the correct tab
       tab := enquiry.GetTabByIndex(0);
@@ -137,6 +224,7 @@ begin
         statusBar.Free;
       end;
 *)
+(*
       menu := enquiry.MainMenu;
       try
         writeln(menu.Name);
@@ -161,6 +249,7 @@ begin
       finally
         menu.Free;
       end;
+*)
 (*
       cmenu := enquiry.ControlMenu;
       try
@@ -170,8 +259,9 @@ begin
       end;
 *)
 
-      WriteLn ('Press return to continue');
-      ReadLn ;
+  //    WriteLn ('Press return to continue');
+  //    ReadLn ;
+
     finally
       enquiry.Free;
     end;

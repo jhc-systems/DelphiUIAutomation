@@ -125,7 +125,6 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="..\source\DelphiUIAutomation.Automation.pas"/>
-        <DCCReference Include="..\source\UIAutomationClient_TLB.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Window.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Client.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Utils.pas"/>
@@ -155,6 +154,7 @@
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.Hyperlink.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.TextBox.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Processes.pas"/>
+        <DCCReference Include="..\source\UIAutomationClient_TLB.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
