@@ -46,7 +46,6 @@ type
   private
     procedure GetInvokePattern;
     procedure GetExpandCollapsePattern;
-    procedure InitialiseList;
   public
     /// <summary>
     ///  Constructor for menu items.
@@ -122,9 +121,6 @@ begin
 
   GetExpandCollapsePattern;
   GetInvokePattern;
-
-  // This doesn't work as expected
-//  InitialiseList;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -133,47 +129,6 @@ begin
     FItems.free;
 
   inherited;
-end;
-
-procedure TAutomationMenuItem.InitialiseList;
-var
-  name : widestring;
-  collection : IUIAutomationElementArray;
-  itemElement : IUIAutomationElement;
-  count : integer;
-  length : integer;
-  retVal : integer;
-  condition : IUIAutomationCondition;
-  item : TAutomationMenuItem;
-
-begin
-  self.Expand;
-  sleep(750);
-
-  condition := TUIAuto.CreateTrueCondition;
-
-  FItems := TObjectList<TAutomationMenuItem>.create;
-
-  // Find the elements
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, itemElement);
-    itemElement.Get_CurrentControlType(retVal);
-
-
-    itemElement.Get_CurrentName(name);
-    writeln(name);
-
-    if (retVal = UIA_MenuItemControlTypeId) then
-    begin
-      item := TAutomationMenuItem.Create(itemElement);
-      FItems.Add(item);
-    end;
-  end;
 end;
 
 function TAutomationMenuItem.Expand: HRESULT;

@@ -160,9 +160,7 @@ class function TAutomationApplication.LaunchOrAttach(executable,
 var
   exename : string;
   Processes : TAutomationProcesses;
-  process, p : TProcessEntry32;
-  found : boolean;
-  count : integer;
+  process : TProcessEntry32;
 
 begin
   exename := ExtractFileName(executable);

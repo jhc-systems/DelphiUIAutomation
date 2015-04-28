@@ -209,8 +209,6 @@ end;
 function TAutomationWindow.GetMenuBar(index: integer): TAutomationMainMenu;
 var
   element : IUIAutomationElement;
-  i : integer;
-  item : TAutomationMenuItem;
 
 begin
   result := nil;

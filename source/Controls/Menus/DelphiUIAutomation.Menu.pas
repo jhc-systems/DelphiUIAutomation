@@ -98,8 +98,6 @@ var
   regexpr : TRegEx;
   matches : TMatchCollection;
   match : TMatch;
-  group : TGroup;
-  i : integer;
   value, value1 : string;
 
   condition : IUIAutomationCondition;
