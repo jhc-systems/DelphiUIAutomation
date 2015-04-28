@@ -91,6 +91,7 @@ implementation
 uses
   sysutils,
   ActiveX,
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.Processes,
   DelphiUIAutomation.Utils,
   DelphiUIAutomation.Automation,
@@ -156,28 +157,12 @@ begin
   exename := ExtractFileName(executable);
 
   processes := TAutomationProcesses.create;
-  found := false;
-  try
-    for count := 0 to Processes.Processes.count -1 do
-    begin
-      p := Processes.Processes[count];
-      if p.szExeFile = exename then
-      begin
-        process := p;
-        found := true;
-        break;
-      end;
-    end;
-  finally
-    processes.Free;
-  end;
 
-  if (found) then
-  begin
+  try
+    // See whether we can get hold of the process
+    process := processes.FindProcess(exename);
     result := self.Attach(process);
-  end
-  else
-  begin
+  except on EDelphiAutomationException do
     result := self.Launch(executable, parameters);
   end;
 end;

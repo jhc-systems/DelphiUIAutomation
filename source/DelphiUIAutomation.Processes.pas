@@ -49,11 +49,17 @@ type
     ///  Get the list of processes
     /// </summary>
     property Processes : TList<TProcessEntry32> read getProcesses;
+
+    /// <summary>
+    ///  Finds the first process with the given name
+    /// </summary>
+    function FindProcess(const name: string): TProcessEntry32;
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.Exception,
   sysutils;
 
 { TAutomationProcesses }
@@ -70,10 +76,7 @@ begin
     pe.dwSize := SizeOf(pe);
     if Process32First(Snapshot, pe) then
       while Process32Next(Snapshot, pe) do
-      begin
-        writeln (pe.szExeFile);
         FItems.Add(pe);
-      end;
   finally
     CloseHandle(Snapshot);
   end;
@@ -89,6 +92,34 @@ end;
 function TAutomationProcesses.getProcesses: TList<TProcessEntry32>;
 begin
   result := self.FItems;
+end;
+
+function TAutomationProcesses.FindProcess (const name : string) : TProcessEntry32;
+var
+  count : integer;
+  p : TProcessEntry32;
+  found : boolean;
+
+begin
+  found := false;
+
+  try
+    for count := 0 to self.Processes.count -1 do
+    begin
+      p := self.Processes[count];
+      if p.szExeFile = name then
+      begin
+        result := p;
+        found := true;
+        break;
+      end;
+    end;
+  finally
+    processes.Free;
+  end;
+
+  if not found then
+    raise EDelphiAutomationException.Create('Failed to find process - ' + name);
 end;
 
 end.
