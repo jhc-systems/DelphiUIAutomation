@@ -114,8 +114,6 @@ end;
 
 constructor TAutomationApplication.Create(process: THandle);
 begin
- // FprocessInfo := processInfo;
-
   FProcess := process;
 end;
 
@@ -124,12 +122,25 @@ begin
   result := FProcess;
 end;
 
+function TerminateProcessByID(ProcessID: Cardinal): Boolean;
+var
+  hProcess : THandle;
+begin
+  Result := False;
+  hProcess := OpenProcess(PROCESS_TERMINATE,False,ProcessID);
+  if hProcess > 0 then
+  try
+    Result := Win32Check(TerminateProcess(hProcess,0));
+  finally
+    CloseHandle(hProcess);
+  end;
+end;
+
 procedure TAutomationApplication.Kill;
 begin
   if FProcess <> 0 then
   begin
-    TerminateProcess(FProcess, 0);
-    CloseHandle(FProcess);
+    TerminateProcessByID(FProcess);
   end;
 end;
 
