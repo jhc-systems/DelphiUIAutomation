@@ -36,14 +36,14 @@ type
   /// </summary>
   TAutomationApplication = class
   strict private
-//    FProcessInfo : TProcessInformation;
     FProcess : THandle;
+    FAttached : boolean;
     function getProcID: THandle;
   public
     /// <summary>
     /// Creates an application
     /// </summary>
-    constructor Create(process: THandle);
+    constructor Create(process: THandle; IsAttached : boolean = false);
 
     /// <summary>
     ///  Launches an application
@@ -84,6 +84,11 @@ type
     ///  Gets the process
     /// </summary>
     property Process : THandle read getProcID;
+
+    /// <summary>
+    ///  Gets whether the process was attached or started
+    /// </summary>
+    property IsAttached : boolean read FAttached;
   end;
 
 implementation
@@ -109,12 +114,13 @@ begin
 //  info.dwProcessId := 0;
 //  info.dwThreadId := 0;
 
-  result := TAutomationApplication.Create(process.th32ProcessID);
+  result := TAutomationApplication.Create(process.th32ProcessID, true);
 end;
 
-constructor TAutomationApplication.Create(process: THandle);
+constructor TAutomationApplication.Create(process: THandle; IsAttached : boolean = false);
 begin
   FProcess := process;
+  FAttached := IsAttached;
 end;
 
 function TAutomationApplication.getProcID: THandle;
@@ -122,17 +128,31 @@ begin
   result := FProcess;
 end;
 
-function TerminateProcessByID(ProcessID: Cardinal): Boolean;
+function TerminateProcessByID(ProcessID: Cardinal; IsAttached : boolean): Boolean;
 var
   hProcess : THandle;
 begin
   Result := False;
-  hProcess := OpenProcess(PROCESS_TERMINATE,False,ProcessID);
-  if hProcess > 0 then
-  try
-    Result := Win32Check(TerminateProcess(hProcess,0));
-  finally
-    CloseHandle(hProcess);
+
+  // If we attached to an already running process, then we need to open the handle
+  if (IsAttached) then
+  begin
+    hProcess := OpenProcess(PROCESS_TERMINATE,False,ProcessID);
+
+    if hProcess > 0 then
+    try
+      Result := Win32Check(TerminateProcess(hProcess,0));
+    finally
+      CloseHandle(hProcess);
+    end;
+  end
+  else
+  begin
+    try
+      Result := Win32Check(TerminateProcess(ProcessID,0));
+    finally
+      CloseHandle(ProcessID);
+    end;
   end;
 end;
 
@@ -140,7 +160,7 @@ procedure TAutomationApplication.Kill;
 begin
   if FProcess <> 0 then
   begin
-    TerminateProcessByID(FProcess);
+    TerminateProcessByID(FProcess, self.FAttached);
   end;
 end;
 
@@ -148,9 +168,16 @@ class function TAutomationApplication.Launch(executable,
   parameters: String): TAutomationApplication;
 var
   info : TProcessInformation;
+  actualParameters : string;
 
 begin
-  info := ExecNewProcess(executable, parameters, false);
+  if (parameters <> '') then
+  begin
+    actualParameters := string.Format('%s %s',
+      [executable, parameters]);
+  end;
+
+  info := ExecNewProcess(executable, actualParameters, false);
 
   result := TAutomationApplication.Create(info.hProcess);
 end;
@@ -162,13 +189,15 @@ var
   Processes : TAutomationProcesses;
   process : TProcessEntry32;
 
+
 begin
   exename := ExtractFileName(executable);
 
   processes := TAutomationProcesses.create;
 
+  // See whether we can get hold of the process
   try
-    // See whether we can get hold of the process
+    // Found a running application
     process := processes.FindProcess(exename);
     result := self.Attach(process);
   except on EDelphiAutomationException do
