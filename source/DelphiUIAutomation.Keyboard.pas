@@ -36,11 +36,14 @@ type
     ///  'Types' the keys
     ///</summary>
     class procedure Enter(const keys : string);
+
+    class procedure EnterWithCtrl(const key : char);
   end;
 
 implementation
 
 uses
+  Messages,
   generics.collections,
   winapi.windows;
 
@@ -71,6 +74,30 @@ begin
   finally
     inputList.Free;
   end;
+end;
+
+class procedure TAutomationKeyboard.EnterWithCtrl(const key: char);
+var
+  KeyInputs: array of TInput;
+
+  procedure KeybdInput(VKey: Byte; Flags: DWORD);
+  begin
+    SetLength(KeyInputs, Length(KeyInputs)+1);
+    KeyInputs[high(KeyInputs)].Itype := INPUT_KEYBOARD;
+    with  KeyInputs[high(KeyInputs)].ki do
+    begin
+      wVk := VKey;
+      wScan := MapVirtualKey(wVk, 0);
+      dwFlags := Flags;
+    end;
+  end;
+
+begin
+  KeybdInput(VK_CONTROL, 0);
+  KeybdInput(Ord(key), 0);
+  KeybdInput(Ord(key), KEYEVENTF_KEYUP);
+  KeybdInput(VK_CONTROL, KEYEVENTF_KEYUP);
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
 end;
 
 end.
