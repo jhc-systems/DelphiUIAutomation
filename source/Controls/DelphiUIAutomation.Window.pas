@@ -184,21 +184,25 @@ begin
 
   UIAuto.CreateTrueCondition(condition);
 
-  // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
+  // Maybe this should timeout ????
+  while result = nil do
   begin
-    collection.GetElement(count, element);
+    // Find the element
+    self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
-    element.Get_CurrentName(name);
+    collection.Get_Length(length);
 
-    if (name = title)then
+    for count := 0 to length -1 do
     begin
-      result := TAutomationWindow.create(element);
-      break;
+      collection.GetElement(count, element);
+
+      element.Get_CurrentName(name);
+
+      if (name = title)then
+      begin
+        result := TAutomationWindow.create(element);
+        break;
+      end;
     end;
   end;
 
