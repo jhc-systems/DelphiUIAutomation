@@ -59,7 +59,8 @@ uses
   DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
   DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
-  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas';
+  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
+  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas';
 
 var
   application : TAutomationApplication;
