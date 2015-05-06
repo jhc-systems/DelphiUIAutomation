@@ -31,7 +31,7 @@ type
     /// <summary>
     ///  Gets the clipboard contents as text (if it was a grid)
     /// </summary>
-    class function GridText : string;
+    class function GridText : TArray<String>;
 
     /// <summary>
     ///  Gets the number of rows in the clipboard, assuming it is a 'table'
@@ -47,7 +47,7 @@ uses
 
 { TAutomationClipboard }
 
-class function TAutomationClipboard.GridText: string;
+class function TAutomationClipboard.GridText: TArray<String>;
 var
   Lines : TArray<String>;
 begin
