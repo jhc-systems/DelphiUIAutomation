@@ -31,6 +31,8 @@ type
   ///  http://stackoverflow.com/questions/18662637/sendinput-vs-keybd-event
   /// </remarks>
   TAutomationKeyboard = class
+  private
+
   public
     ///<summary>
     ///  'Types' the keys
@@ -38,6 +40,9 @@ type
     class procedure Enter(const keys : string);
 
     class procedure EnterWithCtrl(const key : char);
+
+    class procedure Tab;
+    class procedure BackTab;
   end;
 
 implementation
@@ -97,6 +102,50 @@ begin
   KeybdInput(Ord(key), 0);
   KeybdInput(Ord(key), KEYEVENTF_KEYUP);
   KeybdInput(VK_CONTROL, KEYEVENTF_KEYUP);
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
+end;
+
+class procedure TAutomationKeyboard.Tab;
+var
+  KeyInputs: array of TInput;
+
+  procedure KeybdInput(VKey: Byte; Flags: DWORD);
+  begin
+    SetLength(KeyInputs, Length(KeyInputs)+1);
+    KeyInputs[high(KeyInputs)].Itype := INPUT_KEYBOARD;
+    with  KeyInputs[high(KeyInputs)].ki do
+    begin
+      wVk := VKey;
+      wScan := MapVirtualKey(wVk, 0);
+      dwFlags := Flags;
+    end;
+  end;
+
+begin
+  KeybdInput(VK_TAB, 0);
+  KeybdInput(VK_TAB, KEYEVENTF_KEYUP);
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
+end;
+
+class procedure TAutomationKeyboard.BackTab;
+var
+  KeyInputs: array of TInput;
+
+  procedure KeybdInput(VKey: Byte; Flags: DWORD);
+  begin
+    SetLength(KeyInputs, Length(KeyInputs)+1);
+    KeyInputs[high(KeyInputs)].Itype := INPUT_KEYBOARD;
+    with  KeyInputs[high(KeyInputs)].ki do
+    begin
+      wVk := VKey;
+      wScan := MapVirtualKey(wVk, 0);
+      dwFlags := Flags;
+    end;
+  end;
+
+begin
+  KeybdInput(VK_BACK, 0);
+  KeybdInput(VK_BACK, KEYEVENTF_KEYUP);
   SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
 end;
 

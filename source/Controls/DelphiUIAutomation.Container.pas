@@ -95,6 +95,7 @@ type
 implementation
 
 uses
+  sysutils,
   ActiveX,
   DelphiUIAutomation.Tab,
   DelphiUIAutomation.PropertyIDs,
@@ -128,11 +129,14 @@ begin
     element.Get_CurrentControlType(retVal);
     element.Get_CurrentHelpText(help);
 
-    if retval = UIA_PaneControlTypeId then
-    begin
-      writeln('Looking at children');
-      ListControlsAndStuff(element);
-    end;
+    if name = '999.99' then
+      writeln(name + ' - ' + inttostr(retval) + ' - ' + help);
+
+//    if retval = UIA_PaneControlTypeId then
+//    begin
+//      writeln('Looking at children');
+//      ListControlsAndStuff(element);
+//    end;
 
 //    if (name = title)then
 //    begin

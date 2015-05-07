@@ -37,6 +37,11 @@ type
     ///  Clicks the button
     /// </summary>
     function Click : HResult;
+
+    /// <summary>
+    ///  Focuses the button
+    /// </summary>
+    function Focus : HResult;
   end;
 
 implementation
@@ -65,6 +70,11 @@ begin
       result := Pattern.Invoke;
     end;
   end;
+end;
+
+function TAutomationButton.Focus: HResult;
+begin
+  FElement.SetFocus;
 end;
 
 end.
