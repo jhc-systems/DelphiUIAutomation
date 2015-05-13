@@ -55,9 +55,14 @@ type
     destructor Destroy; override;
 
     /// <summary>
+    /// Finds the child window with the title supplied, with a timeout
+    /// </summary>
+    function Window (const title : string; timeout : DWORD) : TAutomationWindow; overload;
+
+    /// <summary>
     /// Finds the child window with the title supplied
     /// </summary>
-    function Window (const title : string) : TAutomationWindow;
+    function Window (const title : string) : TAutomationWindow; overload;
 
     ///<summary>
     ///  Sets the focus to this window
@@ -103,6 +108,9 @@ uses
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Automation,
   sysutils;
+
+const
+  DEFAULT_TIMEOUT = 3000;
 
 { TAutomationWindow }
 
@@ -171,6 +179,11 @@ begin
 end;
 
 function TAutomationWindow.Window(const title: string): TAutomationWindow;
+begin
+  result := Window(title, DEFAULT_TIMEOUT);
+end;
+
+function TAutomationWindow.Window(const title: string; timeout : DWORD): TAutomationWindow;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -178,15 +191,26 @@ var
   count : integer;
   name : widestring;
   length : integer;
+  start : DWORD;
+  aborted : boolean;
+
+  function TimedOut : boolean;
+  begin
+    result := GetTickCount - start > timeout;
+  end;
 
 begin
   result := nil;
 
   UIAuto.CreateTrueCondition(condition);
 
-  // Maybe this should timeout ????
-  while result = nil do
+  start := GetTickCount;
+  aborted := false;
+
+  while (result = nil) and (not aborted) do
   begin
+    aborted := TimedOut;
+
     // Find the element
     self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 

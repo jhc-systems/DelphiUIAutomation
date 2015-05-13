@@ -129,8 +129,7 @@ begin
     element.Get_CurrentControlType(retVal);
     element.Get_CurrentHelpText(help);
 
-    if name = '999.99' then
-      writeln(name + ' - ' + inttostr(retval) + ' - ' + help);
+    writeln(name + ' - ' + inttostr(retval) + ' - ' + help);
 
 //    if retval = UIA_PaneControlTypeId then
 //    begin

@@ -150,7 +150,7 @@ function TAutomationMenuItem.ClickSubItem(const name : string): HResult;
 var
   items : IUIAutomationElementArray;
   item : IUIAutomationElement;
-  menu : TAutomationMenuItem;
+//  menu : TAutomationMenuItem;
   count, length : integer;
   condition : IUIAutomationCondition;
   retVal : integer;

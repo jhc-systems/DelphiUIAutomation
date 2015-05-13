@@ -24,6 +24,7 @@ unit DelphiUIAutomation.Desktop;
 interface
 
 uses
+  windows,
   generics.collections,
   DelphiUIAutomation.Window;
 
@@ -41,7 +42,12 @@ type
     /// <summary>
     ///  Gets the specified desktop windows
     /// </summary>
-    class function GetDesktopWindow (const title : String) : TAutomationWindow;
+    class function GetDesktopWindow (const title : String) : TAutomationWindow; overload;
+
+    /// <summary>
+    ///  Gets the specified desktop windows, with a timeout
+    /// </summary>
+    class function GetDesktopWindow (const title : String; timeout : DWORD) : TAutomationWindow; overload;
   end;
 
 implementation
@@ -52,21 +58,42 @@ uses
   UIAutomationClient_TLB,
   sysutils;
 
+const
+  DEFAULT_TIMEOUT = 3000;
+
 class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
+begin
+  result := TAutomationDesktop.GetDesktopWindow(title, DEFAULT_TIMEOUT);
+end;
+
+class function TAutomationDesktop.GetDesktopWindow(const title: String;
+  timeout: DWORD): TAutomationWindow;
 var
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   element : IUIAutomationElement;
   name : WideString;
   count, length : integer;
+  start : DWORD;
+  aborted : boolean;
+
+  function TimedOut : boolean;
+  begin
+    result := GetTickCount - start > timeout;
+  end;
 
 begin
   result := nil;
 
   condition := TUIAuto.CreateTrueCondition;
 
-  while result = nil do
+  start := GetTickCount;
+  aborted := false;
+
+  while (result = nil) and (not aborted) do
   begin
+    aborted := TimedOut;
+
     rootElement.FindAll(TreeScope_Children, condition, collection);
 
     collection.Get_Length(length);
