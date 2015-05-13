@@ -59,7 +59,7 @@ uses
   sysutils;
 
 const
-  DEFAULT_TIMEOUT = 3000;
+  DEFAULT_TIMEOUT = 999999999999;
 
 class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
 begin
