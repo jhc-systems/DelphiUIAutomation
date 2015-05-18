@@ -109,8 +109,11 @@ var
   collection : IUIAutomationElementArray;
   count : integer;
   name, help : widestring;
+  text : OleVariant;
   length : integer;
   retVal : integer;
+  combo : TAutomationTextBox;
+  found : integer;
 
 begin
   if element = nil then
@@ -120,16 +123,27 @@ begin
   collection := FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
+  found := 0;
 
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
 
     element.Get_CurrentName(name);
+//    element.GetCurrentPropertyValue(UIA_NamePropertyId, text);
     element.Get_CurrentControlType(retVal);
     element.Get_CurrentHelpText(help);
 
-    writeln(name + ' - ' + inttostr(retval) + ' - ' + help);
+    combo := TAutomationTextBox.Create(element);
+
+    if retVal = UIA_ComboBoxControlTypeId then
+    begin
+      inc(found);
+      writeln(inttostr(found) + ' - ' + combo.Text + ' - ' + inttostr(retval) + ' - ' + help);
+    end;
+
+    //if name <> '' then
+    //  writeln(inttostr(count) + ' - ' + name + ' - ' + inttostr(retval) + ' - ' + help);
 
 //    if retval = UIA_PaneControlTypeId then
 //    begin
@@ -241,7 +255,6 @@ begin
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
-
     if counter = index then
     begin
       result := element;

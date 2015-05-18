@@ -32,14 +32,26 @@ type
   /// </remarks>
   TAutomationKeyboard = class
   private
-
   public
     ///<summary>
     ///  'Types' the keys
     ///</summary>
     class procedure Enter(const keys : string);
 
+    ///<summary>
+    ///  'Types' the key, with Ctrl down
+    ///</summary>
     class procedure EnterWithCtrl(const key : char);
+
+    ///<summary>
+    ///  Send the alt key down
+    ///</summary>
+    class procedure SendAltDown; static;
+
+    ///<summary>
+    ///  Send the alt key up
+    ///</summary>
+    class procedure SendAltUp; static;
 
     class procedure Tab;
     class procedure BackTab;
@@ -79,6 +91,44 @@ begin
   finally
     inputList.Free;
   end;
+end;
+
+procedure AltDown;
+var
+  input: TInput;
+begin
+  input := Default(TInput);
+  input.Itype := INPUT_KEYBOARD;
+  input.ki.wScan := 0;
+  input.ki.time := 0;
+  input.ki.dwExtraInfo := 0;
+  input.ki.wVk := VK_CONTROL;
+  input.ki.dwFlags := 0; // 0 for key press
+  SendInput(1, input, sizeof(INPUT));
+end;
+
+procedure AltUp;
+var
+  input: TInput;
+begin
+  input := Default(TInput);
+  input.Itype := INPUT_KEYBOARD;
+  input.ki.wScan := 0;
+  input.ki.time := 0;
+  input.ki.dwExtraInfo := 0;
+  input.ki.wVk := VK_CONTROL;
+  input.ki.dwFlags := KEYEVENTF_KEYUP;
+  SendInput(1, input, sizeof(INPUT));
+end;
+
+class procedure TAutomationKeyboard.SendAltDown;
+begin
+  AltDown;
+end;
+
+class procedure TAutomationKeyboard.SendAltUp;
+begin
+  AltDown;
 end;
 
 class procedure TAutomationKeyboard.EnterWithCtrl(const key: char);

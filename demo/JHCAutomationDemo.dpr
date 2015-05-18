@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{                                                                           }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -29,8 +29,8 @@ uses
   generics.collections,
   System.SysUtils,
   System.Types,
-  dialogs,
   DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
+  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
   DelphiUIAutomation.Window in '..\source\Controls\DelphiUIAutomation.Window.pas',
   DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
   DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
@@ -59,198 +59,36 @@ uses
   DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
   DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
-  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
-  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
-  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas';
+  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas';
 
 var
-  mouse : TAutomationMouse;
   application : TAutomationApplication;
   menu : TAutomationMainMenu;
-  fileitem : TAutomationMenuItem;
-  cmenu : TAutomationMenu;
-  enquiry, calc, calc1 : TAutomationWindow;
-  tb1, edit : TAutomationEditBox;
+  enquiry : TAutomationWindow;
+  tb1 : TAutomationEditBox;
   eb0 : TAutomationTextBox;
-  combo, buysell : TAutomationComboBox;
+  combo : TAutomationComboBox;
   tab : IAutomationTab;
   statusBar : TAutomationStatusbar;
   check : TAutomationCheckBox;
   radio : TAutomationRadioButton;
   val : string;
-  splash : TAutomationWindow;
-  connect, security : TAutomationWindow;
-  user : TAutomationEditBox;
-  passwd : TAutomationEditBox;
-  btnOK : TAutomationButton;
-  exitItem : TAutomationMenuItem;
-  count : integer;
-
-const
-  CALC_BUYSELL = 5;
 
 begin
 
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-//  Application := TAutomationApplication.LaunchOrAttach(
-//      'C:\Users\humphreysm.JHCLLP\Documents\GitHub\DelphiUIAutomation\demo\democlient\Win32\Debug\Project1.exe',
-//      '');
-(*
-  try
-    application.WaitWhileBusy;
-
-    // Now wait for a very long time for the enquiry screen to come up
-    enquiry := TAutomationDesktop.GetDesktopWindow('Untitled - Notepad');
-    try
-      enquiry.Focus;
-*)
-(*
-      menu := enquiry.MainMenu;
-      try
-  //      writeln(menu.Name);
-
-    //    fileitem := menu.Items[0];
-      //  try
-//          writeln(fileitem.Name);
-
-          exitItem := menu.MenuItem('Help|About Notepad');
-
-          if exitItem <> nil then
-            exitItem.Click
-          else
-            WriteLn('Did not find ''File|Exit''');
-
-        finally
-//         fileitem.Free;
-        end;
-  //    finally
-   //     menu.Free;
-    //  end;
-    *)
-
-(*
-  // First launch the application
-  Application := TAutomationApplication.Launch(
-      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe',
-      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe @\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Config\Envs\F63QUALCST\SS3');
+  application := TAutomationApplication.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   try
     application.WaitWhileBusy;
 
-    splash := TAutomationDesktop.GetDesktopWindow('splashScreen');
-
-    try
-      connect := splash.Window('Trying to connect to Server.');
-    finally
-      splash.Free;
-    end;
-
-    security := connect.Window('TRACEY System Security');
-
-    try
-      // Now sign in
-      user := connect.GetEditBoxByIndex(1);
-      try
-        user.Text := 'MHDEV';
-      finally
-        user.Free;
-      end;
-
-      passwd := connect.GetEditBoxByIndex(0);
-      try
-        passwd.Text := 'MHDEV';
-      finally
-        passwd.Free;
-      end;
-
-      btnOK := connect.GetButton('OK');
-      try
-        btnOk.Click;
-      finally
-        btnOk.Free;
-      end;
-    finally
-      security.Free;
-    end;
-*)
     // Now wait for a very long time for the enquiry screen to come up
-//    application.WaitWhileBusy;
-
-    enquiry := TAutomationDesktop.GetDesktopWindow('Incepting Order ');
-//    enquiry.ListControlsAndStuff(nil);
-
- ///   enquiry.ListControlsAndStuff(nil);
-
-    for count := 0 to 18 do
-    begin
-      combo := enquiry.GetComboboxByIndex(count);
-      combo.Text := 'Phone';
-    end;
-
-    WriteLn ('All done');
-    ReadLn;
-
-(*
-    enquiry := TAutomationDesktop.GetDesktopWindow('Enquiry');
+    enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
     try
-      // Wait for enquiry to be ready
-      enquiry.WaitWhileBusy;
-
-      // Now set focus
       enquiry.Focus;
 
-      // Calculate ???
-      mouse := TAutomationMouse.Create;
-      try
-        mouse.Location := TPoint.Create(1250, 200);
-        mouse.LeftClick;
-        Sleep(4000);  // Necessary for some reason
-      finally
-        mouse.Free;
-      end;
-
-      calc := enquiry.Window('Contract Calculator');
-
-      buysell := calc.GetComboboxByIndex(CALC_BUYSELL);
-      buysell.Text := 'Invest';
-      Sleep(1000);
-
-      // Move to the correct place ????
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-
-      TAutomationKeyBoard.Enter('999.99');
-
-
-
-
-      // Regenerate ????
-      calc1 := enquiry.Window('Contract Calculator');
-
-//      calc1.ListControlsAndStuff(nil);
-
-(*
-      // Now look for the edit box we want
-      for count := 0 to 10 do
-      begin
-        try
-          edit := calc.GetEditBoxByIndex(count);
-          edit.text := IntToStr(count);
-        except
-          ShowMessage (IntToStr(count));
-
-        end;
-      end;
-*)
-
-
-(*
       // 4. Select the correct tab
       tab := enquiry.GetTabByIndex(0);
       tab.SelectTabPage('Second Tab');     // 3 is the magic number
@@ -287,8 +125,8 @@ begin
       // Now see whether we can get the statusbar
       statusBar := enquiry.StatusBar;
       try
-        eb0 := statusBar.GetTextBoxByIndex(1);
         try
+          eb0 := statusBar.GetTextBoxByIndex(1);
           writeln ('Text is ' + eb0.Text);
         finally
           eb0.Free;
@@ -296,53 +134,27 @@ begin
       finally
         statusBar.Free;
       end;
-*)
-(*
+
       menu := enquiry.MainMenu;
       try
         writeln(menu.Name);
-
-        fileitem := menu.Items[0];
-        try
-          writeln(fileitem.Name);
-
-          //fileitem.ClickSubItem('Exit');
-
-          //writeln(menuitem.Items.Count);
-
-        finally
-        // This free causes issues
-       //   fileitem.Free;
-        end;
-
-//        writeln(menu.Items[0].Name);
+        writeln(menu.Items[0].Name);
+        writeln(menu.Items[1].Name);
 
         //menu.Items[0].items[0].Name;
 
       finally
         menu.Free;
       end;
-*)
-(*
-      cmenu := enquiry.ControlMenu;
-      try
-        writeln(cmenu.Name);
-      finally
-        cmenu.Free;
-      end;
-*)
 
-  //    WriteLn ('Press return to continue');
-  //    ReadLn ;
-(*
+      WriteLn ('Press return to continue');
+      ReadLn ;
     finally
       enquiry.Free;
-
-      WriteLn('All done, press any key');
-      ReadLn;
-*)
-//      application.Kill;
-//      application.free
-//    end;
+    end;
+  finally
+    application.Kill;
+    application.free
+  end;
 end.
 

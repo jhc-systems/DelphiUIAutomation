@@ -77,7 +77,6 @@ type
     ///  Destructor for comboboxes.
     /// </summary>
     destructor Destroy; override;
-
   end;
 
 implementation
@@ -99,9 +98,13 @@ var
 
 begin
   self.fElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, inter);
-  if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
+
+  if (inter <> nil) then
   begin
-    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
   end;
 end;
 
@@ -111,9 +114,12 @@ var
 
 begin
   fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
+  if (inter <> nil) then
   begin
-    raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
   end;
 end;
 
@@ -148,7 +154,7 @@ begin
   FItems := TObjectList<TAutomationListItem>.create;
 
   // Find the elements
-  collection := self.FindAll(TreeScope_Descendants);
+  collection := self.FindAll(TreeScope_Children);
 
   collection.Get_Length(length);
 
@@ -167,7 +173,10 @@ end;
 
 function TAutomationComboBox.Expand: HRESULT;
 begin
-  result := self.FExpandCollapsePattern.Expand;
+  if assigned(FExpandCollapsePattern) then
+    result := self.FExpandCollapsePattern.Expand
+  else
+    result := -1;
 end;
 
 function TAutomationComboBox.Collapse: HRESULT;

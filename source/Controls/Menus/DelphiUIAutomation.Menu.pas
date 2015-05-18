@@ -55,6 +55,8 @@ type
     /// </remarks>
     function MenuItem (const path : string) : TAutomationMenuItem;
 
+    procedure MenuItemFudge (const path : string);
+
   end;
 
   /// <summary>
@@ -72,10 +74,12 @@ type
 implementation
 
 uses
+  windows,
   System.RegularExpressions,
   sysutils,
   Generics.Defaults,
   DelphiUIAutomation.Automation,
+  DelphiUIAutomation.Keyboard,
   DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.ControlTypeIDs;
 
@@ -149,6 +153,8 @@ begin
                   pattern.Expand;
                   sleep(750);
 
+
+//                  TAutomationKeyBoard.Enter('A');
                   // Now do it all again
                   self.FParentElement.FindAll(TreeScope_Descendants, condition, icollection);
 
@@ -163,16 +169,80 @@ begin
                     begin
                       imenuElement.Get_CurrentName(name);
 
-                      writeln ('Inner name = ' + name);
+                      OutputDebugString (pchar('Inner name = ' + name));
 
                       if name = value1 then
                       begin
-                        writeln ('Found it');
+                        OutputDebugString (pchar('Found it'));
                         result := TAutomationMenuItem.Create(imenuElement);
                         break;
                       end;
                     end;
                   end;
+                end;
+              end;
+            end;
+          end;
+        end;
+      end;
+  end;
+end;
+
+procedure TAutomationMenu.MenuItemFudge(const path: string);
+var
+  regexpr : TRegEx;
+  matches : TMatchCollection;
+  match : TMatch;
+  value, value1 : string;
+
+  condition : IUIAutomationCondition;
+  collection, icollection : IUIAutomationElementArray;
+  lLength, iLength: Integer;
+  count, icount : integer;
+  menuElement, imenuElement: IUIAutomationElement;
+  retVal: Integer;
+  name : widestring;
+  pattern : IUIAutomationExpandCollapsePattern;
+
+begin
+  regexpr := TRegEx.Create('(.*)\|(.*)',[roIgnoreCase,roMultiline]);
+  matches := regexpr.Matches(path);
+
+  for match in matches do
+  begin
+    if match.success then
+    begin
+      if match.Groups.Count > 1 then
+      begin
+          value := match.Groups.Item[1].Value;
+          value1 := match.Groups.Item[2].Value;
+
+          // 1. Find top level and expand
+          condition := TUIAuto.CreateTrueCondition;
+
+          self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+          collection.Get_Length(lLength);
+
+          for count := 0 to lLength - 1 do
+          begin
+            collection.GetElement(Count, menuElement);
+            menuElement.Get_CurrentControlType(retVal);
+
+            if (retVal = UIA_MenuItemControlTypeId) then
+            begin
+              menuElement.Get_CurrentName(name);
+
+              if name = value then
+              begin
+                // 2. Find leaf level and click
+                menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(pattern));
+                if Assigned(pattern) then
+                begin
+                  pattern.Expand;
+                  sleep(750);
+
+                  TAutomationKeyBoard.Enter(copy(value1, 1));
                 end;
               end;
             end;
