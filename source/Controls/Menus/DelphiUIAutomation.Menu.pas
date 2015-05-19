@@ -30,10 +30,15 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationMenu = interface
+    ['{503033B8-D055-40F3-B3F1-DAB915295CCA}']
+    procedure MenuItemFudge (const path : string);
+  end;
+
   /// <summary>
   ///  Represents a menu
   /// </summary>
-  TAutomationMenu = class (TAutomationBase)
+  TAutomationMenu = class (TAutomationBase, IAutomationMenu)
   strict private
     FParentElement : IUIAutomationElement;
   public
@@ -41,11 +46,6 @@ type
     ///  Constructor for menu.
     /// </summary>
     constructor Create(parent: IUIAutomationElement; element : IUIAutomationElement); reintroduce;
-
-    /// <summary>
-    ///  Destructor for menu.
-    /// </summary>
-    destructor Destroy; override;
 
     ///<summary>
     ///  Gets the menu associated with the given path
@@ -62,13 +62,17 @@ type
   /// <summary>
   ///  Represents a popup menu
   /// </summary>
-  TAutomationPopupMenu = class (TAutomationMenu)
+  TAutomationPopupMenu = class (TAutomationMenu, IAutomationMenu)
+  end;
+
+  IAutomationMainMenu = interface (IAutomationMenu)
+    ['{86FB2309-D9EE-48F5-851C-ED40E4BFCFD4}']
   end;
 
   /// <summary>
   ///  Represents a main menu
   /// </summary>
-  TAutomationMainMenu = class (TAutomationMenu)
+  TAutomationMainMenu = class (TAutomationMenu, IAutomationMainMenu)
   end;
 
 implementation
@@ -90,11 +94,6 @@ begin
   inherited create(element);
 
   self.FParentElement := parent;
-end;
-
-destructor TAutomationMenu.Destroy;
-begin
-  inherited;
 end;
 
 function TAutomationMenu.MenuItem(const path: string): TAutomationMenuItem;
@@ -196,10 +195,10 @@ var
   value, value1 : string;
 
   condition : IUIAutomationCondition;
-  collection, icollection : IUIAutomationElementArray;
-  lLength, iLength: Integer;
-  count, icount : integer;
-  menuElement, imenuElement: IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  lLength : Integer;
+  count : integer;
+  menuElement: IUIAutomationElement;
   retVal: Integer;
   name : widestring;
   pattern : IUIAutomationExpandCollapsePattern;

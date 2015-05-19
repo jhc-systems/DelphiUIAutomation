@@ -27,10 +27,36 @@ uses
   types;
 
 type
+  IAutomationMouse = interface
+    ['{4EEEC6B6-0967-4580-B54E-1F4861F9A057}']
+    function GetLocation : TPoint;
+    procedure SetLocation (value : TPoint);
+
+    /// <summary>
+    ///  Gets or sets the current mouse location
+    /// </summary>
+    property Location : TPoint read GetLocation write SetLocation;
+
+    /// <summary>
+    ///  Double left clicks the mouse
+    /// </summary>
+    procedure DoubleLeftClick;
+
+    /// <summary>
+    ///  Right clicks the mouse
+    /// </summary>
+    procedure RightClick;
+
+    /// <summary>
+    ///  Left clicks the mouse
+    /// </summary>
+    procedure LeftClick;
+  end;
+
   /// <summary>
   ///  The representation of a mouse
   /// </summary>
-  TAutomationMouse = class
+  TAutomationMouse = class (TInterfacedObject, IAutomationMouse)
   private
     function GetLocation : TPoint;
     procedure SetLocation (value : TPoint);

@@ -26,14 +26,16 @@ interface
 uses
   DelphiUIAutomation.Tab.Intf,
   DelphiUIAutomation.TextBox,
+  DelphiUIAutomation.EditBox,
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Combobox,
   DelphiUIAutomation.Menu,
+  DelphiUIAutomation.Base,
   DelphiUIAutomation.RadioButton;
 
 type
-  IAutomationContainer = interface
+  IAutomationContainer = interface (IAutomationBase)
     ['{1077F870-7065-4FA9-BCC7-C8D3610CB2C6}']
     /// <summary>
     /// Finds the tab
@@ -64,6 +66,12 @@ type
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
+
+    /// <summary>
+    /// Finds the editbox, by index
+    /// </summary>
+    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
+
   end;
 
 implementation

@@ -28,13 +28,25 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationEditBox = interface
+    ['{CA47F9E7-ACF6-4B5B-9029-10428C52E1FE}']
+
+    function getText: string;
+    procedure setText(const Value: string);
+
+    ///<summary>
+    ///  Gets or sets the text
+    ///</summary>
+    property Text : string read getText write setText;
+  end;
+
   /// <summary>
   ///  Represents an edit box
   /// </summary>
   /// <remarks>
   ///  TEdit for example.
   /// </remarks>
-  TAutomationEditBox = class (TAutomationBase)
+  TAutomationEditBox = class (TAutomationBase, IAutomationEditBox)
   private
     function getIsPassword: boolean;
     function getIsReadOnly: boolean;

@@ -27,10 +27,19 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationBase = interface
+    function getName: string;
+
+    /// <summary>
+    ///  Gets the name of the element
+    /// </summary>
+    property Name : string read getName;
+  end;
+
   /// <summary>
   ///  The base class for automation objects
   /// </summary>
-  TAutomationBase = class (TInterfacedObject)
+  TAutomationBase = class (TInterfacedObject, IAutomationBase)
   protected
     FElement : IUIAutomationElement;
     function getName: string; virtual;
@@ -69,6 +78,8 @@ uses
 
 constructor TAutomationBase.Create(element: IUIAutomationElement);
 begin
+  inherited create;
+
   Felement := element;
 end;
 

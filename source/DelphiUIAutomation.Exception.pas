@@ -29,6 +29,8 @@ uses
 type
   EDelphiAutomationException = exception;
 
+  EWindowNotFoundException = EDelphiAutomationException;
+
 implementation
 
 end.

@@ -31,14 +31,28 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationApplication = interface
+    ['{82CC20ED-7DA4-48D4-B46D-09D059606A15}']
+    procedure WaitWhileBusy;
+
+    function GetAttached: boolean;
+
+    /// <summary>
+    ///  Gets whether the process was attached or started
+    /// </summary>
+    property IsAttached : boolean read GetAttached;
+  end;
+
   /// <summary>
   ///  The main automation application wrapper
   /// </summary>
-  TAutomationApplication = class
+  TAutomationApplication = class (TInterfacedObject, IAutomationApplication)
   strict private
     FProcess : THandle;
     FAttached : boolean;
+  private
     function getProcID: THandle;
+    function GetAttached: boolean;
   public
     /// <summary>
     /// Creates an application
@@ -48,17 +62,17 @@ type
     /// <summary>
     ///  Launches an application
     /// </summary>
-    class function Launch(executable, parameters : String) : TAutomationApplication;
+    class function Launch(executable, parameters : String) : IAutomationApplication;
 
     /// <summary>
     ///  Attaches to an already running application
     /// </summary>
-    class function Attach (process: TProcessEntry32) : TAutomationApplication;
+    class function Attach (process: TProcessEntry32) : IAutomationApplication;
 
     /// <summary>
     ///  Launches or attaches to an application
     /// </summary>
-    class function LaunchOrAttach(executable, parameters : String) : TAutomationApplication;
+    class function LaunchOrAttach(executable, parameters : String) : IAutomationApplication;
 
     ///<summary>
     ///  Kills the application being automated
@@ -88,7 +102,7 @@ type
     /// <summary>
     ///  Gets whether the process was attached or started
     /// </summary>
-    property IsAttached : boolean read FAttached;
+    property IsAttached : boolean read GetAttached;
   end;
 
 implementation
@@ -104,7 +118,7 @@ uses
 
 { TAutomationApplication }
 
-class function TAutomationApplication.Attach(process: TProcessEntry32): TAutomationApplication;
+class function TAutomationApplication.Attach(process: TProcessEntry32): IAutomationApplication;
 //var
 //  info : TProcessInformation;
 
@@ -121,6 +135,11 @@ constructor TAutomationApplication.Create(process: THandle; IsAttached : boolean
 begin
   FProcess := process;
   FAttached := IsAttached;
+end;
+
+function TAutomationApplication.GetAttached: boolean;
+begin
+  result := FAttached;
 end;
 
 function TAutomationApplication.getProcID: THandle;
@@ -165,7 +184,7 @@ begin
 end;
 
 class function TAutomationApplication.Launch(executable,
-  parameters: String): TAutomationApplication;
+  parameters: String): IAutomationApplication;
 var
   info : TProcessInformation;
   actualParameters : string;
@@ -183,25 +202,27 @@ begin
 end;
 
 class function TAutomationApplication.LaunchOrAttach(executable,
-  parameters: String): TAutomationApplication;
+  parameters: String): IAutomationApplication;
 var
   exename : string;
   Processes : TAutomationProcesses;
   process : TProcessEntry32;
 
-
 begin
   exename := ExtractFileName(executable);
 
   processes := TAutomationProcesses.create;
-
-  // See whether we can get hold of the process
   try
-    // Found a running application
-    process := processes.FindProcess(exename);
-    result := self.Attach(process);
-  except on EDelphiAutomationException do
-    result := self.Launch(executable, parameters);
+    // See whether we can get hold of the process
+    try
+      // Found a running application
+      process := processes.FindProcess(exename);
+      result := self.Attach(process);
+    except on EDelphiAutomationException do
+      result := self.Launch(executable, parameters);
+    end;
+  finally
+    processes.Free;
   end;
 end;
 

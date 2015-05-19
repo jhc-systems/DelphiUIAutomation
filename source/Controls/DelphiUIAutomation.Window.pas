@@ -25,29 +25,54 @@ interface
 
 uses
   Winapi.Windows,
+  DelphiUIAutomation.Container.Intf,
   DelphiUIAutomation.Container,
   DelphiUIAutomation.Tab,
   DelphiUIAutomation.Statusbar,
   DelphiUIAutomation.Menu,
   UIAutomationClient_TLB;
 
+const
+  DEFAULT_TIMEOUT = 99999999;
+
 type
+  IAutomationWindow = interface (IAutomationContainer)
+    ['{4ECCEFCA-7A72-4CBC-A192-568031A28F2B}']
+    function GetMainMenu: IAutomationMainMenu;
+
+    /// <summary>
+    /// Finds the child window with the title supplied
+    /// </summary>
+    function Window (const title : string; timeout : DWORD = DEFAULT_TIMEOUT; WithMenu : boolean = true) : IAutomationWindow;
+
+    ///<summary>
+    /// Gets the main menu associated with this window
+    ///</summary>
+    property MainMenu : IAutomationMainMenu read GetMainMenu;
+
+    ///<summary>
+    ///  Sets the focus to this window
+    ///</summary>
+    procedure Focus;
+  end;
+
   /// <summary>
   ///  Represents a window
   /// </summary>
-  TAutomationWindow = class (TAutomationContainer)
+  TAutomationWindow = class (TAutomationContainer, IAutomationWindow)
   strict private
-    FMainMenu : TAutomationMainMenu;
-    FControlMenu : TAutomationMenu;
+    FMainMenu : IAutomationMainMenu;
+    FControlMenu : IAutomationMenu;
+    FWithMenu : boolean;
   private
-    function GetStatusBar : TAutomationStatusbar;
-    function GetMainMenu: TAutomationMainMenu;
-    function GetControlMenu : TAutomationMenu;
+    function GetStatusBar : IAutomationStatusbar;
+    function GetMainMenu: IAutomationMainMenu;
+    function GetControlMenu : IAutomationMenu;
   public
     /// <summary>
     ///  Constructor for window.
     /// </summary>
-    constructor Create(element : IUIAutomationElement); override;
+    constructor Create(element : IUIAutomationElement; WithMenu : boolean); reintroduce;
 
     /// <summary>
     ///  Destructor for window.
@@ -57,12 +82,12 @@ type
     /// <summary>
     /// Finds the child window with the title supplied, with a timeout
     /// </summary>
-    function Window (const title : string; timeout : DWORD) : TAutomationWindow; overload;
+    function Window (const title : string; timeout : DWORD; WithMenu : boolean = true) : IAutomationWindow; overload;
 
     /// <summary>
     /// Finds the child window with the title supplied
     /// </summary>
-    function Window (const title : string) : TAutomationWindow; overload;
+//    function Window (const title : string) : IAutomationWindow; overload;
 
     ///<summary>
     ///  Sets the focus to this window
@@ -77,17 +102,17 @@ type
     ///<summary>
     /// The status bar associated with this window
     ///</summary>
-    property StatusBar : TAutomationStatusBar read GetStatusBar;
+    property StatusBar : IAutomationStatusBar read GetStatusBar;
 
     ///<summary>
     /// Gets the main menu associated with this window
     ///</summary>
-    property MainMenu : TAutomationMainMenu read GetMainMenu;
+    property MainMenu : IAutomationMainMenu read GetMainMenu;
 
     ///<summary>
     /// Gets the control menu associated with this window
     ///</summary>
-    property ControlMenu : TAutomationMenu read GetControlMenu;
+    property ControlMenu : IAutomationMenu read GetControlMenu;
 
     ///<summary>
     /// Waits for the window to be idle, with timeout
@@ -109,23 +134,20 @@ uses
   DelphiUIAutomation.Automation,
   sysutils;
 
-const
-  DEFAULT_TIMEOUT = 999999999999;
-
 { TAutomationWindow }
 
-constructor TAutomationWindow.Create(element: IUIAutomationElement);
+constructor TAutomationWindow.Create(element: IUIAutomationElement; WithMenu : boolean);
 begin
   inherited create(element);
 
-  self.FMainMenu := GetMenuBar(1);
+  FWithMenu := WithMenu;
+
+  if WithMenu then
+    self.FMainMenu := GetMenuBar(1);
 end;
 
 destructor TAutomationWindow.Destroy;
 begin
-  FMainMenu.Free;
-  FControlMenu.Free;
-
   inherited;
 end;
 
@@ -134,17 +156,17 @@ begin
   self.FElement.SetFocus;
 end;
 
-function TAutomationWindow.GetControlMenu: TAutomationMenu;
+function TAutomationWindow.GetControlMenu: IAutomationMenu;
 begin
   result := self.FControlMenu;
 end;
 
-function TAutomationWindow.GetMainMenu: TAutomationMainMenu;
+function TAutomationWindow.GetMainMenu: IAutomationMainMenu;
 begin
   result := self.FMainMenu;
 end;
 
-function TAutomationWindow.GetStatusBar: TAutomationStatusbar;
+function TAutomationWindow.GetStatusBar: IAutomationStatusbar;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -178,12 +200,12 @@ begin
     raise EDelphiAutomationException.Create('Unable to find statusbar');
 end;
 
-function TAutomationWindow.Window(const title: string): TAutomationWindow;
-begin
-  result := Window(title, DEFAULT_TIMEOUT);
-end;
+//function TAutomationWindow.Window(const title: string): IAutomationWindow;
+//begin
+//  result := Window(title, DEFAULT_TIMEOUT);
+//end;
 
-function TAutomationWindow.Window(const title: string; timeout : DWORD): TAutomationWindow;
+function TAutomationWindow.Window(const title: string; timeout : DWORD; WithMenu : Boolean): IAutomationWindow;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
@@ -224,14 +246,14 @@ begin
 
       if (name = title)then
       begin
-        result := TAutomationWindow.create(element);
+        result := TAutomationWindow.create(element, WithMenu);
         break;
       end;
     end;
   end;
 
   if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find window');
+    raise EWindowNotFoundException.Create('Unable to find window');
 end;
 
 function TAutomationWindow.GetMenuBar(index: integer): TAutomationMainMenu;

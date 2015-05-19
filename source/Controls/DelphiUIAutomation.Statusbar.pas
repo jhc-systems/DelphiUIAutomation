@@ -24,16 +24,20 @@ unit DelphiUIAutomation.Statusbar;
 interface
 
 uses
-
+  DelphiUIAutomation.Container.Intf,
   DelphiUIAutomation.Base,
   DelphiUIAutomation.Container,
   UIAutomationClient_TLB;
 
 type
+  IAutomationStatusbar = interface (IAutomationContainer)
+    ['{6C04412C-4FA6-4023-814D-C26C1691B015}']
+  end;
+
   /// <summary>
   ///  Represents a statusbar
   /// </summary>
-  TAutomationStatusbar = class (TAutomationContainer)
+  TAutomationStatusbar = class (TAutomationContainer, IAutomationStatusbar)
   end;
 
 implementation

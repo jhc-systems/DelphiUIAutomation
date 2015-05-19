@@ -84,7 +84,7 @@ end;
 
 destructor TAutomationProcesses.Destroy;
 begin
-  FreeAndNil(FItems);
+//  FreeAndNil(FItems);
 
   inherited;
 end;

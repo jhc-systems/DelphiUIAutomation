@@ -29,9 +29,25 @@ uses
 
 type
   /// <summary>
-  ///  Represents a button control
+  ///  Interface for a button control
   /// </summary>
-  TAutomationButton = class (TAutomationBase)
+  IAutomationButton = interface
+    ['{BB9FB82C-8794-4355-B0BE-610B03B69822}']
+    /// <summary>
+    ///  Clicks the button
+    /// </summary>
+    function Click : HResult;
+
+    /// <summary>
+    ///  Focuses the button
+    /// </summary>
+    function Focus : HResult;
+  end;
+
+  /// <summary>
+  ///  Representation of a button control
+  /// </summary>
+  TAutomationButton = class (TAutomationBase, IAutomationButton)
   public
     /// <summary>
     ///  Clicks the button
@@ -74,7 +90,7 @@ end;
 
 function TAutomationButton.Focus: HResult;
 begin
-  FElement.SetFocus;
+  result := FElement.SetFocus;
 end;
 
 end.

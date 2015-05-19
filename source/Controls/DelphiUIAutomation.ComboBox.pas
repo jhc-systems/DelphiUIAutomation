@@ -181,7 +181,7 @@ end;
 
 function TAutomationComboBox.Collapse: HRESULT;
 begin
-    result := self.FExpandCollapsePattern.Collapse;
+  result := self.FExpandCollapsePattern.Collapse;
 end;
 
 function TAutomationComboBox.getItems : TObjectList<TAutomationListItem>;

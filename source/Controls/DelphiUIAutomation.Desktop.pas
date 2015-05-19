@@ -105,7 +105,7 @@ begin
 
       if name = title then
       begin
-        result := TAutomationWindow.Create(element);
+        result := TAutomationWindow.Create(element, true);
         break;
       end;
     end;
@@ -137,7 +137,7 @@ begin
   begin
     collection.GetElement(count, element);
     element.Get_CurrentName(name);
-    res.Add(TAutomationWindow.create(element));
+    res.Add(TAutomationWindow.create(element, true));
   end;
 
   result := res;

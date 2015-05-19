@@ -24,6 +24,7 @@ unit DelphiUIAutomation.Checkbox;
 interface
 
 uses
+  activex,
   DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
@@ -32,37 +33,70 @@ type
   ///  Represents a checkbox control
   /// </summary>
   TAutomationCheckBox = class (TAutomationBase)
+  strict private
+    FTogglePattern : IUIAutomationTogglePattern;
+  private
+    procedure GetTogglePattern;
   public
     ///<summary>
     ///  Performs a toggle action
     ///</summary>
     function Toggle: HRESULT;
+
+    ///<summary>
+    ///  Gets the toggle state of the checkbox
+    ///</summary>
+    function ToggleState : TOleEnum;
+
+    /// <summary>
+    ///  Constructor for the element.
+    /// </summary>
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.PatternIDs;
 
 { TAutomationCheckBox }
 
-function TAutomationCheckBox.Toggle: HRESULT;
+constructor TAutomationCheckBox.Create(element: IUIAutomationElement);
+begin
+  inherited create(element);
+
+  GetTogglePattern;
+end;
+
+procedure TAutomationCheckBox.GetTogglePattern;
 var
-  Inter: IInterface;
-  pattern : IUIAutomationTogglePattern;
+  inter: IInterface;
 
 begin
-  result := -1;
-
-  fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
+  self.fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
 
   if (inter <> nil) then
   begin
-    if Inter.QueryInterface(IID_IUIAutomationTogglePattern, pattern) = S_OK then
+    if inter.QueryInterface(IID_IUIAutomationTogglePattern, self.FTogglePattern) <> S_OK then
     begin
-      result := pattern.Toggle;
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
     end;
   end;
+end;
+
+function TAutomationCheckBox.Toggle: HRESULT;
+begin
+  result := self.FTogglePattern.Toggle;
+end;
+
+function TAutomationCheckBox.ToggleState: TOleEnum;
+var
+  state : TOleEnum;
+begin
+  self.FTogglePattern.Get_CurrentToggleState(state);
+
+  result := state;
 end;
 
 end.

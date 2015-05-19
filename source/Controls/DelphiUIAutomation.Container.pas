@@ -164,18 +164,30 @@ end;
 {$ENDIF}
 
 function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
+var
+  eb : IUIAutomationElement;
+
 begin
-  result := TAutomationEditBox.Create(GetControlByControlType(index, UIA_EditControlTypeId));
+  eb := GetControlByControlType(index, UIA_EditControlTypeId);
+  result := TAutomationEditBox.Create(eb);
 end;
 
 function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
+var
+  tb : IUIAutomationElement;
+
 begin
-  result := TAutomationTextBox.Create(GetControlByControlType(index, UIA_TextControlTypeId));
+  tb := GetControlByControlType(index, UIA_TextControlTypeId);
+  result := TAutomationTextBox.Create(tb);
 end;
 
 function TAutomationContainer.GetButton(const title: string): TAutomationButton;
+var
+  btn : IUIAutomationElement;
+
 begin
-  result := TAutomationButton.Create(GetControlByControlType(title, UIA_ButtonControlTypeId));
+  btn := GetControlByControlType(title, UIA_ButtonControlTypeId);
+  result := TAutomationButton.Create(btn);
 end;
 
 function TAutomationContainer.GetCheckboxByIndex(index: integer): TAutomationCheckBox;
@@ -201,7 +213,7 @@ begin
   result := nil;
 
   // Find the element
-  collection := self.FindAll(TreeScope_Descendants);
+  collection := FindAll(TreeScope_Descendants);
 
   collection.Get_Length(length);
 
