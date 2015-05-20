@@ -34,6 +34,7 @@ uses
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.StringGrid,
   UIAutomationClient_TLB;
 
 type
@@ -43,6 +44,7 @@ type
   TAutomationContainer = class (TAutomationBase, IAutomationContainer)
   protected
     function GetControlByControlType (index : integer; id : word) : IUIAutomationElement; overload;
+    function GetControlByControlType (index : integer;  id: word; controlType : string) : IUIAutomationElement; overload;
     function GetControlByControlType (title : string; id : word) : IUIAutomationElement; overload;
 
   public
@@ -65,6 +67,11 @@ type
     /// Finds the combobox, by index
     /// </summary>
     function GetComboboxByIndex (index : integer) : TAutomationComboBox;
+
+    /// <summary>
+    /// Finds the stringgrid, by index
+    /// </summary>
+    function GetStringGridByIndex (index : integer) : TAutomationStringGrid;
 
     /// <summary>
     /// Finds the checkbox, by index
@@ -250,6 +257,54 @@ begin
 
 end;
 
+function TAutomationContainer.GetControlByControlType(index: integer; id: word;
+  controlType: string): IUIAutomationElement;
+var
+  element : IUIAutomationElement;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  count : integer;
+  length : integer;
+  counter : integer;
+  varProp : OleVariant;
+  CName : WideString;
+
+begin
+  element := nil;
+
+  TVariantArg(varProp).vt := VT_I4;
+  TVariantArg(varProp).lVal := id; // At the moment it is always a pane
+
+  UIAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, varProp, condition);
+
+  // Find the element
+  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+  collection.Get_Length(length);
+
+  counter := 0;
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+
+    element.Get_CurrentClassName(CName);
+
+    if CName = controlType then
+    begin
+      if counter = index then
+      begin
+        result := element;
+        break;
+      end;
+      inc (counter);
+    end;
+  end;
+
+//  if result = nil then
+//    raise EDelphiAutomationException.Create('Unable to find control');
+end;
+
 function TAutomationContainer.GetControlByControlType(index : integer;  id: word): IUIAutomationElement;
 var
   element : IUIAutomationElement;
@@ -294,6 +349,12 @@ end;
 function TAutomationContainer.GetRadioButtonByIndex(index: integer): TAutomationRadioButton;
 begin
   result := TAutomationRadioButton.Create(GetControlByControlType(index, UIA_RadioButtonControlTypeId));
+end;
+
+function TAutomationContainer.GetStringGridByIndex(
+  index: integer): TAutomationStringGrid;
+begin
+  result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_PaneControlTypeId, 'TStringGrid'));
 end;
 
 function TAutomationContainer.GetTabByIndex (index : integer) : IAutomationTab;

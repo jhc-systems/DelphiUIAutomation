@@ -19,70 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.Tab.Intf;
+unit DelphiUIAutomation.StringGrid;
 
 interface
 
 uses
-  DelphiUIAutomation.TextBox,
-  DelphiUIAutomation.EditBox,
-  DelphiUIAutomation.CheckBox,
-  DelphiUIAutomation.Button,
-  DelphiUIAutomation.TabItem,
-  DelphiUIAutomation.Combobox,
-  DelphiUIAutomation.RadioButton;
+  DelphiUIAutomation.Base,
+  UIAutomationClient_TLB;
 
 type
-  IAutomationTab = interface
-    ['{542BED07-5345-4E0F-993C-26C121B66371}']
-    function GetSelectedItem: TAutomationTabItem;
-
-    ///<summary>
-    ///  Selects the given tab
-    ///</summary>
-    procedure SelectTabPage(const value : string);
-
-    /// <summary>
-    /// Finds the tab
-    /// </summary>
-    function GetTabByIndex (index : integer) : IAutomationTab;
-
-    /// <summary>
-    /// Finds the textbox, by index
-    /// </summary>
-    function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
-
-    /// <summary>
-    /// Finds the editbox, by index
-    /// </summary>
-    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
-
-    /// <summary>
-    /// Finds the combobox, by index
-    /// </summary>
-    function GetComboboxByIndex (index : integer) : TAutomationComboBox;
-
-    /// <summary>
-    /// Finds the checkbox, by index
-    /// </summary>
-    function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
-
-    /// <summary>
-    /// Finds the checkbox, by index
-    /// </summary>
-    function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
-
-    /// <summary>
-    /// Finds the button with the title supplied
-    /// </summary>
-    function GetButton (const title : string) : TAutomationButton;
-
-    /// <summary>
-    ///  Gets the currently selected item
-    /// </summary>
-    property SelectedItem : TAutomationTabItem read GetSelectedItem;
+  /// <summary>
+  ///  Represents a string grid - as best we can
+  /// </summary>
+  TAutomationStringGrid = class (TAutomationBase)
+  public
   end;
 
 implementation
+
+{ TAutomationTextBox }
 
 end.
