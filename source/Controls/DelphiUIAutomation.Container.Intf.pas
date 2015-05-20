@@ -58,6 +58,11 @@ type
     function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
 
     /// <summary>
+    /// Finds the checkbox, by text
+    /// </summary>
+    function GetCheckboxByName (const value : string) : TAutomationCheckBox;
+
+    /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
     function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;

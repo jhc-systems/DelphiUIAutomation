@@ -49,6 +49,11 @@ type
     function ToggleState : TOleEnum;
 
     /// <summary>
+    ///  Focuses the checkbox
+    /// </summary>
+    function Focus : HResult;
+
+    /// <summary>
     ///  Constructor for the element.
     /// </summary>
     constructor Create(element : IUIAutomationElement); override;
@@ -97,6 +102,11 @@ begin
   self.FTogglePattern.Get_CurrentToggleState(state);
 
   result := state;
+end;
+
+function TAutomationCheckBox.Focus: HResult;
+begin
+  result := FElement.SetFocus;
 end;
 
 end.

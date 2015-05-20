@@ -72,6 +72,11 @@ type
     function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
 
     /// <summary>
+    /// Finds the checkbox, by name
+    /// </summary>
+    function GetCheckboxByName(const value: string): TAutomationCheckBox;
+
+    /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
     function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
@@ -162,6 +167,12 @@ begin
 //    raise Exception.Create('Unable to find window');
 end;
 {$ENDIF}
+
+function TAutomationContainer.GetCheckboxByName(
+  const value: string): TAutomationCheckBox;
+begin
+  result := TAutomationCheckBox.Create(GetControlByControlType(value, UIA_CheckBoxControlTypeId));
+end;
 
 function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
 var
