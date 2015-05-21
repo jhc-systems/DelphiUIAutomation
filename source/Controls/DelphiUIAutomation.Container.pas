@@ -107,6 +107,7 @@ type
 implementation
 
 uses
+  windows,
   sysutils,
   ActiveX,
   DelphiUIAutomation.Tab,
@@ -315,6 +316,9 @@ var
   counter : integer;
   varProp : OleVariant;
 
+  // For debugging
+  name : WideString;
+
 begin
   element := nil;
 
@@ -333,6 +337,10 @@ begin
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
+    element.Get_CurrentName(name);
+
+    OutputDebugString(pwidechar(name));
+
     if counter = index then
     begin
       result := element;

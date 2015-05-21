@@ -129,6 +129,8 @@ var
 begin
   fElement.GetCurrentPattern(UIA_SelectionPatternId, unknown);
 
+  result := nil;
+
   if (unknown <> nil) then
   begin
     if unknown.QueryInterface(IID_IUIAutomationSelectionPattern, Pattern) = S_OK then
