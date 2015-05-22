@@ -24,16 +24,23 @@ unit DelphiUIAutomation.Base;
 interface
 
 uses
+  types,
   UIAutomationClient_TLB;
 
 type
   IAutomationBase = interface
-    function getName: string;
+    function GetName: string;
+    function GetBoundingRectangle : TRect;
 
     /// <summary>
     ///  Gets the name of the element
     /// </summary>
     property Name : string read getName;
+
+    /// <summary>
+    ///  Gets the bounding rectangle of the element
+    /// </summary>
+    property BoundingRectangle : TRect read GetBoundingRectangle;
   end;
 
   /// <summary>
@@ -43,6 +50,7 @@ type
   protected
     FElement : IUIAutomationElement;
     function getName: string; virtual;
+    function GetBoundingRectangle : TRect;
   protected
     /// <summary>
     ///  Finds the elements
@@ -64,6 +72,11 @@ type
     ///  Gets the name of the element
     /// </summary>
     property Name : string read getName;
+
+    /// <summary>
+    ///  Gets the bounding rectangle of the element
+    /// </summary>
+    property BoundingRectangle : TRect read GetBoundingRectangle;
 
     /// <summary>
     ///  Constructor for the element.
@@ -112,6 +125,22 @@ begin
   self.FElement.FindAll(scope, condition, collection);
 
   result := collection;
+end;
+
+function TAutomationBase.GetBoundingRectangle: TRect;
+var
+  rect : tagRect;
+  outRect : TRect;
+
+begin
+  Felement.Get_CurrentBoundingRectangle(rect);
+
+  outRect.Top := rect.top;
+  outRect.Left := rect.left;
+  outRect.Width := rect.right;
+  outRect.Height := rect.bottom;
+
+  result := outRect;
 end;
 
 function TAutomationBase.getName: string;

@@ -19,95 +19,24 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.Checkbox;
+unit DelphiUIAutomation.StringGrid;
 
 interface
 
 uses
-  activex,
   DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
   /// <summary>
-  ///  Represents a checkbox control
+  ///  Represents a string grid - as best we can
   /// </summary>
-  TAutomationCheckBox = class (TAutomationBase)
-  strict private
-    FTogglePattern : IUIAutomationTogglePattern;
-  private
-    procedure GetTogglePattern;
+  TAutomationStringGrid = class (TAutomationBase)
   public
-    ///<summary>
-    ///  Performs a toggle action
-    ///</summary>
-    function Toggle: HRESULT;
-
-    ///<summary>
-    ///  Gets the toggle state of the checkbox
-    ///</summary>
-    function ToggleState : TOleEnum;
-
-    /// <summary>
-    ///  Focuses the checkbox
-    /// </summary>
-    function Focus : HResult;
-
-    /// <summary>
-    ///  Constructor for the element.
-    /// </summary>
-    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
-uses
-  DelphiUIAutomation.Exception,
-  DelphiUIAutomation.PatternIDs;
-
-{ TAutomationCheckBox }
-
-constructor TAutomationCheckBox.Create(element: IUIAutomationElement);
-begin
-  inherited create(element);
-
-  GetTogglePattern;
-end;
-
-procedure TAutomationCheckBox.GetTogglePattern;
-var
-  inter: IInterface;
-
-begin
-  self.fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if inter.QueryInterface(IID_IUIAutomationTogglePattern, self.FTogglePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
-
-function TAutomationCheckBox.Toggle: HRESULT;
-begin
-  result := self.FTogglePattern.Toggle;
-end;
-
-function TAutomationCheckBox.ToggleState: TOleEnum;
-var
-  state : TOleEnum;
-begin
-  self.FTogglePattern.Get_CurrentToggleState(state);
-
-  result := state;
-end;
-
-function TAutomationCheckBox.Focus: HResult;
-begin
-  result := FElement.SetFocus;
-end;
+{ TAutomationTextBox }
 
 end.
-

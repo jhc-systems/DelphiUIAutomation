@@ -72,11 +72,6 @@ type
     /// </summary>
     function Click: HResult;
 
-    /// <summary>
-    ///  Clicks the sub-menuitem
-    /// </summary>
-    function ClickSubItem(const name : string) : HResult;
-
     ///<summary>
     ///  Gets the list of items associated with this menu
     ///</summary>
@@ -144,43 +139,6 @@ begin
     if retval <> ExpandCollapseState_Expanded then
       result := self.FExpandCollapsePattern.Expand;
   end;
-end;
-
-function TAutomationMenuItem.ClickSubItem(const name : string): HResult;
-var
-  items : IUIAutomationElementArray;
-  item : IUIAutomationElement;
-//  menu : TAutomationMenuItem;
-  count, length : integer;
-  condition : IUIAutomationCondition;
-  retVal : integer;
-
-begin
-//  TVariantArg(varProp).vt := VT_BSTR;
-//  TVariantArg(varProp).bstrVal := pchar(name);
-
-  condition := TUIAuto.CreateTrueCondition;
-
-//  UIAuto.CreatePropertyCondition(UIA_NamePropertyId, name, condition);
-
-  self.Expand;
-  sleep(750);
-
-  self.FElement.FindAll(TreeScope_Children, condition, items);
-
-  items.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    items.GetElement(count, item);
-    item.Get_CurrentControlType(retVal);
-
-    if (retVal = UIA_MenuItemControlTypeId) then
-    begin
-      // should check the name is the same
-    end;
-  end;;
-
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;

@@ -28,12 +28,15 @@ uses
   DelphiUIAutomation.EditBox,
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Button,
+  DelphiUIAutomation.TabItem,
   DelphiUIAutomation.Combobox,
   DelphiUIAutomation.RadioButton;
 
 type
   IAutomationTab = interface
     ['{542BED07-5345-4E0F-993C-26C121B66371}']
+    function GetSelectedItem: TAutomationTabItem;
+
     ///<summary>
     ///  Selects the given tab
     ///</summary>
@@ -73,6 +76,11 @@ type
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : TAutomationButton;
+
+    /// <summary>
+    ///  Gets the currently selected item
+    /// </summary>
+    property SelectedItem : TAutomationTabItem read GetSelectedItem;
   end;
 
 implementation

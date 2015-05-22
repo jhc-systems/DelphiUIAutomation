@@ -131,10 +131,6 @@ begin
     *)
 
 (*
-  // First launch the application
-  Application := TAutomationApplication.Launch(
-      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe',
-      '\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Binaries\Everyth6.exe @\\csmb\FrontOffice\Figaro\Artefacts\F63\Qual\Config\Envs\F63QUALCST\SS3');
 
   try
     application.WaitWhileBusy;

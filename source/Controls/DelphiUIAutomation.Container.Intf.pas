@@ -32,6 +32,7 @@ uses
   DelphiUIAutomation.Combobox,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.StringGrid,
   DelphiUIAutomation.RadioButton;
 
 type
@@ -58,6 +59,11 @@ type
     function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
 
     /// <summary>
+    /// Finds the checkbox, by text
+    /// </summary>
+    function GetCheckboxByName (const value : string) : TAutomationCheckBox;
+
+    /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
     function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
@@ -68,10 +74,14 @@ type
     function GetButton (const title : string) : TAutomationButton;
 
     /// <summary>
+    /// Finds the stringgrid, by index
+    /// </summary>
+    function GetStringGridByIndex (index : integer) : TAutomationStringGrid;
+
+    /// <summary>
     /// Finds the editbox, by index
     /// </summary>
     function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
-
   end;
 
 implementation

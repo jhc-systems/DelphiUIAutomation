@@ -36,7 +36,12 @@ type
     ///<summary>
     ///  'Types' the keys
     ///</summary>
-    class procedure Enter(const keys : string);
+    class procedure Enter(const keys : string); overload;
+
+    ///<summary>
+    ///  'Types' the single key
+    ///</summary>
+    class procedure Enter(const key : word); overload;
 
     ///<summary>
     ///  'Types' the key, with Ctrl down
@@ -91,6 +96,28 @@ begin
   finally
     inputList.Free;
   end;
+end;
+
+class procedure TAutomationKeyboard.Enter(const key : word);
+var
+  KeyInputs: array of TInput;
+
+  procedure KeybdInput(VKey: Byte; Flags: DWORD);
+  begin
+    SetLength(KeyInputs, Length(KeyInputs)+1);
+    KeyInputs[high(KeyInputs)].Itype := INPUT_KEYBOARD;
+    with  KeyInputs[high(KeyInputs)].ki do
+    begin
+      wVk := VKey;
+      wScan := MapVirtualKey(wVk, 0);
+      dwFlags := Flags;
+    end;
+  end;
+
+begin
+  KeybdInput(Ord(key), 0);
+  KeybdInput(Ord(key), KEYEVENTF_KEYUP);
+  SendInput(Length(KeyInputs), KeyInputs[0], SizeOf(KeyInputs[0]));
 end;
 
 procedure AltDown;

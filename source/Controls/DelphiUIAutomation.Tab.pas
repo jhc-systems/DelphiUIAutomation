@@ -41,7 +41,7 @@ type
   TAutomationTab = class (TAutomationContainer, IAutomationTab)
   strict private
     FTabItems : TObjectList<TAutomationTabItem>;
-    FSelectedItem : TAutomationTabItem;
+//    FSelectedItem : TAutomationTabItem;
   private
     function GetSelectedItem: TAutomationTabItem;
   public
@@ -119,8 +119,31 @@ begin
 end;
 
 function TAutomationTab.GetSelectedItem: TAutomationTabItem;
+var
+  unknown: IInterface;
+  Pattern  : IUIAutomationSelectionPattern;
+  collection : IUIAutomationElementArray;
+  element : IUIAutomationElement;
+  length : integer;
+
 begin
-  result := self.FSelectedItem;
+  fElement.GetCurrentPattern(UIA_SelectionPatternId, unknown);
+
+  result := nil;
+
+  if (unknown <> nil) then
+  begin
+    if unknown.QueryInterface(IID_IUIAutomationSelectionPattern, Pattern) = S_OK then
+    begin
+      Pattern.GetCurrentSelection(collection);
+
+      collection.Get_Length(length);
+
+      // In this case it should be one entry only
+      collection.GetElement(0, element);
+      result := TAutomationTabItem.Create(element);
+    end;
+  end;
 end;
 
 procedure TAutomationTab.SelectTabPage(const value: string);
@@ -133,7 +156,7 @@ begin
     if self.FTabItems[count].Name = value then
     begin
       self.FTabItems[count].Select;
-      FSelectedItem := self.FTabItems[count];
+//      FSelectedItem := self.FTabItems[count];
       break;
     end;
   end;
