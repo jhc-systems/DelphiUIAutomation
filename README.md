@@ -9,6 +9,9 @@ It provides a consistent object-oriented API, hiding the complexity of Microsoft
 
 ## Getting started
 
+The DelphiUIAutomation library is a wrapper for the UIAutomationClient library, which has been extracted into the UIAutomationClient_TLB source file. As the generated code is large and complex, this has been wrapped up in a number of units, each providing classes that encapsulate part of this library (together with other utility methods).
+
+### Launching an application
 ### Getting hold of a window
 ### Finding a control
 ### Invoking actions on controls
