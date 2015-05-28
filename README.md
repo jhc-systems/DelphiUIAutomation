@@ -83,6 +83,9 @@ var
   btnOk.Click;
 ```
 
+# Current supported controls
+[List of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
+
 # Contributors
 Mark Humphreys
 
