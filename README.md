@@ -84,7 +84,21 @@ var
 ```
 
 # Current supported controls
-[List of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
+
+The currently supported controls are ...
+
+* TButton
+* TCheckBox
+* TComboBox
+* TEditBox
+* TRadioButton
+* TStatusBar
+* TStringGrid
+* TPageControl
+* TTab
+* TTextBox
+
+For [more details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
 
 # Contributors
 Mark Humphreys
