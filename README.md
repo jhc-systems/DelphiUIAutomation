@@ -98,7 +98,7 @@ The currently supported controls are ...
 * TTab
 * TTextBox
 
-For [more details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
+[More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
 
 # Contributors
 Mark Humphreys
