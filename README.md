@@ -93,7 +93,7 @@ The currently supported controls are ...
 * TEditBox
 * TRadioButton
 * TStatusBar
-* TStringGrid (As the TStringGrid in Delphi is just a pane, it is not possible to properly interact with the control via automation
+* TStringGrid (As the TStringGrid in Delphi is a pane, it is not possible to interact with the control via automation)
 * TPageControl
 * TTab
 * TTextBox
