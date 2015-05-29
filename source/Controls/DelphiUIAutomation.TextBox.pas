@@ -28,10 +28,17 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationTextBox = interface (IAutomationBase)
+    /// <summary>
+    ///  Gets the text from the control
+    /// </summary>
+    property Text : string read getName;
+  end;
+
   /// <summary>
   ///  Represents a text box
   /// </summary>
-  TAutomationTextBox = class (TAutomationBase)
+  TAutomationTextBox = class (TAutomationBase, IAutomationTextBox)
   public
     /// <summary>
     ///  Gets the text from the control

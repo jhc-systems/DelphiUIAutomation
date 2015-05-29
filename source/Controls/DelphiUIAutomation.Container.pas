@@ -56,52 +56,42 @@ type
     /// <summary>
     /// Finds the editbox, by index
     /// </summary>
-    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
+    function GetEditBoxByIndex (index : integer) : IAutomationEditBox;
 
     /// <summary>
     /// Finds the textbox, by index
     /// </summary>
-    function GetTextBoxByIndex(index: integer): TAutomationTextBox;
+    function GetTextBoxByIndex(index: integer): IAutomationTextBox;
 
     /// <summary>
     /// Finds the combobox, by index
     /// </summary>
-    function GetComboboxByIndex (index : integer) : TAutomationComboBox;
+    function GetComboboxByIndex (index : integer) : IAutomationComboBox;
 
     /// <summary>
     /// Finds the stringgrid, by index
     /// </summary>
-    function GetStringGridByIndex (index : integer) : TAutomationStringGrid;
+    function GetStringGridByIndex (index : integer) : IAutomationStringGrid;
 
     /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
-    function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
+    function GetCheckboxByIndex (index : integer) : IAutomationCheckBox;
 
     /// <summary>
     /// Finds the checkbox, by name
     /// </summary>
-    function GetCheckboxByName(const value: string): TAutomationCheckBox;
+    function GetCheckboxByName(const value: string): IAutomationCheckBox;
 
     /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
-    function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
+    function GetRadioButtonByIndex (index : integer) : IAutomationRadioButton;
 
     /// <summary>
     /// Finds the button with the title supplied
     /// </summary>
-    function GetButton (const title : string) : TAutomationButton;
-
-{$IFDEF INVESTIGATION}
-    /// <summary>
-    ///  Prints out the child controls
-    /// </summary>
-    /// <remarks>
-    ///  For investigation only
-    /// </remarks>
-    procedure ListControlsAndStuff(element : IUIAutomationElement);
-{$ENDIF}
+    function GetButton (const title : string) : IAutomationButton;
   end;
 
 implementation
@@ -116,73 +106,12 @@ uses
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation;
 
-{$IFDEF INVESTIGATION}
-procedure TAutomationContainer.ListControlsAndStuff(element : IUIAutomationElement);
-var
-  collection : IUIAutomationElementArray;
-  count : integer;
-  name, help : widestring;
-  text : OleVariant;
-  length : integer;
-  retVal : integer;
-  combo : TAutomationTextBox;
-  found : integer;
-
-begin
-  if element = nil then
-    element := self.FElement;
-
-  // Find the elements
-  collection := FindAll(TreeScope_Descendants);
-
-  collection.Get_Length(length);
-  found := 0;
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-
-    element.Get_CurrentName(name);
-//    element.GetCurrentPropertyValue(UIA_NamePropertyId, text);
-    element.Get_CurrentControlType(retVal);
-    element.Get_CurrentHelpText(help);
-
-    combo := TAutomationTextBox.Create(element);
-
-    if retVal = UIA_ComboBoxControlTypeId then
-    begin
-      inc(found);
-      writeln(inttostr(found) + ' - ' + combo.Text + ' - ' + inttostr(retval) + ' - ' + help);
-    end;
-
-    //if name <> '' then
-    //  writeln(inttostr(count) + ' - ' + name + ' - ' + inttostr(retval) + ' - ' + help);
-
-//    if retval = UIA_PaneControlTypeId then
-//    begin
-//      writeln('Looking at children');
-//      ListControlsAndStuff(element);
-//    end;
-
-//    if (name = title)then
-//    begin
-//      result := TAutomationWindow.create(element);
-//      break;
-//    end;
-  end;
-
-//  if result = nil then
-//    raise Exception.Create('Unable to find window');
-end;
-{$ENDIF}
-
-function TAutomationContainer.GetCheckboxByName(
-  const value: string): TAutomationCheckBox;
+function TAutomationContainer.GetCheckboxByName(const value: string): IAutomationCheckBox;
 begin
   result := TAutomationCheckBox.Create(GetControlByControlType(value, UIA_CheckBoxControlTypeId));
 end;
 
-function TAutomationContainer.GetEditBoxByIndex(index: integer): TAutomationEditBox;
+function TAutomationContainer.GetEditBoxByIndex(index: integer): IAutomationEditBox;
 var
   eb : IUIAutomationElement;
 
@@ -191,7 +120,7 @@ begin
   result := TAutomationEditBox.Create(eb);
 end;
 
-function TAutomationContainer.GetTextBoxByIndex(index: integer): TAutomationTextBox;
+function TAutomationContainer.GetTextBoxByIndex(index: integer): IAutomationTextBox;
 var
   tb : IUIAutomationElement;
 
@@ -200,7 +129,7 @@ begin
   result := TAutomationTextBox.Create(tb);
 end;
 
-function TAutomationContainer.GetButton(const title: string): TAutomationButton;
+function TAutomationContainer.GetButton(const title: string): IAutomationButton;
 var
   btn : IUIAutomationElement;
 
@@ -209,12 +138,12 @@ begin
   result := TAutomationButton.Create(btn);
 end;
 
-function TAutomationContainer.GetCheckboxByIndex(index: integer): TAutomationCheckBox;
+function TAutomationContainer.GetCheckboxByIndex(index: integer): IAutomationCheckBox;
 begin
   result := TAutomationCheckBox.Create(GetControlByControlType(index, UIA_CheckBoxControlTypeId));
 end;
 
-function TAutomationContainer.GetComboboxByIndex (index : integer) : TAutomationComboBox;
+function TAutomationContainer.GetComboboxByIndex (index : integer) : IAutomationComboBox;
 begin
   result := TAutomationComboBox.Create(GetControlByControlType(index, UIA_ComboBoxControlTypeId));
 end;
@@ -354,13 +283,12 @@ begin
 //    raise EDelphiAutomationException.Create('Unable to find control');
 end;
 
-function TAutomationContainer.GetRadioButtonByIndex(index: integer): TAutomationRadioButton;
+function TAutomationContainer.GetRadioButtonByIndex(index: integer): IAutomationRadioButton;
 begin
   result := TAutomationRadioButton.Create(GetControlByControlType(index, UIA_RadioButtonControlTypeId));
 end;
 
-function TAutomationContainer.GetStringGridByIndex(
-  index: integer): TAutomationStringGrid;
+function TAutomationContainer.GetStringGridByIndex(index: integer): IAutomationStringGrid;
 begin
   result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_PaneControlTypeId, 'TStringGrid'));
 end;

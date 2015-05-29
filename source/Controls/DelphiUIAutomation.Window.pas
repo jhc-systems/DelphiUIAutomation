@@ -39,6 +39,7 @@ type
   IAutomationWindow = interface (IAutomationContainer)
     ['{4ECCEFCA-7A72-4CBC-A192-568031A28F2B}']
     function GetMainMenu: IAutomationMainMenu;
+    function GetStatusBar : IAutomationStatusbar;
 
     /// <summary>
     /// Finds the child window with the title supplied
@@ -54,6 +55,11 @@ type
     ///  Sets the focus to this window
     ///</summary>
     procedure Focus;
+
+    ///<summary>
+    /// The status bar associated with this window
+    ///</summary>
+    property StatusBar : IAutomationStatusBar read GetStatusBar;
   end;
 
   /// <summary>

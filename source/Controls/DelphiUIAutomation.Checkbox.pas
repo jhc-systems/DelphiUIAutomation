@@ -29,10 +29,23 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationCheckBox = interface (IAutomationBase)
+  ['{9A290D8D-BAE7-47E6-BE7A-28DF5ADCE5C7}']
+    ///<summary>
+    ///  Performs a toggle action
+    ///</summary>
+    function Toggle: HRESULT;
+
+    ///<summary>
+    ///  Gets the toggle state of the checkbox
+    ///</summary>
+    function ToggleState : TOleEnum;
+  end;
+
   /// <summary>
   ///  Represents a checkbox control
   /// </summary>
-  TAutomationCheckBox = class (TAutomationBase)
+  TAutomationCheckBox = class (TAutomationBase, IAutomationCheckBox)
   strict private
     FTogglePattern : IUIAutomationTogglePattern;
   private

@@ -28,10 +28,18 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationRadioButton = interface (IAutomationBase)
+  ['{B40E22FF-6E10-4E9C-8900-48C4D1F83F19}']
+    ///<summary>
+    ///  Selects the control
+    ///</summary>
+    function Select: HRESULT;
+  end;
+
   /// <summary>
   ///  Represents a radio button control
   /// </summary>
-  TAutomationRadioButton = class (TAutomationBase)
+  TAutomationRadioButton = class (TAutomationBase, IAutomationRadioButton)
   public
     ///<summary>
     ///  Selects the control
