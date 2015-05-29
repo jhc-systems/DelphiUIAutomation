@@ -43,7 +43,7 @@ type
     FTabItems : TObjectList<TAutomationTabItem>;
 //    FSelectedItem : TAutomationTabItem;
   private
-    function GetSelectedItem: TAutomationTabItem;
+    function GetSelectedItem: IAutomationTabItem;
   public
     /// <summary>
     ///  Creates the representation
@@ -68,7 +68,7 @@ type
     /// <summary>
     ///  Gets the currently selected item
     /// </summary>
-    property SelectedItem : TAutomationTabItem read GetSelectedItem;
+    property SelectedItem : IAutomationTabItem read GetSelectedItem;
   end;
 
 implementation
@@ -118,7 +118,7 @@ begin
   inherited;
 end;
 
-function TAutomationTab.GetSelectedItem: TAutomationTabItem;
+function TAutomationTab.GetSelectedItem: IAutomationTabItem;
 var
   unknown: IInterface;
   Pattern  : IUIAutomationSelectionPattern;

@@ -46,42 +46,42 @@ type
     /// <summary>
     /// Finds the textbox, by index
     /// </summary>
-    function GetTextBoxByIndex (index : integer) : TAutomationTextBox;
+    function GetTextBoxByIndex (index : integer) : IAutomationTextBox;
 
     /// <summary>
     /// Finds the combobox, by index
     /// </summary>
-    function GetComboboxByIndex (index : integer) : TAutomationComboBox;
+    function GetComboboxByIndex (index : integer) : IAutomationComboBox;
 
     /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
-    function GetCheckboxByIndex (index : integer) : TAutomationCheckBox;
+    function GetCheckboxByIndex (index : integer) : IAutomationCheckBox;
 
     /// <summary>
     /// Finds the checkbox, by text
     /// </summary>
-    function GetCheckboxByName (const value : string) : TAutomationCheckBox;
+    function GetCheckboxByName (const value : string) : IAutomationCheckBox;
 
     /// <summary>
     /// Finds the checkbox, by index
     /// </summary>
-    function GetRadioButtonByIndex (index : integer) : TAutomationRadioButton;
+    function GetRadioButtonByIndex (index : integer) : IAutomationRadioButton;
 
     /// <summary>
     /// Finds the button with the title supplied
     /// </summary>
-    function GetButton (const title : string) : TAutomationButton;
+    function GetButton (const title : string) : IAutomationButton;
 
     /// <summary>
     /// Finds the stringgrid, by index
     /// </summary>
-    function GetStringGridByIndex (index : integer) : TAutomationStringGrid;
+    function GetStringGridByIndex (index : integer) : IAutomationStringGrid;
 
     /// <summary>
     /// Finds the editbox, by index
     /// </summary>
-    function GetEditBoxByIndex (index : integer) : TAutomationEditBox;
+    function GetEditBoxByIndex (index : integer) : IAutomationEditBox;
   end;
 
 implementation

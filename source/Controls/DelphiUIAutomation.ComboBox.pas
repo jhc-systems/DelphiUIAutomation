@@ -30,10 +30,14 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationComboBox = interface (IAutomationBase)
+  ['{531C8646-A605-4D6D-BEE0-89E1719D6321}']
+  end;
+
   /// <summary>
   ///  Represents a combobox control
   /// </summary>
-  TAutomationComboBox = class (TAutomationBase)
+  TAutomationComboBox = class (TAutomationBase, IAutomationComboBox)
   strict private
     FItems : TObjectList<TAutomationListItem>;
     FExpandCollapsePattern : IUIAutomationExpandCollapsePattern;

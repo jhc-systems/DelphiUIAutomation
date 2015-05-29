@@ -41,6 +41,11 @@ type
     ///  Gets whether the process was attached or started
     /// </summary>
     property IsAttached : boolean read GetAttached;
+
+    ///<summary>
+    ///  Kills the application being automated
+    ///</summary>
+    procedure Kill;
   end;
 
   /// <summary>

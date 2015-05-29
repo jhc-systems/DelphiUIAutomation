@@ -28,10 +28,14 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationStringGrid = interface (IAutomationBase)
+    ['{6E151D9C-33C7-4D82-A25C-BED061F3FB61}']
+  end;
+
   /// <summary>
   ///  Represents a string grid - as best we can
   /// </summary>
-  TAutomationStringGrid = class (TAutomationBase)
+  TAutomationStringGrid = class (TAutomationBase, IAutomationStringGrid)
   public
   end;
 

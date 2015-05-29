@@ -1,28 +1,27 @@
-{***************************************************************************}
-{                                                                           }
-{           DelphiUIAutomation                                              }
-{                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
-{                                                                           }
-{***************************************************************************}
-{                                                                           }
-{  Licensed under the Apache License, Version 2.0 (the "License");          }
-{  you may not use this file except in compliance with the License.         }
-{  You may obtain a copy of the License at                                  }
-{                                                                           }
-{      http://www.apache.org/licenses/LICENSE-2.0                           }
-{                                                                           }
-{  Unless required by applicable law or agreed to in writing, software      }
-{  distributed under the License is distributed on an "AS IS" BASIS,        }
-{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
-{  See the License for the specific language governing permissions and      }
-{  limitations under the License.                                           }
-{                                                                           }
-{***************************************************************************}
+{ *************************************************************************** }
+{ }
+{ DelphiUIAutomation }
+{ }
+{ Copyright 2015 JHC Systems Limited }
+{ }
+{ *************************************************************************** }
+{ }
+{ Licensed under the Apache License, Version 2.0 (the "License"); }
+{ you may not use this file except in compliance with the License. }
+{ You may obtain a copy of the License at }
+{ }
+{ http://www.apache.org/licenses/LICENSE-2.0 }
+{ }
+{ Unless required by applicable law or agreed to in writing, software }
+{ distributed under the License is distributed on an "AS IS" BASIS, }
+{ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{ See the License for the specific language governing permissions and }
+{ limitations under the License. }
+{ }
+{ *************************************************************************** }
 program AutomationDemo;
 
 {$APPTYPE CONSOLE}
-
 {$R *.res}
 
 uses
@@ -61,284 +60,53 @@ uses
   DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
   DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
   UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
-  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas';
+  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas',
+  DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas';
 
 var
-  mouse : TAutomationMouse;
-  application : TAutomationApplication;
-  menu : TAutomationMainMenu;
-  fileitem : TAutomationMenuItem;
-  cmenu : TAutomationMenu;
-  enquiry, calc, calc1 : TAutomationWindow;
-  tb1, edit : TAutomationEditBox;
-  eb0 : TAutomationTextBox;
-  combo, buysell : TAutomationComboBox;
-  tab : IAutomationTab;
-  statusBar : TAutomationStatusbar;
-  check : TAutomationCheckBox;
-  radio : TAutomationRadioButton;
-  val : string;
-  splash : TAutomationWindow;
-  connect, security : TAutomationWindow;
-  user : TAutomationEditBox;
-  passwd : TAutomationEditBox;
-  btnOK : TAutomationButton;
-  exitItem : TAutomationMenuItem;
-  count : integer;
-
-const
-  CALC_BUYSELL = 5;
+  application: IAutomationApplication;
+  enquiry : IAutomationWindow;
+  tb1 : IAutomationEditBox;
+  eb0: IAutomationTextBox;
+  Tab: IAutomationTab;
+  Statusbar: IAutomationStatusBar;
+  check: IAutomationCheckBox;
+  radio: IAutomationRadioButton;
 
 begin
-
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-//  Application := TAutomationApplication.LaunchOrAttach(
-//      'C:\Users\humphreysm.JHCLLP\Documents\GitHub\DelphiUIAutomation\demo\democlient\Win32\Debug\Project1.exe',
-//      '');
-(*
-  try
-    application.WaitWhileBusy;
+  application := TAutomationApplication.Launch
+    ('..\..\democlient\Win32\Debug\Project1.exe', '');
 
-    // Now wait for a very long time for the enquiry screen to come up
-    enquiry := TAutomationDesktop.GetDesktopWindow('Untitled - Notepad');
-    try
-      enquiry.Focus;
-*)
-(*
-      menu := enquiry.MainMenu;
-      try
-  //      writeln(menu.Name);
+  application.WaitWhileBusy;
 
-    //    fileitem := menu.Items[0];
-      //  try
-//          writeln(fileitem.Name);
+  // Now wait for a very long time for the enquiry screen to come up
+  enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
+  enquiry.Focus;
 
-          exitItem := menu.MenuItem('Help|About Notepad');
+  // Select the correct tab
+  Tab := enquiry.GetTabByIndex(0);
+  Tab.SelectTabPage('Second Tab'); // 3 is the magic number
 
-          if exitItem <> nil then
-            exitItem.Click
-          else
-            WriteLn('Did not find ''File|Exit''');
+  tb1 := Tab.GetEditBoxByIndex(0);
+  writeln(tb1.Text);
 
-        finally
-//         fileitem.Free;
-        end;
-  //    finally
-   //     menu.Free;
-    //  end;
-    *)
+  check := enquiry.GetCheckboxByIndex(0);
+  check.toggle;
 
-(*
+  radio := enquiry.GetRadioButtonByIndex(2);
+  radio.Select;
 
-  try
-    application.WaitWhileBusy;
+  // Now see whether we can get the statusbar
+  Statusbar := enquiry.Statusbar;
+  eb0 := Statusbar.GetTextBoxByIndex(1);
+  writeln('Text is ' + eb0.Text);
 
-    splash := TAutomationDesktop.GetDesktopWindow('splashScreen');
+  application.Kill;
 
-    try
-      connect := splash.Window('Trying to connect to Server.');
-    finally
-      splash.Free;
-    end;
+  WriteLn('Press key to exit');
+  ReadLn;
 
-    security := connect.Window('TRACEY System Security');
-
-    try
-      // Now sign in
-      user := connect.GetEditBoxByIndex(1);
-      try
-        user.Text := 'MHDEV';
-      finally
-        user.Free;
-      end;
-
-      passwd := connect.GetEditBoxByIndex(0);
-      try
-        passwd.Text := 'MHDEV';
-      finally
-        passwd.Free;
-      end;
-
-      btnOK := connect.GetButton('OK');
-      try
-        btnOk.Click;
-      finally
-        btnOk.Free;
-      end;
-    finally
-      security.Free;
-    end;
-*)
-    // Now wait for a very long time for the enquiry screen to come up
-//    application.WaitWhileBusy;
-
-    enquiry := TAutomationDesktop.GetDesktopWindow('Incepting Order ');
-//    enquiry.ListControlsAndStuff(nil);
-
- ///   enquiry.ListControlsAndStuff(nil);
-
-    for count := 0 to 18 do
-    begin
-      combo := enquiry.GetComboboxByIndex(count);
-      combo.Text := 'Phone';
-    end;
-
-    WriteLn ('All done');
-    ReadLn;
-
-(*
-    enquiry := TAutomationDesktop.GetDesktopWindow('Enquiry');
-    try
-      // Wait for enquiry to be ready
-      enquiry.WaitWhileBusy;
-
-      // Now set focus
-      enquiry.Focus;
-
-      // Calculate ???
-      mouse := TAutomationMouse.Create;
-      try
-        mouse.Location := TPoint.Create(1250, 200);
-        mouse.LeftClick;
-        Sleep(4000);  // Necessary for some reason
-      finally
-        mouse.Free;
-      end;
-
-      calc := enquiry.Window('Contract Calculator');
-
-      buysell := calc.GetComboboxByIndex(CALC_BUYSELL);
-      buysell.Text := 'Invest';
-      Sleep(1000);
-
-      // Move to the correct place ????
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-      TAutomationKeyboard.Tab;
-
-      TAutomationKeyBoard.Enter('999.99');
-
-
-
-
-      // Regenerate ????
-      calc1 := enquiry.Window('Contract Calculator');
-
-//      calc1.ListControlsAndStuff(nil);
-
-(*
-      // Now look for the edit box we want
-      for count := 0 to 10 do
-      begin
-        try
-          edit := calc.GetEditBoxByIndex(count);
-          edit.text := IntToStr(count);
-        except
-          ShowMessage (IntToStr(count));
-
-        end;
-      end;
-*)
-
-
-(*
-      // 4. Select the correct tab
-      tab := enquiry.GetTabByIndex(0);
-      tab.SelectTabPage('Second Tab');     // 3 is the magic number
-
-      tb1 := tab.GetEditBoxByIndex(0);
-      try
-        writeln(tb1.Text);
-      finally
-        tb1.Free;
-      end;
-
-      check := enquiry.GetCheckboxByIndex(0);
-      try
-        check.toggle;
-      finally
-        check.Free;
-      end;
-
-      combo := enquiry.GetComboBoxByIndex(0);
-      try
-        val := combo.Items[3].Name;
-        writeln ('Combobox Text (2) is ' + val);
-      finally
-        combo.Free;
-      end;
-
-      radio := enquiry.GetRadioButtonByIndex(2);
-      try
-        radio.Select;
-      finally
-        radio.Free;
-      end;
-
-      // Now see whether we can get the statusbar
-      statusBar := enquiry.StatusBar;
-      try
-        eb0 := statusBar.GetTextBoxByIndex(1);
-        try
-          writeln ('Text is ' + eb0.Text);
-        finally
-          eb0.Free;
-        end;
-      finally
-        statusBar.Free;
-      end;
-*)
-(*
-      menu := enquiry.MainMenu;
-      try
-        writeln(menu.Name);
-
-        fileitem := menu.Items[0];
-        try
-          writeln(fileitem.Name);
-
-          //fileitem.ClickSubItem('Exit');
-
-          //writeln(menuitem.Items.Count);
-
-        finally
-        // This free causes issues
-       //   fileitem.Free;
-        end;
-
-//        writeln(menu.Items[0].Name);
-
-        //menu.Items[0].items[0].Name;
-
-      finally
-        menu.Free;
-      end;
-*)
-(*
-      cmenu := enquiry.ControlMenu;
-      try
-        writeln(cmenu.Name);
-      finally
-        cmenu.Free;
-      end;
-*)
-
-  //    WriteLn ('Press return to continue');
-  //    ReadLn ;
-(*
-    finally
-      enquiry.Free;
-
-      WriteLn('All done, press any key');
-      ReadLn;
-*)
-//      application.Kill;
-//      application.free
-//    end;
 end.
-

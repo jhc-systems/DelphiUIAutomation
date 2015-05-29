@@ -28,10 +28,18 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationTabItem = interface (IAutomationBase)
+  ['{6FC85416-87FD-4FE6-91C5-3D465F73DBD5}']
+    /// <summary>
+    ///  Selects this tabitem
+    /// </summary>
+    procedure Select;
+  end;
+
   /// <summary>
   ///  Represents a tab item
   /// </summary>
-  TAutomationTabItem = class (TAutomationBase)
+  TAutomationTabItem = class (TAutomationBase, IAutomationTabItem)
   public
     /// <summary>
     ///  Selects this tabitem
