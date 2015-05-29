@@ -93,10 +93,12 @@ The currently supported controls are ...
 * TEditBox
 * TRadioButton
 * TStatusBar
-* TStringGrid
+* TStringGrid (As the TStringGrid in Delphi is just a pane, it is not possible to properly interact with the control via automation
 * TPageControl
 * TTab
 * TTextBox
+
+
 
 [More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
 
