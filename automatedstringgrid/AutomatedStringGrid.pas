@@ -35,6 +35,8 @@ uses
 type
   TStringGrid = class(Grids.TStringGrid,
                       ISelectionProvider,
+                      IGridProvider,
+                  //    ITableProvider,
                       IInvokeProvider,
                       IValueProvider,
                       IRawElementProviderSimple)
@@ -64,6 +66,11 @@ type
     function SetValue(val: PWideChar): HResult; stdcall;
     function Get_Value(out pRetVal: WideString): HResult; stdcall;
     function Get_IsReadOnly(out pRetVal: Integer): HResult; stdcall;
+
+    // IGridProvider
+    function GetItem(row: SYSINT; column: SYSINT; out pRetVal: IRawElementProviderSimple): HResult; stdcall;
+    function Get_RowCount(out pRetVal: SYSINT): HResult; stdcall;
+    function Get_ColumnCount(out pRetVal: SYSINT): HResult; stdcall;
   end;
 
 implementation
@@ -101,19 +108,31 @@ var
 
 { TStringGrid }
 
+function TStringGrid.GetItem(row, column: SYSINT;
+  out pRetVal: IRawElementProviderSimple): HResult;
+var
+  obj : TAutomationStringGridItem;
+
+begin
+  result := S_OK;
+
+  obj := TAutomationStringGridItem.create(self);
+  obj.Row := row;
+  obj.Column := column;
+  obj.Value := self.Cells[column, row];
+
+  pRetVal := obj;
+end;
+
 function TStringGrid.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   result := S_OK;
   pRetval := nil;
 
-//  if (patternID = UIA_SelectionPatternId) then
-//  begin
-//    pRetVal := self;
-//  end;
-
   if ((patternID = UIA_InvokePatternId) or
       (patternID = UIA_ValuePatternId) or
+      (patternID = UIA_GridPatternId) or
       (patternID = UIA_SelectionPatternId)) then
   begin
     pRetVal := self;
@@ -143,11 +162,13 @@ function TStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
   region_buf : array of IRawElementProviderSimple;
   region_arr : variant;
-  obj : TStringGridRow;
+  obj : TAutomationStringGridItem;
 
 begin
-  obj := TStringGridRow.create(self);
+  obj := TAutomationStringGridItem.create(self);
   obj.Row := self.row;
+  obj.Column := self.Col;
+  obj.Value := self.Cells[self.Col, self.Row];
 
   SetLength(region_buf, 1);
   region_buf[0] := obj;
@@ -158,13 +179,18 @@ begin
 
   pRetVal := PSafeArray(TVarData(region_arr).VArray);
 
-  // Retrieves a Microsoft UI Automation provider for each child element that is selected.pRetVal := nil;
   result := S_OK;
 end;
 
 function TStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
 begin
   pRetVal := 0;
+  result := S_OK;
+end;
+
+function TStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
+begin
+  pRetVal := self.ColCount;
   result := S_OK;
 end;
 
@@ -186,11 +212,11 @@ begin
   Result := S_OK;
 end;
 
-//function TStringGrid.Get_ReadyState(out pRetVal: WideString): HResult;
-//begin
-//  pRetval := 'I''m Ready';
-//  result := S_OK;
-//end;
+function TStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
+begin
+  pretVal := self.RowCount;
+  result := S_OK;
+end;
 
 function TStringGrid.Invoke: HResult;
 begin
