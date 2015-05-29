@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{           Copyright 2015 JHC Systems Limited                              }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 unit AutomatedStringGrid;
 
 interface
@@ -8,16 +29,16 @@ uses
   messages,
   classes,
   ActiveX,
+  StringGridRow,
   grids;
 
 type
   TStringGrid = class(Grids.TStringGrid,
-                      //ISelectionProvider,
+                      ISelectionProvider,
                       IInvokeProvider,
                       IValueProvider,
                       IRawElementProviderSimple)
   private
-    //FOwner: TComponent;
     FRawElementProviderSimple : IRawElementProviderSimple;
     procedure WMGetObject(var Message: TMessage); message WM_GETOBJECT;
 
@@ -29,6 +50,9 @@ type
     function Get_HostRawElementProvider(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
 
     // ISelectionProvider
+    ///<remarks>
+    ///  Will return the selected row (if possible)
+    ///</remarks>
     function GetSelection(out pRetVal: PSafeArray): HResult; stdcall;
     function Get_CanSelectMultiple(out pRetVal: Integer): HResult; stdcall;
     function Get_IsSelectionRequired(out pRetVal: Integer): HResult; stdcall;
@@ -43,6 +67,10 @@ type
   end;
 
 implementation
+
+uses
+  sysutils,
+  Variants;
 
 function TStringGrid_NewInstance(AClass: TClass): TObject;
 begin
@@ -85,7 +113,8 @@ begin
 //  end;
 
   if ((patternID = UIA_InvokePatternId) or
-      (patternID = UIA_ValuePatternId)) then
+      (patternID = UIA_ValuePatternId) or
+      (patternID = UIA_SelectionPatternId)) then
   begin
     pRetVal := self;
   end;
@@ -111,14 +140,31 @@ begin
 end;
 
 function TStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
+var
+  region_buf : array of IRawElementProviderSimple;
+  region_arr : variant;
+  obj : TStringGridRow;
+
 begin
-  pRetVal := nil;
+  obj := TStringGridRow.create(self);
+  obj.Row := self.row;
+
+  SetLength(region_buf, 1);
+  region_buf[0] := obj;
+
+  region_arr := VarArrayCreate([0, High(region_buf)], varInteger);
+  Move(PInteger(region_buf)^, VarArrayLock(region_arr)^, SizeOf(Integer) * Length(region_buf));
+  VarArrayUnlock(region_arr);
+
+  pRetVal := PSafeArray(TVarData(region_arr).VArray);
+
+  // Retrieves a Microsoft UI Automation provider for each child element that is selected.pRetVal := nil;
   result := S_OK;
 end;
 
 function TStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
 begin
-  pRetVal := 1;
+  pRetVal := 0;
   result := S_OK;
 end;
 
@@ -130,7 +176,7 @@ end;
 
 function TStringGrid.Get_IsSelectionRequired(out pRetVal: Integer): HResult;
 begin
-  pRetVal := 1;
+  pRetVal := 0;
   result := S_OK;
 end;
 
@@ -139,6 +185,12 @@ begin
   pRetVal:= ProviderOptions_ServerSideProvider;
   Result := S_OK;
 end;
+
+//function TStringGrid.Get_ReadyState(out pRetVal: WideString): HResult;
+//begin
+//  pRetval := 'I''m Ready';
+//  result := S_OK;
+//end;
 
 function TStringGrid.Invoke: HResult;
 begin
@@ -160,7 +212,7 @@ end;
 function TStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
 begin
 //  pRetVal := self
-  pRetVal := 1;
+  pRetVal := 0;
   result := S_OK;
 end;
 
