@@ -39,7 +39,7 @@ To get a 'desktop' window (i.e. one that appears in the Windows tasks bar), then
 
 ```pascal
 var
-  notepad : TAutomationWindow;
+  notepad : IAutomationWindow;
   ...
   
   notepad := TAutomationDesktop.GetDesktopWindow('Untitled - Notepad');
@@ -52,7 +52,7 @@ To get an 'application' window, i.e. one associated with another window, first t
 
 ```pascal
 var
-  security : TAutomationWindow
+  security : IAutomationWindow
   ...
   
   security := notepad.Window('Security');
@@ -64,7 +64,7 @@ Each control contained in a window can be identified by the index of that contro
 
 ```pascal
 var
-  user : TAutomationEditBox;
+  user : IAutomationEditBox;
 
   user := connect.GetEditBoxByIndex(0);
   user.Text := 'USER1';
@@ -76,12 +76,29 @@ In order to click the 'OK' button associated with the connection window, it can 
 
 ```pascal
 var
-  btnOK : TAutomationButton;
+  btnOK : IAutomationButton;
   ...
   
   btnOK := connect.GetButton('OK');
   btnOk.Click;
 ```
+
+# Current supported controls
+
+The currently supported controls are ...
+
+* TButton
+* TCheckBox
+* TComboBox
+* TEditBox
+* TRadioButton
+* TStatusBar
+* TStringGrid
+* TPageControl
+* TTab
+* TTextBox
+
+[More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
 
 # Contributors
 Mark Humphreys
