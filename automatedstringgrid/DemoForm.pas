@@ -6,14 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.ComCtrls,
   Vcl.DBGrids, Vcl.DBCGrids, Vcl.Menus, Vcl.StdCtrls,
-  Vcl.Buttons;
+  Vcl.Buttons, AutomatedStringGrid;
 
 type
   TForm2 = class(TForm)
-    ListView1: TListView;
-    StringGrid1: TStringGrid;
+    StringGrid1: TAutomationStringGrid;
     procedure FormCreate(Sender: TObject);
-    procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
   private
     { Private declarations }
@@ -50,11 +48,6 @@ begin
     StringGrid1.Cells[3,4] := 'Hello34';
     StringGrid1.Cells[2,4] := 'Hello24';
     StringGrid1.Cells[2,9] := 'Hello24';
-end;
-
-procedure TForm2.StringGrid1Click(Sender: TObject);
-begin
-  ShowMessage(StringGrid1.Cells[StringGrid1.Col, StringGrid1.row]);
 end;
 
 procedure TForm2.StringGrid1DblClick(Sender: TObject);
