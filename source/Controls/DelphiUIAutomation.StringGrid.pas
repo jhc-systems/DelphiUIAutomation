@@ -25,6 +25,7 @@ interface
 
 uses
   DelphiUIAutomation.Base,
+  ActiveX,
   UIAutomationClient_TLB;
 
 type
@@ -36,6 +37,8 @@ type
     ///  Gets or sets the value
     ///</summary>
     property Value : string read GetValue;
+
+    function GetItemText(row: SYSINT; column: SYSINT) : string;
   end;
 
   /// <summary>
@@ -44,15 +47,19 @@ type
   TAutomationStringGrid = class (TAutomationBase, IAutomationStringGrid)
   strict private
     FValuePattern : IUIAutomationValuePattern;
+    FGridPattern : IUIAutomationGridPattern;
   private
     function GetValue: string;
     procedure GetValuePattern;
+    procedure GetGridPattern;
 
   public
     ///<summary>
     ///  Gets or sets the value
     ///</summary>
     property Value : string read GetValue;
+
+    function GetItemText(row: SYSINT; column: SYSINT) : string;
 
     constructor Create(element : IUIAutomationElement); override;
   end;
@@ -86,6 +93,22 @@ begin
   inherited create(element);
 
   GetValuePattern;
+  GetGridPattern;
+end;
+
+procedure TAutomationStringGrid.GetGridPattern;
+var
+  inter: IInterface;
+
+begin
+  fElement.GetCurrentPattern(UIA_GridPatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationGridPattern, FGridPattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
+  end;
 end;
 
 function TAutomationStringGrid.GetValue: string;
@@ -97,4 +120,17 @@ begin
   Result := trim(value);
 end;
 
+function TAutomationStringGrid.GetItemText(row: SYSINT; column: SYSINT) : string;
+var
+  value : IUIAutomationElement;
+  name : WideString;
+
+begin
+  FGridPattern.GetItem(row, column, value);
+  value.Get_CurrentName(name);
+
+  result := name;
+end;
+
 end.
+
