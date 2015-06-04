@@ -33,7 +33,7 @@ uses
   grids;
 
 type
-  TStringGrid = class(Grids.TStringGrid,
+  TAutomationStringGrid = class(TStringGrid,
                       ISelectionProvider,
                       IGridProvider,
                   //    ITableProvider,
@@ -73,42 +73,22 @@ type
     function Get_ColumnCount(out pRetVal: SYSINT): HResult; stdcall;
   end;
 
+procedure Register;
+
 implementation
 
 uses
   sysutils,
   Variants;
 
-function TStringGrid_NewInstance(AClass: TClass): TObject;
+procedure Register;
 begin
-  Result := TStringGrid.NewInstance;
+  RegisterComponents('Samples', [TAutomationStringGrid]);
 end;
 
-function GetVirtualMethod(AClass: TClass; const VmtOffset: Integer): Pointer;
-begin
-  Result := PPointer(Integer(AClass) + VmtOffset)^;
-end;
+{ TAutomationStringGrid }
 
-procedure SetVirtualMethod(AClass: TClass; const VmtOffset: Integer; const Method: Pointer);
-var
-  WrittenBytes: SIZE_T;
-  PatchAddress: PPointer;
-begin
-  PatchAddress := Pointer(Integer(AClass) + VmtOffset);
-  WriteProcessMemory(GetCurrentProcess, PatchAddress, @Method, SizeOf(Method), WrittenBytes);
-end;
-
-{$IFOPT W+}{$DEFINE WARN}{$ENDIF}{$WARNINGS OFF} // no compiler warning
-const
-  vmtNewInstance = System.vmtNewInstance;
-{$IFDEF WARN}{$WARNINGS ON}{$ENDIF}
-
-var
-  OrgTStringGrid_NewInstance: Pointer;
-
-{ TStringGrid }
-
-function TStringGrid.GetItem(row, column: SYSINT;
+function TAutomationStringGrid.GetItem(row, column: SYSINT;
   out pRetVal: IRawElementProviderSimple): HResult;
 var
   obj : TAutomationStringGridItem;
@@ -124,7 +104,7 @@ begin
   pRetVal := obj;
 end;
 
-function TStringGrid.GetPatternProvider(patternId: SYSINT;
+function TAutomationStringGrid.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   result := S_OK;
@@ -140,7 +120,7 @@ begin
 
 end;
 
-function TStringGrid.GetPropertyValue(propertyId: SYSINT;
+function TAutomationStringGrid.GetPropertyValue(propertyId: SYSINT;
   out pRetVal: OleVariant): HResult;
 begin
   if(propertyId = UIA_ClassNamePropertyId) then
@@ -158,7 +138,7 @@ begin
   result := S_OK;
 end;
 
-function TStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
+function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
   region_buf : array of IRawElementProviderSimple;
   region_arr : variant;
@@ -182,67 +162,67 @@ begin
   result := S_OK;
 end;
 
-function TStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
+function TAutomationStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
 begin
   pRetVal := 0;
   result := S_OK;
 end;
 
-function TStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
+function TAutomationStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := self.ColCount;
   result := S_OK;
 end;
 
-function TStringGrid.Get_HostRawElementProvider(
+function TAutomationStringGrid.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
   result := UiaHostProviderFromHwnd (self.Handle, pRetVal);
 end;
 
-function TStringGrid.Get_IsSelectionRequired(out pRetVal: Integer): HResult;
+function TAutomationStringGrid.Get_IsSelectionRequired(out pRetVal: Integer): HResult;
 begin
   pRetVal := 0;
   result := S_OK;
 end;
 
-function TStringGrid.Get_ProviderOptions(out pRetVal: ProviderOptions): HResult;
+function TAutomationStringGrid.Get_ProviderOptions(out pRetVal: ProviderOptions): HResult;
 begin
   pRetVal:= ProviderOptions_ServerSideProvider;
   Result := S_OK;
 end;
 
-function TStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
+function TAutomationStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
 begin
   pretVal := self.RowCount;
   result := S_OK;
 end;
 
-function TStringGrid.Invoke: HResult;
+function TAutomationStringGrid.Invoke: HResult;
 begin
   PostMessage(self.Handle, WM_LBUTTONDBLCLK, Integer(self),0);
 end;
 
-function TStringGrid.SetValue(val: PWideChar): HResult;
+function TAutomationStringGrid.SetValue(val: PWideChar): HResult;
 begin
   self.Cells[self.Col, self.Row] := val;
   result := S_OK;
 end;
 
-function TStringGrid.Get_Value(out pRetVal: WideString): HResult;
+function TAutomationStringGrid.Get_Value(out pRetVal: WideString): HResult;
 begin
   pRetVal := self.Cells[self.Col, self.Row];
   result := S_OK;
 end;
 
-function TStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
+function TAutomationStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
 begin
 //  pRetVal := self
   pRetVal := 0;
   result := S_OK;
 end;
 
-procedure TStringGrid.WMGetObject(var Message: TMessage);
+procedure TAutomationStringGrid.WMGetObject(var Message: TMessage);
 begin
   if (Message.Msg = WM_GETOBJECT) then
   begin
@@ -253,12 +233,5 @@ begin
   else
     Message.Result := DefWindowProc(self.Handle, Message.Msg, Message.WParam, Message.LParam);
 end;
-
-initialization
-  OrgTStringGrid_NewInstance := GetVirtualMethod(TStringGrid, vmtNewInstance);
-  SetVirtualMethod(Grids.TStringGrid, vmtNewInstance, @TStringGrid_NewInstance);
-
-finalization
-  SetVirtualMethod(Grids.TStringGrid, vmtNewInstance, OrgTStringGrid_NewInstance);
 
 end.
