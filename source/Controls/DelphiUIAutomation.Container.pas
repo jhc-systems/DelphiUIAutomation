@@ -290,7 +290,7 @@ end;
 
 function TAutomationContainer.GetStringGridByIndex(index: integer): IAutomationStringGrid;
 begin
-  result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_PaneControlTypeId, 'TStringGrid'));
+  result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_PaneControlTypeId, 'TAutomationStringGrid'));
 end;
 
 function TAutomationContainer.GetTabByIndex (index : integer) : IAutomationTab;
