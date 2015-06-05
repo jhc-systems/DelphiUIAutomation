@@ -39,6 +39,8 @@ type
     property Value : string read GetValue;
 
     function GetItemText(row: SYSINT; column: SYSINT) : string;
+
+    function GetSelectedText : string;
   end;
 
   /// <summary>
@@ -48,10 +50,12 @@ type
   strict private
     FValuePattern : IUIAutomationValuePattern;
     FGridPattern : IUIAutomationGridPattern;
+    FSelectionPattern : IUIAutomationSelectionPattern;
   private
     function GetValue: string;
     procedure GetValuePattern;
     procedure GetGridPattern;
+    procedure GetSelectionPattern;
 
   public
     ///<summary>
@@ -60,6 +64,8 @@ type
     property Value : string read GetValue;
 
     function GetItemText(row: SYSINT; column: SYSINT) : string;
+
+    function GetSelectedText : string;
 
     constructor Create(element : IUIAutomationElement); override;
   end;
@@ -94,6 +100,7 @@ begin
 
   GetValuePattern;
   GetGridPattern;
+  GetSelectionPattern;
 end;
 
 procedure TAutomationStringGrid.GetGridPattern;
@@ -130,6 +137,48 @@ begin
   value.Get_CurrentName(name);
 
   result := name;
+end;
+
+function TAutomationStringGrid.GetSelectedText: string;
+var
+  collection : IUIAutomationElementArray;
+  count : integer;
+  retval : integer;
+  element : IUIAutomationElement;
+  name : WideString;
+  length : integer;
+
+begin
+  FSelectionPattern.GetCurrentSelection(collection);
+  collection.Get_Length(length);
+
+  name := '<UNKNOWN>';
+
+  // There should only be one!
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, element);
+    element.Get_CurrentControlType(retVal);
+
+    element.Get_CurrentName(name)
+  end;
+
+  result := name;
+end;
+
+procedure TAutomationStringGrid.GetSelectionPattern;
+var
+  inter: IInterface;
+
+begin
+  fElement.GetCurrentPattern(UIA_SelectionPatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationSelectionPattern, FSelectionPattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
+  end;
 end;
 
 end.
