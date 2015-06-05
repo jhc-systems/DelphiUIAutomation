@@ -159,10 +159,11 @@ end;
 
 function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
-  buffer : array of IRawElementProviderSimple;
+//  buffer : array of IRawElementProviderSimple;
 //  region_arr : variant;
   obj : TAutomationStringGridItem;
   outBuffer : PSafeArray;
+  offset : integer;
 
 begin
   obj := TAutomationStringGridItem.create(self);
@@ -170,10 +171,16 @@ begin
   obj.Column := self.Col;
   obj.Value := self.Cells[self.Col, self.Row];
 
-  SetLength(buffer, 1);
-  buffer[0] := obj;
+//  SetLength(buffer, 1);
+//  buffer[0] := obj;
 
-  pRetVal := ArrayToSafeArray(buffer);
+//  pRetVal := ArrayToSafeArray(buffer);
+
+  offset := 0;
+  outBuffer := SafeArrayCreateVector(VT_VARIANT, 0, 1);
+  SafeArrayPutElement(outBuffer, offset, obj);
+
+  pRetVal := outBuffer;
 
   result := S_OK;
 end;
