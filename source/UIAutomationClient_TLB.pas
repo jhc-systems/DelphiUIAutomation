@@ -858,7 +858,7 @@ type
 // *********************************************************************//
   IUIAutomationSelectionPattern = interface(IUnknown)
     ['{5ED5202E-B2AC-47A6-B638-4B0BF140D78E}']
-    function GetCurrentSelection(out retVal: IUIAutomationElementArray): HResult; stdcall;
+    function  GetCurrentSelection(out retVal: IUIAutomationElementArray): HResult; stdcall;
     function Get_CurrentCanSelectMultiple(out retVal: Integer): HResult; stdcall;
     function Get_CurrentIsSelectionRequired(out retVal: Integer): HResult; stdcall;
     function GetCachedSelection(out retVal: IUIAutomationElementArray): HResult; stdcall;

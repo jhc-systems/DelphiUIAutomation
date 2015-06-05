@@ -78,8 +78,27 @@ procedure Register;
 implementation
 
 uses
+  dialogs,
   sysutils,
   Variants;
+
+function arrayToSafeArray (inData : array of IRawElementProviderSimple) : PSafeArray;
+var
+  InDataLength: Integer;
+  vaMatrix: Variant;
+  I: Integer;
+
+begin
+  InDataLength := Length(InData);
+
+  vaMatrix := VarArrayCreate([Low(inData), High(inData)], varVariant);
+
+  //copy data into varArray
+  for I := 0 to InDataLength-1 do
+    vaMatrix[I] := InData[I];
+
+  result :=  PSafeArray (TVarData (vaMatrix).VArray);
+end;
 
 procedure Register;
 begin
@@ -140,9 +159,10 @@ end;
 
 function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
-  region_buf : array of IRawElementProviderSimple;
-  region_arr : variant;
+  buffer : array of IRawElementProviderSimple;
+//  region_arr : variant;
   obj : TAutomationStringGridItem;
+  outBuffer : PSafeArray;
 
 begin
   obj := TAutomationStringGridItem.create(self);
@@ -150,14 +170,10 @@ begin
   obj.Column := self.Col;
   obj.Value := self.Cells[self.Col, self.Row];
 
-  SetLength(region_buf, 1);
-  region_buf[0] := obj;
+  SetLength(buffer, 1);
+  buffer[0] := obj;
 
-  region_arr := VarArrayCreate([0, High(region_buf)], varInteger);
-  Move(PInteger(region_buf)^, VarArrayLock(region_arr)^, SizeOf(Integer) * Length(region_buf));
-  VarArrayUnlock(region_arr);
-
-  pRetVal := PSafeArray(TVarData(region_arr).VArray);
+  pRetVal := ArrayToSafeArray(buffer);
 
   result := S_OK;
 end;

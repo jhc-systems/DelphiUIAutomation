@@ -28,43 +28,6 @@ uses
   UIAutomationCore_TLB, classes;
 
 type
-  TStringGridRow = class(TInterfacedObject,
-          IValueProvider,
-          ISelectionItemProvider,
-//          IGridItemProvider,
-          IRawElementProviderSimple)
-  strict private
-    FRow : integer;
-    FGrid : TComponent;
-    FSelected : boolean;
-  private
-    procedure SetSelected(const Value: boolean);
-  public
-    property Selected : boolean read FSelected write SetSelected;
-    property Row : integer read FRow write FRow;
-
-    // IRawElementProviderSimple
-    function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
-    function GetPatternProvider(patternId: SYSINT; out pRetVal: IUnknown): HResult; stdcall;
-    function GetPropertyValue(propertyId: SYSINT; out pRetVal: OleVariant): HResult; stdcall;
-    function Get_HostRawElementProvider(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
-
-    // IValueProvider
-    function SetValue(val: PWideChar): HResult; stdcall;
-    function Get_Value(out pRetVal: WideString): HResult; stdcall;
-    function Get_IsReadOnly(out pRetVal: Integer): HResult; stdcall;
-
-    // ISelectionItemProvider
-    function Select: HResult; stdcall;
-    function AddToSelection: HResult; stdcall;
-    function RemoveFromSelection: HResult; stdcall;
-    function Get_IsSelected(out pRetVal: Integer): HResult; stdcall;
-    function Get_SelectionContainer(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
-
-    constructor Create(AOwner : TComponent);
-  end;
-
-type
   TAutomationStringGridItem = class (TInterfacedObject,
     IRawElementProviderSimple,
     ISelectionItemProvider,
@@ -114,126 +77,13 @@ type
     function Get_ColumnSpan(out pRetVal: SYSINT): HResult; stdcall;
     function Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
 
-    // ITableItemProvider
-
-
     constructor Create(AOwner: TComponent);// override;
   end;
+
 implementation
 
 uses
   sysutils;
-
-{ TStringGridRow }
-
-function TStringGridRow.AddToSelection: HResult;
-begin
-  result := (self as ISelectionItemProvider).Select;
-end;
-
-constructor TStringGridRow.Create(AOwner: TComponent);
-begin
-  inherited create;
-
-  FGrid := AOwner;
-end;
-
-function TStringGridRow.GetPatternProvider(patternId: SYSINT;
-  out pRetVal: IInterface): HResult;
-begin
-  result := S_FALSE;
-
-  if ((patternID = UIA_SelectionItemPatternId) or
-      (patternID = UIA_ValuePatternId)) then
-  begin
-    pRetVal := self;
-  result := S_OK;
-  end;
-
-end;
-
-function TStringGridRow.GetPropertyValue(propertyId: SYSINT;
-  out pRetVal: OleVariant): HResult;
-begin
-  if(propertyId = UIA_ClassNamePropertyId) then
-  begin
-    TVarData(pRetVal).VType := varOleStr;
-    TVarData(pRetVal).VOleStr := pWideChar('TStringGridRow');
-  end;
-
-  if(propertyId = UIA_NamePropertyId) then
-  begin
-    TVarData(pRetVal).VType := varOleStr;
-    TVarData(pRetVal).VOleStr := pWideChar('Row ' + IntToStr(FRow));
-  end;
-
-  result := S_OK;
-end;
-
-function TStringGridRow.Get_HostRawElementProvider(
-  out pRetVal: IRawElementProviderSimple): HResult;
-begin
-  pRetVal := nil;
-  result := S_OK;
-end;
-
-function TStringGridRow.Get_IsReadOnly(out pRetVal: Integer): HResult;
-begin
-  pRetVal := 0;
-  Result := S_OK;
-end;
-
-function TStringGridRow.Get_IsSelected(out pRetVal: Integer): HResult;
-begin
-  result := S_OK;
-
-  if self.FSelected then
-    pRetVal := 0
-  else
-    pRetVal := 1;
-end;
-
-function TStringGridRow.Get_ProviderOptions(
-  out pRetVal: ProviderOptions): HResult;
-begin
-  pRetVal:= ProviderOptions_ServerSideProvider;
-  Result := S_OK;
-end;
-
-function TStringGridRow.Get_SelectionContainer(
-  out pRetVal: IRawElementProviderSimple): HResult;
-begin
-  result := S_OK;
-  pRetVal := self.FGrid as IRawElementProviderSimple;
-end;
-
-function TStringGridRow.Get_Value(out pRetVal: WideString): HResult;
-begin
-  pRetVal := IntToStr(FRow);
-  result := S_OK;
-end;
-
-function TStringGridRow.RemoveFromSelection: HResult;
-begin
-  self.FSelected := false;
-end;
-
-function TStringGridRow.Select: HResult;
-begin
-  self.FSelected := true;
-  result := S_OK;
-end;
-
-procedure TStringGridRow.SetSelected(const Value: boolean);
-begin
-  FSelected := Value;
-end;
-
-function TStringGridRow.SetValue(val: PWideChar): HResult;
-begin
-  FRow := StrToInt(val);
-  Result := S_OK;
-end;
 
 { TAutomationStringGridItem }
 
