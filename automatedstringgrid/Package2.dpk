@@ -33,7 +33,8 @@ requires
 
 contains
   UIAutomationCore_TLB in 'UIAutomationCore_TLB.pas',
-  StringGridRow in 'StringGridRow.pas',
-  AutomatedStringGrid in 'AutomatedStringGrid.pas';
+  AutomatedStringGrid in 'AutomatedStringGrid.pas',
+  StringGridItem in 'StringGridItem.pas';
 
 end.
+

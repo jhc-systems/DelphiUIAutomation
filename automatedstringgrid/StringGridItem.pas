@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit StringGridRow;
+unit StringGridItem;
 
 interface
 
@@ -28,7 +28,7 @@ uses
   UIAutomationCore_TLB, classes;
 
 type
-  TAutomationStringGridRow = class (TInterfacedPersistent,
+  TAutomationStringGridItem = class (TInterfacedPersistent,
                                     IRawElementProviderSimple,
                                     ISelectionItemProvider,
                                     IValueProvider,
@@ -45,13 +45,14 @@ type
     procedure SetRow(const Value: integer);
     procedure SetTheValue(const Value: string);
     procedure SetSelected(const Value: boolean);
+    function GetSelected : boolean;
     function GetTheValue: string;
 
   public
     property Row : integer read FRow write SetRow;
     property Column : integer read FColumn write SetColumn;
     property Value : string read GetTheValue write SetTheValue;
-    property Selected : boolean read FSelected write SetSelected;
+    property Selected : boolean read GetSelected write SetSelected;
 
     // IRawElementProviderSimple
     function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
@@ -84,26 +85,28 @@ type
 implementation
 
 uses
+  AutomatedStringGrid,
   sysutils;
 
-{ TAutomationStringGridRow }
+{ TAutomationStringGridItem }
 
-function TAutomationStringGridRow.AddToSelection: HResult;
+function TAutomationStringGridItem.AddToSelection: HResult;
 begin
   result := (self as ISelectionItemProvider).Select;
 end;
 
-constructor TAutomationStringGridRow.Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);
+constructor TAutomationStringGridItem.Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);
 begin
   inherited create;// (AOwner);
-  FOwner := AOwner;
+//  FOwner := AOwner;
 
   self.Column := ACol;
   self.Row := ARow;
   self.Value := AValue;
+  self.Selected := false;
 end;
 
-function TAutomationStringGridRow.GetPatternProvider(patternId: SYSINT;
+function TAutomationStringGridItem.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   pRetval := nil;
@@ -118,7 +121,7 @@ begin
   end
 end;
 
-function TAutomationStringGridRow.GetPropertyValue(propertyId: SYSINT;
+function TAutomationStringGridItem.GetPropertyValue(propertyId: SYSINT;
   out pRetVal: OleVariant): HResult;
 begin
   if(propertyId = UIA_ControlTypePropertyId) then
@@ -142,28 +145,30 @@ begin
   else
     result := S_FALSE;
 end;
+function TAutomationStringGridItem.GetSelected: boolean;
+begin
+  result := FSelected;
+end;
 
-function TAutomationStringGridRow.GetTheValue: string;
+function TAutomationStringGridItem.GetTheValue: string;
 begin
   result := self.FValue;
 end;
 
-function TAutomationStringGridRow.Get_HostRawElementProvider(
+function TAutomationStringGridItem.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
   pRetVal := nil;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_IsReadOnly(
+function TAutomationStringGridItem.Get_IsReadOnly(
   out pRetVal: Integer): HResult;
 begin
   pRetVal := 1;
   result := S_OK;
 end;
-
-function TAutomationStringGridRow.Get_IsSelected(
-
+function TAutomationStringGridItem.Get_IsSelected(
   out pRetVal: Integer): HResult;
 begin
   result := S_OK;
@@ -174,91 +179,106 @@ begin
     pRetVal := 1;
 end;
 
-function TAutomationStringGridRow.Get_ProviderOptions(
+function TAutomationStringGridItem.Get_ProviderOptions(
   out pRetVal: ProviderOptions): HResult;
 begin
   pRetVal:= ProviderOptions_ServerSideProvider;
   Result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_Value(out pRetVal: WideString): HResult;
+function TAutomationStringGridItem.Get_Value(out pRetVal: WideString): HResult;
 begin
   pRetVal := self.FValue;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.RemoveFromSelection: HResult;
+function TAutomationStringGridItem.RemoveFromSelection: HResult;
 begin
+  result := (self as ISelectionItemProvider).RemoveFromSelection;
+end;
+
+function TAutomationStringGridItem.Select: HResult;
+begin
+  self.Selected := true;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Select: HResult;
-begin
-  self.FSelected := true;
-  result := S_OK;
-end;
-
-procedure TAutomationStringGridRow.SetColumn(const Value: integer);
+procedure TAutomationStringGridItem.SetColumn(const Value: integer);
 begin
   FColumn := Value;
 end;
 
-procedure TAutomationStringGridRow.SetRow(const Value: integer);
+procedure TAutomationStringGridItem.SetRow(const Value: integer);
 begin
   FRow := Value;
 end;
 
-procedure TAutomationStringGridRow.SetSelected(const Value: boolean);
+procedure TAutomationStringGridItem.SetSelected(const Value: boolean);
 begin
+//  (FOwner as TAutomationStringGrid).Row := self.Row;
+
   FSelected := Value;
 end;
 
-function TAutomationStringGridRow.SetValue(val: PWideChar): HResult;
+function TAutomationStringGridItem.SetValue(val: PWideChar): HResult;
 begin
   result := S_OK;
   self.FValue := val;
 end;
 
-procedure TAutomationStringGridRow.SetTheValue(const Value: string);
+procedure TAutomationStringGridItem.SetTheValue(const Value: string);
 begin
   FValue := Value;
 end;
 
-function TAutomationStringGridRow.Get_row(out pRetVal: SYSINT): HResult;
+function TAutomationStringGridItem.Get_row(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := self.Row;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_column(out pRetVal: SYSINT): HResult;
+function TAutomationStringGridItem.Get_column(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := self.Column;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_RowSpan(out pRetVal: SYSINT): HResult;
+function TAutomationStringGridItem.Get_RowSpan(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := 1;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_SelectionContainer(
+function TAutomationStringGridItem.Get_SelectionContainer(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
-  result := S_OK;
-  pRetVal := FOwner as IRawElementProviderSimple;
+  result := S_FALSE;
+//  pRetVal := FOwner as IRawElementProviderSimple;
 end;
 
-function TAutomationStringGridRow.Get_ColumnSpan(out pRetVal: SYSINT): HResult;
+function TAutomationStringGridItem.Get_ColumnSpan(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := 1;
   result := S_OK;
 end;
 
-function TAutomationStringGridRow.Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult;
+function TAutomationStringGridItem.Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult;
 begin
-  pRetVal := nil;
-  result := S_OK;
+//  pRetVal := FOwner as IRawElementProviderSimple;
+  result := S_FALSE;
 end;
+
+(*
+function TAutomationStringGridItem.Get_FragmentRoot(
+  out pRetVal: IRawElementProviderFragmentRoot): HResult;
+begin
+  result := S_FALSE;
+end;
+*)
+
+//procedure TAutomationStringGridItem.WMGetObject(var Message: TMessage);
+//begin
+//  ?????
+//end;
 
 end.

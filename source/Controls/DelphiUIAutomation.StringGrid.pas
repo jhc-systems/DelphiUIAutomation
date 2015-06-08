@@ -24,6 +24,8 @@ unit DelphiUIAutomation.StringGrid;
 interface
 
 uses
+  Generics.Collections,
+  DelphiUIAutomation.StringGridItem,
   DelphiUIAutomation.Base,
   ActiveX,
   UIAutomationClient_TLB;
@@ -33,16 +35,20 @@ type
     ['{6E151D9C-33C7-4D82-A25C-BED061F3FB61}']
     function GetValue: string;
 
+    function GetColumnHeaders : TObjectList<TAutomationStringGridItem>;
+
+    function GetSelected : IAutomationStringGridItem;
+
     ///<summary>
     ///  Gets or sets the value
     ///</summary>
     property Value : string read GetValue;
 
-    function GetItemText(row: SYSINT; column: SYSINT) : string;
+    function GetItem(row: SYSINT; column: SYSINT) : IAutomationStringGridItem;
 
-    function GetSelectedText : string;
+    property Selected : IAutomationStringGridItem read GetSelected;
 
-    procedure PrintColumHeaders;
+    property ColumnHeaders : TObjectList<TAutomationStringGridItem> read GetColumnHeaders;
   end;
 
   /// <summary>
@@ -61,6 +67,8 @@ type
     procedure GetSelectionPattern;
     procedure GetTablePattern;
     procedure GetPatterns;
+    function GetSelected : IAutomationStringGridItem;
+    function GetColumnHeaders : TObjectList<TAutomationStringGridItem>;
 
   public
     ///<summary>
@@ -68,13 +76,15 @@ type
     ///</summary>
     property Value : string read GetValue;
 
-    function GetItemText(row: SYSINT; column: SYSINT) : string;
+    function GetItem(row: SYSINT; column: SYSINT) : IAutomationStringGridItem;
 
-    function GetSelectedText : string;
+//    function GetSelectedText : string;
 
     constructor Create(element : IUIAutomationElement); override;
 
-    procedure PrintColumHeaders;
+    property ColumnHeaders : TObjectList<TAutomationStringGridItem> read GetColumnHeaders;
+
+    property Selected : IAutomationStringGridItem read GetSelected;
   end;
 
 implementation
@@ -101,7 +111,14 @@ begin
   end;
 end;
 
-procedure TAutomationStringGrid.PrintColumHeaders;
+constructor TAutomationStringGrid.Create(element: IUIAutomationElement);
+begin
+  inherited create(element);
+
+  GetPatterns;
+end;
+
+function TAutomationStringGrid.GetColumnHeaders: TObjectList<TAutomationStringGridItem>;
 var
   collection : IUIAutomationElementArray;
   count : integer;
@@ -109,27 +126,22 @@ var
   retval : integer;
   name : WideString;
   element : IUIAutomationElement;
+  items : TObjectList<TAutomationStringGridItem>;
 
 begin
   FTablePattern.GetCurrentColumnHeaders(collection);
   collection.Get_Length(length);
 
+  items := TObjectList<TAutomationStringGridItem>.create;
+
   for count := 0 to length -1 do
   begin
     collection.GetElement(count, element);
-    element.Get_CurrentControlType(retVal);
 
-    element.Get_CurrentName(name);
-
-    Writeln(name);
+    items.Add(TAutomationStringGridItem.create(element));
   end;
-end;
 
-constructor TAutomationStringGrid.Create(element: IUIAutomationElement);
-begin
-  inherited create(element);
-
-  GetPatterns;
+  result := items;
 end;
 
 procedure TAutomationStringGrid.GetGridPattern;
@@ -156,16 +168,16 @@ begin
   Result := trim(value);
 end;
 
-function TAutomationStringGrid.GetItemText(row: SYSINT; column: SYSINT) : string;
+function TAutomationStringGrid.GetItem(row,
+  column: SYSINT): IAutomationStringGridItem;
 var
   value : IUIAutomationElement;
   name : WideString;
 
 begin
   FGridPattern.GetItem(row, column, value);
-  value.Get_CurrentName(name);
 
-  result := name;
+  result := TAutomationStringGridItem.create(value);
 end;
 
 procedure TAutomationStringGrid.GetPatterns;
@@ -176,20 +188,20 @@ begin
   GetTablePattern;
 end;
 
-function TAutomationStringGrid.GetSelectedText: string;
+function TAutomationStringGrid.GetSelected: IAutomationStringGridItem;
 var
   collection : IUIAutomationElementArray;
   count : integer;
   retval : integer;
   element : IUIAutomationElement;
-  name : WideString;
   length : integer;
+  item : IAutomationStringGridItem;
 
 begin
   FSelectionPattern.GetCurrentSelection(collection);
   collection.Get_Length(length);
 
-  name := '<UNKNOWN>';
+  item := nil;
 
   // There should only be one!
   for count := 0 to length -1 do
@@ -197,10 +209,10 @@ begin
     collection.GetElement(count, element);
     element.Get_CurrentControlType(retVal);
 
-    element.Get_CurrentName(name)
+    item := TAutomationStringGridItem.Create(element);
   end;
 
-  result := name;
+  result := item;
 end;
 
 procedure TAutomationStringGrid.GetSelectionPattern;

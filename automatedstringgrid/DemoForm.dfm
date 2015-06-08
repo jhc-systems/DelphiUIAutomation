@@ -23,7 +23,7 @@ object Form2: TForm2
     Width = 668
     Height = 490
     Anchors = [akLeft, akTop, akRight, akBottom]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect, goFixedRowClick]
     TabOrder = 0
-    OnDblClick = StringGrid1DblClick
   end
 end
