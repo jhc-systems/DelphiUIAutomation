@@ -3,10 +3,10 @@
         <ProjectGuid>{30B89B8D-5E1A-4D22-9F6D-4D7E6DFD908E}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Package2.dproj">
+        <Projects Include="Project3.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Project3.dproj">
+        <Projects Include="Package2.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,15 +17,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="Package2">
-        <MSBuild Projects="Package2.dproj"/>
-    </Target>
-    <Target Name="Package2:Clean">
-        <MSBuild Projects="Package2.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Package2:Make">
-        <MSBuild Projects="Package2.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Project3">
         <MSBuild Projects="Project3.dproj"/>
     </Target>
@@ -35,14 +26,23 @@
     <Target Name="Project3:Make">
         <MSBuild Projects="Project3.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Package2">
+        <MSBuild Projects="Package2.dproj"/>
+    </Target>
+    <Target Name="Package2:Clean">
+        <MSBuild Projects="Package2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Package2:Make">
+        <MSBuild Projects="Package2.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Package2;Project3"/>
+        <CallTarget Targets="Project3;Package2"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Package2:Clean;Project3:Clean"/>
+        <CallTarget Targets="Project3:Clean;Package2:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Package2:Make;Project3:Make"/>
+        <CallTarget Targets="Project3:Make;Package2:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

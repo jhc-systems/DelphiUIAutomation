@@ -11,10 +11,8 @@ uses
 type
   TForm2 = class(TForm)
     StringGrid1: TAutomationStringGrid;
-    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -26,69 +24,7 @@ var
 
 implementation
 
-uses
-  // all for testing
-  ActiveX,
-  UIAutomationCore_TLB,
-  StringGridRow;
-
 {$R *.dfm}
-
-type
-  TTest = class(TInterfacedObject, IUnknown)
-
-  end;
-
-procedure TForm2.Button1Click(Sender: TObject);
-var
-//buffer : array of IRawElementProviderSimple;
-  region_arr : variant;
-//  intf : TAutomationStringGridItem;
-  outBuffer : PSafeArray;
-  offset : integer;
-  unk : IUnknown;
-  iRow, iCol : integer;
-  Bounds : TVarArrayBoundArray;
-  result : HResult;
-//  intf: IRawElementProviderSimple;
-
-begin
-  iRow := 1;
-  iCol := 1;
-
-  // is a cell selected?
-  if (iRow > -1) and (iCol > -1) then
-  begin
-    unk := TTest.create;
-
-    Bounds[0].LowBound:=0;
-    Bounds[0].ElementCount:=1;
-
-    outBuffer := SafeArrayCreateVector(VT_UNKNOWN, 0, 1);
-
-    if unk <> nil then
-    begin
-      offset := 0;
-      Result := SafeArrayPutElement(outBuffer, offset, PUnknown(unk)^);
-      if Result <> S_OK then
-      begin
-        SafeArrayDestroy(outBuffer);
-    //    pRetVal := nil;
-        result := E_OUTOFMEMORY;
-      end
-      else
-      begin
-      //  pRetVal := outBuffer;
-        result := S_OK;
-      end;
-    end;
-  end
-  else
-  begin
-   // pRetVal := nil;
-    result := S_FALSE;
-  end;
-end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin

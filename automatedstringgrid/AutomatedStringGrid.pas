@@ -36,7 +36,7 @@ type
   TAutomationStringGrid = class(TStringGrid,
                       ISelectionProvider,
                       IGridProvider,
-                      ITableProvider,
+                  //    ITableProvider,
                       IInvokeProvider,
                       IValueProvider,
                       IRawElementProviderSimple)
@@ -71,11 +71,6 @@ type
     function GetItem(row: SYSINT; column: SYSINT; out pRetVal: IRawElementProviderSimple): HResult; stdcall;
     function Get_RowCount(out pRetVal: SYSINT): HResult; stdcall;
     function Get_ColumnCount(out pRetVal: SYSINT): HResult; stdcall;
-
-    // ITableProvider
-    function GetRowHeaders(out pRetVal: PSafeArray): HResult; stdcall;
-    function GetColumnHeaders(out pRetVal: PSafeArray): HResult; stdcall;
-    function Get_RowOrColumnMajor(out pRetVal: RowOrColumnMajor): HResult; stdcall;
   end;
 
 procedure Register;
@@ -87,6 +82,24 @@ uses
   sysutils,
   Variants;
 
+function arrayToSafeArray (inData : array of IRawElementProviderSimple) : PSafeArray;
+var
+  InDataLength: Integer;
+  vaMatrix: Variant;
+  I: Integer;
+
+begin
+  InDataLength := Length(InData);
+
+  vaMatrix := VarArrayCreate([Low(inData), High(inData)], varVariant);
+
+  //copy data into varArray
+  for I := 0 to InDataLength-1 do
+    vaMatrix[I] := InData[I];
+
+  result :=  PSafeArray (TVarData (vaMatrix).VArray);
+end;
+
 procedure Register;
 begin
   RegisterComponents('Samples', [TAutomationStringGrid]);
@@ -94,70 +107,20 @@ end;
 
 { TAutomationStringGrid }
 
-function TAutomationStringGrid.GetColumnHeaders(
-  out pRetVal: PSafeArray): HResult;
-var
-  intf : TAutomationStringGridItem;
-  outBuffer : PSafeArray;
-  offset : integer;
-  unk : IUnknown;
-  iRow, iCol : integer;
-  Bounds : array [0..0] of TSafeArrayBound;
-  count : integer;
-
-begin
-  pRetVal := nil;
-  result := S_FALSE;
-
-  // is a cell selected?
-  if (self.FixedRows <> 0) then
-  begin
-    bounds[0].lLbound := 0;
-    bounds[0].cElements := self.ColCount;
-
-    outBuffer := SafeArrayCreate(VT_UNKNOWN, 1, @Bounds);
-
-    for count := 0 to self.ColCount -1 do
-    begin
-      intf := TAutomationStringGridItem.create(self, count, 0,  self.Cells[count, 0]);
-
-      if intf <> nil then
-      begin
-        unk := intf as IUnknown;
-        Result := SafeArrayPutElement(&outBuffer, count, PUnknown(unk)^);
-        if Result <> S_OK then
-        begin
-          SafeArrayDestroy(outBuffer);
-          pRetVal := nil;
-          result := E_OUTOFMEMORY;
-          exit;
-        end
-      end;
-    end;
-
-    pRetVal := outBuffer;
-    result := S_OK;
-
-  end
-  else
-  begin
-    pRetVal := nil;
-    result := S_FALSE;
-  end;
-
-end;
-
 function TAutomationStringGrid.GetItem(row, column: SYSINT;
   out pRetVal: IRawElementProviderSimple): HResult;
 var
-  intf : IRawElementProviderSimple;
+  obj : TAutomationStringGridItem;
 
 begin
   result := S_OK;
 
-  intf := TAutomationStringGridItem.create(self, column, row, self.Cells[column, row]);
+  obj := TAutomationStringGridItem.create(self);
+  obj.Row := row;
+  obj.Column := column;
+  obj.Value := self.Cells[column, row];
 
-  pRetVal := intf;
+  pRetVal := obj;
 end;
 
 function TAutomationStringGrid.GetPatternProvider(patternId: SYSINT;
@@ -168,7 +131,6 @@ begin
 
   if ((patternID = UIA_InvokePatternId) or
       (patternID = UIA_ValuePatternId) or
-      (patternID = UIA_TablePatternId) or
       (patternID = UIA_GridPatternId) or
       (patternID = UIA_SelectionPatternId)) then
   begin
@@ -184,73 +146,43 @@ begin
   begin
     TVarData(pRetVal).VType := varOleStr;
     TVarData(pRetVal).VOleStr := pWideChar(self.ClassName);
-    result := S_OK;
-  end
-  else if(propertyId = UIA_NamePropertyId) then
+  end;
+
+  if(propertyId = UIA_NamePropertyId) then
   begin
     TVarData(pRetVal).VType := varOleStr;
     TVarData(pRetVal).VOleStr := pWideChar(self.Name);
-    result := S_OK;
-  end
-  else
-    result := S_FALSE;
+  end;
 
-end;
-
-function TAutomationStringGrid.GetRowHeaders(out pRetVal: PSafeArray): HResult;
-begin
-  pRetVal := nil;
-  result := S_FALSE;
+  result := S_OK;
 end;
 
 function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
-  intf : TAutomationStringGridItem;
+//  buffer : array of IRawElementProviderSimple;
+//  region_arr : variant;
+  obj : TAutomationStringGridItem;
   outBuffer : PSafeArray;
   offset : integer;
-  unk : IUnknown;
-  iRow, iCol : integer;
-  Bounds : array [0..0] of TSafeArrayBound;
 
 begin
-  pRetVal := nil;
-  result := S_FALSE;
+  obj := TAutomationStringGridItem.create(self);
+  obj.Row := self.row;
+  obj.Column := self.Col;
+  obj.Value := self.Cells[self.Col, self.Row];
 
-  iRow := Self.Row;
-  iCol := Self.Col;
+//  SetLength(buffer, 1);
+//  buffer[0] := obj;
 
-  // is a cell selected?
-  if (iRow > -1) and (iCol > -1) then
-  begin
-    intf := TAutomationStringGridItem.create(self, iCol, iRow,  self.Cells[self.Col, self.Row]);
+//  pRetVal := ArrayToSafeArray(buffer);
 
-    bounds[0].lLbound := 0;
-    bounds[0].cElements := 1;
-    outBuffer := SafeArrayCreate(VT_UNKNOWN, 1, @Bounds);
+  offset := 0;
+  outBuffer := SafeArrayCreateVector(VT_VARIANT, 0, 1);
+  SafeArrayPutElement(outBuffer, offset, obj);
 
-    if intf <> nil then
-    begin
-      offset := 0;
-      unk := intf as IUnknown;
-      Result := SafeArrayPutElement(&outBuffer, offset, PUnknown(unk)^);
-      if Result <> S_OK then
-      begin
-        SafeArrayDestroy(outBuffer);
-        pRetVal := nil;
-        result := E_OUTOFMEMORY;
-      end
-      else
-      begin
-        pRetVal := outBuffer;
-        result := S_OK;
-      end;
-    end;
-  end
-  else
-  begin
-    pRetVal := nil;
-    result := S_FALSE;
-  end;
+  pRetVal := outBuffer;
+
+  result := S_OK;
 end;
 
 function TAutomationStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
@@ -289,17 +221,9 @@ begin
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_RowOrColumnMajor(
-  out pRetVal: RowOrColumnMajor): HResult;
-begin
-  pRetVal := RowOrColumnMajor_RowMajor;
-  result := S_OK;
-end;
-
 function TAutomationStringGrid.Invoke: HResult;
 begin
   PostMessage(self.Handle, WM_LBUTTONDBLCLK, Integer(self),0);
-  result := S_OK;
 end;
 
 function TAutomationStringGrid.SetValue(val: PWideChar): HResult;

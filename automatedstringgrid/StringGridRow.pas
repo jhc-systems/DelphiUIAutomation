@@ -28,9 +28,8 @@ uses
   UIAutomationCore_TLB, classes;
 
 type
-  TAutomationStringGridItem = class (TInterfacedPersistent,
+  TAutomationStringGridItem = class (TInterfacedObject,
     IRawElementProviderSimple,
-//    IRawElementProviderFragment,
     ISelectionItemProvider,
     IValueProvider,
     IGridItemProvider)
@@ -46,12 +45,11 @@ type
     procedure SetRow(const Value: integer);
     procedure SetTheValue(const Value: string);
     procedure SetSelected(const Value: boolean);
-    function GetTheValue: string;
 
   public
     property Row : integer read FRow write SetRow;
     property Column : integer read FColumn write SetColumn;
-    property Value : string read GetTheValue write SetTheValue;
+    property Value : string read FValue write SetTheValue;
     property Selected : boolean read FSelected write SetSelected;
 
     // IRawElementProviderSimple
@@ -79,15 +77,7 @@ type
     function Get_ColumnSpan(out pRetVal: SYSINT): HResult; stdcall;
     function Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
 
-    // IRawElementProviderFragment
-//    function Navigate(direction: NavigateDirection; out pRetVal: IRawElementProviderFragment): HResult; stdcall;
-//    function GetRuntimeId(out pRetVal: PSafeArray): HResult; stdcall;
-//    function get_BoundingRectangle(out pRetVal: UiaRect): HResult; stdcall;
-//    function GetEmbeddedFragmentRoots(out pRetVal: PSafeArray): HResult; stdcall;
-//    function SetFocus: HResult; stdcall;
-//    function Get_FragmentRoot(out pRetVal: IRawElementProviderFragmentRoot): HResult; stdcall;
-
-    constructor Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);// override;
+    constructor Create(AOwner: TComponent);// override;
   end;
 
 implementation
@@ -102,22 +92,11 @@ begin
   result := (self as ISelectionItemProvider).Select;
 end;
 
-constructor TAutomationStringGridItem.Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);
+constructor TAutomationStringGridItem.Create(AOwner: TComponent);
 begin
   inherited create;// (AOwner);
   FOwner := AOwner;
-
-  self.Column := ACol;
-  self.Row := ARow;
-  self.Value := AValue;
 end;
-(*
-function TAutomationStringGridItem.GetEmbeddedFragmentRoots(
-  out pRetVal: PSafeArray): HResult;
-begin
-  result := S_FALSE;
-end;
-*)
 
 function TAutomationStringGridItem.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
@@ -140,41 +119,22 @@ begin
   begin
     TVarData(pRetVal).VType := varWord;
     TVarData(pRetVal).VWord := UIA_DataItemControlTypeId;
-    result := S_OK;
-  end
-  else if (propertyId = UIA_NamePropertyId) then
+  end;
+
+  if (propertyId = UIA_NamePropertyId) then
   begin
     TVarData(pRetVal).VType := varOleStr;
     TVarData(pRetVal).VOleStr := PWideChar(self.Value);
-    result := S_OK;
-  end
-  else if(propertyId = UIA_ClassNamePropertyId) then
+  end;
+
+  if(propertyId = UIA_ClassNamePropertyId) then
   begin
     TVarData(pRetVal).VType := varOleStr;
     TVarData(pRetVal).VOleStr := pWideChar(self.ClassName);
-    result := S_OK;
-  end
-  else
-    result := S_FALSE;
-end;
-function TAutomationStringGridItem.GetTheValue: string;
-begin
-  result := self.FValue;
-end;
+  end;
 
-(*
-function TAutomationStringGridItem.GetRuntimeId(
-  out pRetVal: PSafeArray): HResult;
-begin
-  result := S_FALSE;
+  result := S_OK;
 end;
-
-function TAutomationStringGridItem.get_BoundingRectangle(
-  out pRetVal: UiaRect): HResult;
-begin
-  result := S_FALSE;
-end;
-*)
 
 function TAutomationStringGridItem.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
@@ -213,13 +173,7 @@ begin
   pRetVal := self.FValue;
   result := S_OK;
 end;
-(*
-function TAutomationStringGridItem.Navigate(direction: NavigateDirection;
-  out pRetVal: IRawElementProviderFragment): HResult;
-begin
-  result := S_FALSE;
-end;
-*)
+
 function TAutomationStringGridItem.RemoveFromSelection: HResult;
 begin
 
@@ -234,12 +188,7 @@ procedure TAutomationStringGridItem.SetColumn(const Value: integer);
 begin
   FColumn := Value;
 end;
-(*
-function TAutomationStringGridItem.SetFocus: HResult;
-begin
-  result := S_FALSE;
-end;
-*)
+
 procedure TAutomationStringGridItem.SetRow(const Value: integer);
 begin
   FRow := Value;
@@ -298,13 +247,6 @@ begin
   result := S_OK;
 end;
 
-(*
-function TAutomationStringGridItem.Get_FragmentRoot(
-  out pRetVal: IRawElementProviderFragmentRoot): HResult;
-begin
-  result := S_FALSE;
-end;
-*)
 
 //procedure TAutomationStringGridItem.WMGetObject(var Message: TMessage);
 //begin
