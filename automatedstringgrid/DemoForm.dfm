@@ -2,7 +2,7 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = 'Form2'
-  ClientHeight = 445
+  ClientHeight = 506
   ClientWidth = 684
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,16 +14,25 @@ object Form2: TForm2
   OnCreate = FormCreate
   DesignSize = (
     684
-    445)
+    506)
   PixelsPerInch = 96
   TextHeight = 13
   object StringGrid1: TAutomationStringGrid
     Left = 8
     Top = 8
     Width = 668
-    Height = 425
+    Height = 450
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     OnDblClick = StringGrid1DblClick
+  end
+  object Button1: TButton
+    Left = 296
+    Top = 464
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 1
+    OnClick = Button1Click
   end
 end
