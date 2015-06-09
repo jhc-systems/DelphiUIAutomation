@@ -29,7 +29,6 @@ uses
   messages,
   classes,
   ActiveX,
-  StringGridRow,
   grids;
 
 type
@@ -83,6 +82,7 @@ procedure Register;
 implementation
 
 uses
+  StringGridItem,
   dialogs,
   sysutils,
   Variants;
@@ -99,9 +99,7 @@ function TAutomationStringGrid.GetColumnHeaders(
 var
   intf : TAutomationStringGridItem;
   outBuffer : PSafeArray;
-  offset : integer;
   unk : IUnknown;
-  iRow, iCol : integer;
   Bounds : array [0..0] of TSafeArrayBound;
   count : integer;
 
