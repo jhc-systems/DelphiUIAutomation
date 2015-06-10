@@ -32,6 +32,20 @@ uses
 type
   IAutomationComboBox = interface (IAutomationBase)
   ['{531C8646-A605-4D6D-BEE0-89E1719D6321}']
+    ///<summary>
+    ///  Gets the text associated with this combobox
+    ///</summary>
+    function getText: string;
+
+    ///<summary>
+    ///  Sets the text associated with this combobox
+    ///</summary>
+    procedure setText(const Value: string);
+
+    ///<summary>
+    ///  Gets or sets the text associated with this combobox
+    ///</summary>
+    property Text : string read getText write setText;
   end;
 
   /// <summary>
@@ -44,8 +58,16 @@ type
     FValuePattern : IUIAutomationValuePattern;
 
   private
+    ///<summary>
+    ///  Gets the text associated with this combobox
+    ///</summary>
     function getText: string;
+
+    ///<summary>
+    ///  Sets the text associated with this combobox
+    ///</summary>
     procedure setText(const Value: string);
+
     function getItems: TObjectList<TAutomationListItem>;
     procedure GetExpandCollapsePattern;
     procedure GetValuePattern;
