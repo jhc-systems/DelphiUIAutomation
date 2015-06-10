@@ -40,6 +40,11 @@ type
     ///  Gets the toggle state of the checkbox
     ///</summary>
     function ToggleState : TOleEnum;
+
+    /// <summary>
+    ///  Focuses the checkbox
+    /// </summary>
+    function Focus : HResult;
   end;
 
   /// <summary>
