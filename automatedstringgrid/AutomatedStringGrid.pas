@@ -122,7 +122,7 @@ begin
       if intf <> nil then
       begin
         unk := intf as IUnknown;
-        Result := SafeArrayPutElement(&outBuffer, count, PUnknown(unk)^);
+        Result := SafeArrayPutElement(&outBuffer, count, Pointer(unk)^);
         if Result <> S_OK then
         begin
           SafeArrayDestroy(outBuffer);
@@ -230,7 +230,7 @@ begin
     begin
       offset := 0;
       unk := intf as IUnknown;
-      Result := SafeArrayPutElement(&outBuffer, offset, PUnknown(unk)^);
+      Result := SafeArrayPutElement(&outBuffer, offset, Pointer(unk)^);
       if Result <> S_OK then
       begin
         SafeArrayDestroy(outBuffer);
