@@ -93,14 +93,17 @@ The currently supported controls are ...
 * TEditBox
 * TRadioButton
 * TStatusBar
-* TStringGrid (As the TStringGrid in Delphi is a pane, it is not possible to interact with the control via automation)
+* TStringGrid (using an extended TStringGrid control that implements UIAutomation patterns)
 * TPageControl
 * TTab
 * TTextBox
 
 
-
 [More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
+
+# TStringGrid
+
+The [automatedstringgrid sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/automatedstringgrid) allows the automation of some of the elements of the TStringGrid. It extends the control to allow it to interact with the MS-UIAutomation libraries.
 
 # Contributors
 Mark Humphreys
