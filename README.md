@@ -93,14 +93,56 @@ The currently supported controls are ...
 * TEditBox
 * TRadioButton
 * TStatusBar
-* TStringGrid (As the TStringGrid in Delphi is a pane, it is not possible to interact with the control via automation)
+* TStringGrid (using an extended TStringGrid control that implements UIAutomation patterns)
 * TPageControl
 * TTab
 * TTextBox
 
 
-
 [More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
+
+# TStringGrid
+
+The [automatedstringgrid sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/automatedstringgrid) allows the automation of some of the elements of the TStringGrid. It extends the control to allow it to interact with the MS-UIAutomation libraries.
+
+```pascal
+var
+  grid : IAutomationStringGrid;
+  items : TObjectList<TAutomationStringGridItem>;
+  item : TAutomationStringGridItem;
+  item1 : IAutomationStringGridItem;
+  ...
+  
+  // Get the first string grid associated with the window
+  grid := enquiry.GetStringGridByIndex(0);
+  
+  // Show what the value is (i.e. the contents of the selected cell)
+  writeln ('Value is ' + grid.Value);
+
+  // Get the cell at 3,3 and shows it's value
+  writeln ('Item @ 3-3 is ' +grid.GetItem(3,3).Name);
+
+  // Get the selected cell
+  item := grid.Selected;
+  
+  // Show the value of the selected cell (should be the same as the Grid's value
+  writeln ('Selected is ' + item.Name);
+
+  // Get the list of column headers (i.e. first fixed row)
+  write ('Column Headers : ');
+  items := grid.ColumnHeaders;
+
+  for item in items do
+  begin
+    writeln (item.Name);
+  end;
+
+  // Select the item at 2,4
+  item1 := grid.GetItem(2,4);
+
+  // Show that selection has changed.
+  writeln ('Selected is ' + grid.Selected.Name);
+```
 
 # Contributors
 Mark Humphreys
