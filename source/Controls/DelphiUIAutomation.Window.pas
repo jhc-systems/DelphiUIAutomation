@@ -57,6 +57,11 @@ type
     procedure Focus;
 
     ///<summary>
+    ///  Maximize the window
+    ///</summary>
+    procedure Maximize;
+
+    ///<summary>
     /// The status bar associated with this window
     ///</summary>
     property StatusBar : IAutomationStatusBar read GetStatusBar;
@@ -74,6 +79,7 @@ type
     function GetStatusBar : IAutomationStatusbar;
     function GetMainMenu: IAutomationMainMenu;
     function GetControlMenu : IAutomationMenu;
+
   public
     /// <summary>
     ///  Constructor for window.
@@ -99,6 +105,11 @@ type
     ///  Sets the focus to this window
     ///</summary>
     procedure Focus;
+
+    ///<summary>
+    ///  Maximize the window
+    ///</summary>
+    procedure Maximize;
 
     /// <summary>
     /// Finds the main menu
@@ -137,6 +148,7 @@ uses
   DelphiUIAutomation.MenuItem,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.Automation,
   sysutils;
 
@@ -165,6 +177,24 @@ end;
 function TAutomationWindow.GetControlMenu: IAutomationMenu;
 begin
   result := self.FControlMenu;
+end;
+
+procedure TAutomationWindow.Maximize;
+var
+  unknown: IInterface;
+  Pattern : IUIAutomationWindowPattern;
+begin
+  //Pattern.SetWindowVisualState(WindowVisualState_Maximized);
+
+  fElement.GetCurrentPattern(UIA_WindowPatternId, unknown);
+
+  if (unknown <> nil) then
+  begin
+    if unknown.QueryInterface(IUIAutomationWindowPattern, Pattern) = S_OK then
+    begin
+      Pattern.SetWindowVisualState(WindowVisualState_Maximized);
+    end;
+  end;
 end;
 
 function TAutomationWindow.GetMainMenu: IAutomationMainMenu;
