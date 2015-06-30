@@ -30,6 +30,7 @@ uses
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Combobox,
+  DelphiUIAutomation.Panel.Intf,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
   DelphiUIAutomation.StringGrid,
@@ -67,6 +68,11 @@ type
     /// Finds the checkbox, by index
     /// </summary>
     function GetRadioButtonByIndex (index : integer) : IAutomationRadioButton;
+
+    /// <summary>
+    /// Finds a panel, by index
+    /// </summary>
+    function GetPanelByIndex (index : integer) : IAutomationPanel;
 
     /// <summary>
     /// Finds the button with the title supplied
