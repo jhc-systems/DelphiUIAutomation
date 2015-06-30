@@ -29,9 +29,11 @@ uses
   DelphiUIAutomation.TextBox,
   DelphiUIAutomation.CheckBox,
   DelphiUIAutomation.Container.Intf,
+  DelphiUIAutomation.panel.Intf,
   DelphiUIAutomation.RadioButton,
   DelphiUIAutomation.ComboBox,
   DelphiUIAutomation.Button,
+  DelphiUIAutomation.Panel,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
   DelphiUIAutomation.StringGrid,
@@ -79,6 +81,11 @@ type
     function GetCheckboxByIndex (index : integer) : IAutomationCheckBox;
 
     /// <summary>
+    /// Finds a panel, by index
+    /// </summary>
+    function GetPanelByIndex (index : integer) : IAutomationPanel;
+
+    /// <summary>
     /// Finds the checkbox, by name
     /// </summary>
     function GetCheckboxByName(const value: string): IAutomationCheckBox;
@@ -118,6 +125,15 @@ var
 begin
   eb := GetControlByControlType(index, UIA_EditControlTypeId);
   result := TAutomationEditBox.Create(eb);
+end;
+
+function TAutomationContainer.GetPanelByIndex(index: integer): IAutomationPanel;
+var
+  tb : IUIAutomationElement;
+
+begin
+  tb := GetControlByControlType(index, UIA_PaneControlTypeId);
+  result := TAutomationPanel.Create(tb);
 end;
 
 function TAutomationContainer.GetTextBoxByIndex(index: integer): IAutomationTextBox;
