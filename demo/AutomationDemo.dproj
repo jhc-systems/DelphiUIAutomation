@@ -159,6 +159,9 @@
         <DCCReference Include="..\source\UIAutomationClient_TLB.pas"/>
         <DCCReference Include="..\source\DelphiUIAutomation.Clipboard.pas"/>
         <DCCReference Include="..\source\Controls\DelphiUIAutomation.StringGrid.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Panel.Intf.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.StringGridItem.pas"/>
+        <DCCReference Include="..\source\Controls\DelphiUIAutomation.Panel.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
