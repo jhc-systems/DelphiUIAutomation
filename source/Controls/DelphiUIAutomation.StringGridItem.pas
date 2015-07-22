@@ -36,15 +36,22 @@ type
   TAutomationStringGridItem = class(TAutomationBase, IAutomationStringGridItem)
   strict private
     FSelectionItemPattern : IUIAutomationSelectionItemPattern;
+    FValuePattern : IUIAutomationValuePattern;
   private
     procedure GetSelectionItemPattern;
+    procedure GetValuePattern;
+    procedure GetPatterns;
+  protected
+    function getName: string; override;
   public
     function Select : HResult;
+    constructor Create(element: IUIAutomationElement); override;
   end;
 
 implementation
 
 uses
+  SysUtils,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.PatternIDs;
 
@@ -53,6 +60,21 @@ uses
 function TAutomationStringGridItem.Select : HResult;
 begin
   result := self.FSelectionItemPattern.select;
+end;
+
+function TAutomationStringGridItem.getName: string;
+var
+  name : widestring;
+
+begin
+  FValuePattern.Get_CurrentValue(name);
+  Result := trim(name);
+end;
+
+procedure TAutomationStringGridItem.GetPatterns;
+begin
+  GetSelectionItemPattern;
+  GetValuePattern;
 end;
 
 procedure TAutomationStringGridItem.GetSelectionItemPattern;
@@ -68,6 +90,28 @@ begin
       raise EDelphiAutomationException.Create('Unable to initialise control pattern');
     end;
   end;
+end;
+
+procedure TAutomationStringGridItem.GetValuePattern;
+var
+  inter: IInterface;
+
+begin
+  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise value pattern');
+    end;
+  end;
+end;
+
+constructor TAutomationStringGridItem.Create(element: IUIAutomationElement);
+begin
+  inherited create(element);
+
+  GetPatterns;
 end;
 
 end.
