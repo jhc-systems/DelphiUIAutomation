@@ -25,6 +25,7 @@ interface
 
 uses
   ActiveX,
+  types,
   UIAutomationCore_TLB, classes;
 
 type
@@ -32,6 +33,7 @@ type
                                     IRawElementProviderSimple,
                                     ISelectionItemProvider,
                                     IValueProvider,
+                                    IRawElementProviderFragment,
                                     IGridItemProvider)
   strict private
     FOwner: TComponent;
@@ -39,6 +41,7 @@ type
     FRow: integer;
     FColumn: integer;
     FSelected : boolean;
+    FCellRect : TRect;
 
   private
     procedure SetColumn(const Value: integer);
@@ -53,6 +56,7 @@ type
     property Column : integer read FColumn write SetColumn;
     property Value : string read GetTheValue write SetTheValue;
     property Selected : boolean read GetSelected write SetSelected;
+    property CellRect : TRect read FCellRect write FCellRect;
 
     // IRawElementProviderSimple
     function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
@@ -79,7 +83,15 @@ type
     function Get_ColumnSpan(out pRetVal: SYSINT): HResult; stdcall;
     function Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
 
-    constructor Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);// override;
+    // IRawElementProviderFragment
+    function Navigate(direction: NavigateDirection; out pRetVal: IRawElementProviderFragment): HResult; stdcall;
+    function GetRuntimeId(out pRetVal: PSafeArray): HResult; stdcall;
+    function get_BoundingRectangle(out pRetVal: UiaRect): HResult; stdcall;
+    function GetEmbeddedFragmentRoots(out pRetVal: PSafeArray): HResult; stdcall;
+    function SetFocus: HResult; stdcall;
+    function Get_FragmentRoot(out pRetVal: IRawElementProviderFragmentRoot): HResult; stdcall;
+
+    constructor Create(AOwner: TComponent; ACol, ARow : integer; AValue : String; ACellRect : TRect);
   end;
 
 implementation
@@ -95,15 +107,21 @@ begin
   result := (self as ISelectionItemProvider).Select;
 end;
 
-constructor TAutomationStringGridItem.Create(AOwner: TComponent; ACol, ARow : integer; AValue : String);
+constructor TAutomationStringGridItem.Create(AOwner: TComponent; ACol, ARow : integer; AValue : String; ACellRect : TRect);
 begin
-  inherited create;// (AOwner);
-//  FOwner := AOwner;
+  inherited create;
 
+  self.CellRect := ACellRect;
   self.Column := ACol;
   self.Row := ARow;
   self.Value := AValue;
   self.Selected := false;
+end;
+
+function TAutomationStringGridItem.GetEmbeddedFragmentRoots(
+  out pRetVal: PSafeArray): HResult;
+begin
+  result := S_FALSE;
 end;
 
 function TAutomationStringGridItem.GetPatternProvider(patternId: SYSINT;
@@ -145,6 +163,12 @@ begin
   else
     result := S_FALSE;
 end;
+function TAutomationStringGridItem.GetRuntimeId(
+  out pRetVal: PSafeArray): HResult;
+begin
+  result := S_FALSE;
+end;
+
 function TAutomationStringGridItem.GetSelected: boolean;
 begin
   result := FSelected;
@@ -153,6 +177,17 @@ end;
 function TAutomationStringGridItem.GetTheValue: string;
 begin
   result := self.FValue;
+end;
+
+function TAutomationStringGridItem.get_BoundingRectangle(
+  out pRetVal: UiaRect): HResult;
+begin
+  pRetVal.left := self.FCellRect.Left;
+  pRetVal.top := self.FCellRect.Top;
+
+  // Not sure about these
+  pRetVal.width := self.FCellRect.Right;
+  pRetVal.height := self.FCellRect.Bottom;
 end;
 
 function TAutomationStringGridItem.Get_HostRawElementProvider(
@@ -192,6 +227,12 @@ begin
   result := S_OK;
 end;
 
+function TAutomationStringGridItem.Navigate(direction: NavigateDirection;
+  out pRetVal: IRawElementProviderFragment): HResult;
+begin
+  result := S_FALSE;
+end;
+
 function TAutomationStringGridItem.RemoveFromSelection: HResult;
 begin
   result := (self as ISelectionItemProvider).RemoveFromSelection;
@@ -206,6 +247,11 @@ end;
 procedure TAutomationStringGridItem.SetColumn(const Value: integer);
 begin
   FColumn := Value;
+end;
+
+function TAutomationStringGridItem.SetFocus: HResult;
+begin
+  result := S_FALSE;
 end;
 
 procedure TAutomationStringGridItem.SetRow(const Value: integer);
@@ -265,6 +311,12 @@ end;
 function TAutomationStringGridItem.Get_ContainingGrid(out pRetVal: IRawElementProviderSimple): HResult;
 begin
 //  pRetVal := FOwner as IRawElementProviderSimple;
+  result := S_FALSE;
+end;
+
+function TAutomationStringGridItem.Get_FragmentRoot(
+  out pRetVal: IRawElementProviderFragmentRoot): HResult;
+begin
   result := S_FALSE;
 end;
 

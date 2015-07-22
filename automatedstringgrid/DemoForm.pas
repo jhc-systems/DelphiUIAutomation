@@ -12,8 +12,14 @@ uses
 type
   TForm2 = class(TForm)
     StringGrid1: TAutomationStringGrid;
+    PopupMenu1: TPopupMenu;
+    Hello1: TMenuItem;
+    here1: TMenuItem;
+    Everyyone1: TMenuItem;
+    item1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
   private
      { Private declarations }
   public
@@ -32,7 +38,8 @@ begin
   StringGrid1.ColCount := 10;
   StringGrid1.RowCount := 6;
 
-  StringGrid1.Cells[0, 0] := 'Top Left';
+//  StringGrid1.Cells[0, 0] := 'Top Left';
+//StringGrid1.cell
   StringGrid1.Cells[1, 0] := 'First';
   StringGrid1.Cells[2, 0] := 'Second';
   StringGrid1.Cells[3, 0] := 'Third';
@@ -51,9 +58,14 @@ begin
   StringGrid1.Cells[2, 9] := 'Hello29';
 end;
 
+procedure TForm2.PopupMenu1Popup(Sender: TObject);
+begin
+  item1.caption := 'Cell : ' + IntToStr(StringGrid1.Row) + IntToStr(StringGrid1.Col);
+end;
+
 procedure TForm2.StringGrid1DblClick(Sender: TObject);
 begin
-  ShowMessage(StringGrid1.Cells[StringGrid1.Col, StringGrid1.Row]);
+  ShowMessage(StringGrid1.Cells[StringGrid1.Row, StringGrid1.Col]);
 end;
 
 end.
