@@ -117,7 +117,7 @@ begin
 
     for count := 0 to self.ColCount -1 do
     begin
-      intf := TAutomationStringGridItem.create(self, count, 0,  self.Cells[count, 0]);
+      intf := TAutomationStringGridItem.create(self, count, 0,  self.Cells[count, 0], self.CellRect(count, 0));
 
       if intf <> nil then
       begin
@@ -153,7 +153,7 @@ var
 begin
   result := S_OK;
 
-  intf := TAutomationStringGridItem.create(self, column, row, self.Cells[column, row]);
+  intf := TAutomationStringGridItem.create(self, column, row, self.Cells[column, row], self.CellRect(column, row));
 
   pRetVal := intf;
 end;
@@ -220,7 +220,7 @@ begin
   // is a cell selected?
   if (iRow > -1) and (iCol > -1) then
   begin
-    intf := TAutomationStringGridItem.create(self, iCol, iRow,  self.Cells[self.Col, self.Row]);
+    intf := TAutomationStringGridItem.create(self, iCol, iRow,  self.Cells[self.Col, self.Row], self.CellRect(iCol, iRow));
 
     bounds[0].lLbound := 0;
     bounds[0].cElements := 1;

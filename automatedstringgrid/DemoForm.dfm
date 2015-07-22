@@ -23,7 +23,25 @@ object Form2: TForm2
     Width = 668
     Height = 490
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect, goFixedRowClick]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goFixedRowClick]
+    PopupMenu = PopupMenu1
     TabOrder = 0
+  end
+  object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
+    Left = 384
+    Top = 232
+    object Hello1: TMenuItem
+      Caption = 'Hello'
+    end
+    object here1: TMenuItem
+      Caption = 'There'
+    end
+    object Everyyone1: TMenuItem
+      Caption = 'Everyone'
+    end
+    object item1: TMenuItem
+      Caption = '<item>'
+    end
   end
 end
