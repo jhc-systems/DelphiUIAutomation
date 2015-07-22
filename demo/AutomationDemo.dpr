@@ -61,7 +61,10 @@ uses
   DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
   UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
   DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas',
-  DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas';
+  DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas',
+  DelphiUIAutomation.Panel.Intf in '..\source\Controls\DelphiUIAutomation.Panel.Intf.pas',
+  DelphiUIAutomation.StringGridItem in '..\source\Controls\DelphiUIAutomation.StringGridItem.pas',
+  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas';
 
 var
   application: IAutomationApplication;

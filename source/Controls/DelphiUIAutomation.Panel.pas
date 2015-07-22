@@ -33,7 +33,6 @@ uses
 const
   DEFAULT_TIMEOUT = 99999999;
 
-
 type
   /// <summary>
   ///  Represents a window
