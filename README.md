@@ -172,7 +172,7 @@ As the automation does not expose the cells fully (as they do not technically ex
 ```
 
 # Contributors
-Mark Humphreys
+[Mark Humphreys](https://github.com/markhumphreysjhc)
 
 # License
 Apache Version 2.0 Copyright (C) 2015
