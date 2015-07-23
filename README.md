@@ -163,7 +163,7 @@ As the automation does not expose the cells fully (as they do not technically ex
   itemRect := item.BoundingRectangle;
   
   // Get the overall grid bounding rectangle
-  gridRect := grid.BoundingRectangele;
+  gridRect := grid.BoundingRectangle;
   
   // Move to the correct location, offsetting to make sure the mouse point is inside the cells itself
   mouse.Location := TPoint.Create(gridRect.left + itemRect.left +15, gridRect.Top + itemRect.top +15);
