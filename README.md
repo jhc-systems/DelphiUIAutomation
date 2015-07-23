@@ -142,6 +142,33 @@ var
 
   // Show that selection has changed.
   writeln ('Selected is ' + grid.Selected.Name);
+  
+```
+
+## Navigating to specific elements in the StringGrid and right-clicking
+
+As the automation does not expose the cells fully (as they do not technically exist in the TStringGrid), it is necessary to do the following ..
+
+```pascal
+  // Get the grid item
+  item := grid.GetItem(3,3);
+
+  // Select it
+  item.Select;
+  
+  // Create a mouse to move the pointer
+  mouse := TAutomationMouse.Create;
+  
+  // Get the bounding rectangle of the item (this is relative to the grid)
+  itemRect := item.BoundingRectangle;
+  
+  // Get the overall grid bounding rectangle
+  gridRect := grid.BoundingRectangele;
+  
+  // Move to the correct location, offsetting to make sure the mouse point is inside the cells itself
+  mouse.Location := TPoint.Create(gridRect.left + itemRect.left +15, gridRect.Top + itemRect.top +15);
+  mouse.LeftClick;
+  mouse.RightClick;
 ```
 
 # Contributors
