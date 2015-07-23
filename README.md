@@ -1,5 +1,5 @@
 # DelphiUIAutomation
-Delphi classes that wrap the MS UIAutomation library.
+Delphi classes that wrap the [MS UIAutomation library](https://msdn.microsoft.com/en-us/library/vstudio/ms753388(v=vs.100).aspx).
 
 DelphiUIAutomation is a framework for automating rich client applications based on Win32 (and specifically tested with Delphi XE5). It is written in Delphi XE5 and it requires no use of scripting languages.
 
@@ -172,7 +172,7 @@ As the automation does not expose the cells fully (as they do not technically ex
 ```
 
 # Contributors
-Mark Humphreys
+[Mark Humphreys](https://github.com/markhumphreysjhc)
 
 # License
 Apache Version 2.0 Copyright (C) 2015
