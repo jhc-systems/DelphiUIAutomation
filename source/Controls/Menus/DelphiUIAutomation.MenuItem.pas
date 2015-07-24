@@ -29,6 +29,14 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationMenuItem = interface (IAutomationBase)
+    ['{CCAE523B-A6D2-4C9C-BC96-C1E1BDCF5705}']
+    /// <summary>
+    ///  Clicks the menuitem
+    /// </summary>
+    function Click: HResult;
+  end;
+
   /// <summary>
   ///  Represents a menu item
   /// </summary>
@@ -36,7 +44,7 @@ type
   ///  Models Menu items (root or leaf).
   ///  SubMenus are themselves are Menu(s).
   /// </remarks>
-  TAutomationMenuItem = class (TAutomationBase)
+  TAutomationMenuItem = class (TAutomationBase, IAutomationMenuItem)
   strict private
     FItems : TObjectList<TAutomationMenuItem>;
     FInvokePattern : IUIAutomationInvokePattern;
