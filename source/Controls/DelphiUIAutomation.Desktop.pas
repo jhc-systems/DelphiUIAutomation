@@ -26,6 +26,8 @@ interface
 uses
   windows,
   generics.collections,
+  DelphiUIAutomation.Menu,
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Window;
 
 type
@@ -48,13 +50,23 @@ type
     ///  Gets the specified desktop windows, with a timeout
     /// </summary>
     class function GetDesktopWindow (const title : String; timeout : DWORD) : TAutomationWindow; overload;
+
+    /// <summary>
+    ///  Gets the context menu
+    /// </summary>
+    /// <remarks>
+    ///  Yes, it seems to be owned by the desktop
+    /// </remarks>
+    class function GetContextMenu(timeout: DWORD = DEFAULT_TIMEOUT) : IAutomationMenu;
   end;
 
 implementation
 
 uses
+  ActiveX,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation,
+  DelphiUIAutomation.ControlTypeIDs,
   UIAutomationClient_TLB,
   sysutils;
 
@@ -64,6 +76,56 @@ const
 class function TAutomationDesktop.GetDesktopWindow(const title : String): TAutomationWindow;
 begin
   result := TAutomationDesktop.GetDesktopWindow(title, DEFAULT_TIMEOUT);
+end;
+
+class function TAutomationDesktop.GetContextMenu(timeout: DWORD = DEFAULT_TIMEOUT): IAutomationMenu;
+var
+  item : TAutomationMenu;
+  n : string;
+  collection : IUIAutomationElementArray;
+  condition : IUIAutomationCondition;
+  element : IUIAutomationElement;
+  name : WideString;
+  count, length : integer;
+  start : DWORD;
+  aborted : boolean;
+
+  function TimedOut : boolean;
+  begin
+    result := GetTickCount - start > timeout;
+  end;
+
+begin
+  result := nil;
+
+  UIAuto.CreateTrueCondition(condition);
+
+  start := GetTickCount;
+  aborted := false;
+
+  while (result = nil) and (not aborted) do
+  begin
+    aborted := TimedOut;
+
+    rootElement.FindAll(TreeScope_Children, condition, collection);
+
+    collection.Get_Length(length);
+
+    for count := 0 to length -1 do
+    begin
+      collection.GetElement(count, element);
+      element.Get_CurrentName(name);
+
+      if name = 'Context' then
+      begin
+        result := TAutomationMenu.Create(nil, element);
+        break;
+      end;
+    end;
+  end;
+
+  if result = nil then
+    raise EDelphiAutomationException.Create('Unable to find context menu');
 end;
 
 class function TAutomationDesktop.GetDesktopWindow(const title: String;

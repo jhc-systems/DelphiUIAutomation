@@ -29,6 +29,7 @@ uses
 
 type
   IAutomationBase = interface
+    ['{E858CFB6-C144-444F-9743-5F2F1919EC8D}']
     function GetName: string;
     function GetBoundingRectangle : TRect;
 

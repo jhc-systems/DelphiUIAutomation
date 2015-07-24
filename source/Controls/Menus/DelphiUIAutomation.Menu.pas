@@ -1,24 +1,24 @@
-{***************************************************************************}
-{                                                                           }
-{           DelphiUIAutomation                                              }
-{                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
-{                                                                           }
-{***************************************************************************}
-{                                                                           }
-{  Licensed under the Apache License, Version 2.0 (the "License");          }
-{  you may not use this file except in compliance with the License.         }
-{  You may obtain a copy of the License at                                  }
-{                                                                           }
-{      http://www.apache.org/licenses/LICENSE-2.0                           }
-{                                                                           }
-{  Unless required by applicable law or agreed to in writing, software      }
-{  distributed under the License is distributed on an "AS IS" BASIS,        }
-{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
-{  See the License for the specific language governing permissions and      }
-{  limitations under the License.                                           }
-{                                                                           }
-{***************************************************************************}
+{ *************************************************************************** }
+{ }
+{ DelphiUIAutomation }
+{ }
+{ Copyright 2015 JHC Systems Limited }
+{ }
+{ *************************************************************************** }
+{ }
+{ Licensed under the Apache License, Version 2.0 (the "License"); }
+{ you may not use this file except in compliance with the License. }
+{ You may obtain a copy of the License at }
+{ }
+{ http://www.apache.org/licenses/LICENSE-2.0 }
+{ }
+{ Unless required by applicable law or agreed to in writing, software }
+{ distributed under the License is distributed on an "AS IS" BASIS, }
+{ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{ See the License for the specific language governing permissions and }
+{ limitations under the License. }
+{ }
+{ *************************************************************************** }
 unit DelphiUIAutomation.Menu;
 
 interface
@@ -32,47 +32,56 @@ uses
 type
   IAutomationMenu = interface
     ['{503033B8-D055-40F3-B3F1-DAB915295CCA}']
-    procedure MenuItemFudge (const path : string);
+    procedure MenuItemFudge(const path: string);
+
+    /// <summary>
+    /// Gets the menu associated with the given path
+    /// </summary>
+    /// <remarks>
+    /// Currently working to 2 levels i.e. 'Help|About';
+    /// </remarks>
+    function MenuItem(const path: string): IAutomationMenuItem;
   end;
 
   /// <summary>
-  ///  Represents a menu
+  /// Represents a menu
   /// </summary>
-  TAutomationMenu = class (TAutomationBase, IAutomationMenu)
+  TAutomationMenu = class(TAutomationBase, IAutomationMenu)
   strict private
-    FParentElement : IUIAutomationElement;
+    FParentElement: IUIAutomationElement;
   public
     /// <summary>
-    ///  Constructor for menu.
+    /// Constructor for menu.
     /// </summary>
-    constructor Create(parent: IUIAutomationElement; element : IUIAutomationElement); reintroduce;
+    constructor Create(parent: IUIAutomationElement;
+      element: IUIAutomationElement); reintroduce;
 
-    ///<summary>
-    ///  Gets the menu associated with the given path
-    ///</summary>
+    /// <summary>
+    /// Gets the menu associated with the given path
+    /// </summary>
     /// <remarks>
-    ///  Currently working to 2 levels i.e. 'Help|About';
+    /// Currently working to 2 levels i.e. 'Help|About';
     /// </remarks>
-    function MenuItem (const path : string) : TAutomationMenuItem;
+    function MenuItem(const path: string): IAutomationMenuItem;
 
-    procedure MenuItemFudge (const path : string);
+    procedure MenuItemFudge(const path: string);
 
   end;
 
   /// <summary>
-  ///  Represents a popup menu
+  /// Represents a popup menu
   /// </summary>
-  TAutomationPopupMenu = class (TAutomationMenu, IAutomationMenu)
+  TAutomationPopupMenu = class(TAutomationMenu, IAutomationMenu)
   end;
 
-  IAutomationMainMenu = interface (IAutomationMenu)
+  IAutomationMainMenu = interface(IAutomationMenu)
     ['{86FB2309-D9EE-48F5-851C-ED40E4BFCFD4}']
   end;
 
   /// <summary>
-  ///  Represents a main menu
+  /// Represents a main menu
   /// </summary>
-  TAutomationMainMenu = class (TAutomationMenu, IAutomationMainMenu)
+  TAutomationMainMenu = class(TAutomationMenu, IAutomationMainMenu)
   end;
 
 implementation
@@ -81,7 +90,7 @@ uses
   windows,
   System.RegularExpressions,
   sysutils,
-  Generics.Defaults,
+  generics.Defaults,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.Keyboard,
   DelphiUIAutomation.PatternIDs,
@@ -89,43 +98,46 @@ uses
 
 { TAutomationMenu }
 
-constructor TAutomationMenu.Create(parent: IUIAutomationElement; element: IUIAutomationElement);
+constructor TAutomationMenu.Create(parent: IUIAutomationElement;
+  element: IUIAutomationElement);
 begin
-  inherited create(element);
+  inherited Create(element);
 
   self.FParentElement := parent;
 end;
 
-function TAutomationMenu.MenuItem(const path: string): TAutomationMenuItem;
+function TAutomationMenu.MenuItem(const path: string): IAutomationMenuItem;
 var
-  regexpr : TRegEx;
-  matches : TMatchCollection;
-  match : TMatch;
-  value, value1 : string;
+  regexpr: TRegEx;
+  matches: TMatchCollection;
+  match: TMatch;
+  value, value1: string;
 
-  condition : IUIAutomationCondition;
-  collection, icollection : IUIAutomationElementArray;
+  condition: IUIAutomationCondition;
+  collection, icollection: IUIAutomationElementArray;
   lLength, iLength: Integer;
-  count, icount : integer;
+  count, icount: Integer;
   menuElement, imenuElement: IUIAutomationElement;
   retVal: Integer;
-  name : widestring;
-  pattern : IUIAutomationExpandCollapsePattern;
+  name: widestring;
+  pattern: IUIAutomationExpandCollapsePattern;
 
 begin
   result := nil;
 
-  regexpr := TRegEx.Create('(.*)\|(.*)',[roIgnoreCase,roMultiline]);
-  matches := regexpr.Matches(path);
-
-  for match in matches do
+  if (path.Contains('|')) then
   begin
-    if match.success then
+    regexpr := TRegEx.Create('(.*)\|(.*)', [roIgnoreCase, roMultiline]);
+    matches := regexpr.matches(path);
+
+    for match in matches do
     begin
-      if match.Groups.Count > 1 then
+      if match.success then
       begin
-          value := match.Groups.Item[1].Value;
-          value1 := match.Groups.Item[2].Value;
+        if match.Groups.count > 1 then
+        begin
+          value := match.Groups.Item[1].value;
+          value1 := match.Groups.Item[2].value;
 
           // 1. Find top level and expand
           condition := TUIAuto.CreateTrueCondition;
@@ -136,7 +148,7 @@ begin
 
           for count := 0 to lLength - 1 do
           begin
-            collection.GetElement(Count, menuElement);
+            collection.GetElement(count, menuElement);
             menuElement.Get_CurrentControlType(retVal);
 
             if (retVal = UIA_MenuItemControlTypeId) then
@@ -146,16 +158,17 @@ begin
               if name = value then
               begin
                 // 2. Find leaf level and click
-                menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(pattern));
+                menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId,
+                  IInterface(pattern));
                 if Assigned(pattern) then
                 begin
                   pattern.Expand;
                   sleep(750);
 
-
-//                  TAutomationKeyBoard.Enter('A');
+                  // TAutomationKeyBoard.Enter('A');
                   // Now do it all again
-                  self.FParentElement.FindAll(TreeScope_Descendants, condition, icollection);
+                  self.FParentElement.FindAll(TreeScope_Descendants, condition,
+                    icollection);
 
                   icollection.Get_Length(iLength);
 
@@ -168,11 +181,11 @@ begin
                     begin
                       imenuElement.Get_CurrentName(name);
 
-                      OutputDebugString (pchar('Inner name = ' + name));
+                      OutputDebugString(pchar('Inner name = ' + name));
 
                       if name = value1 then
                       begin
-                        OutputDebugString (pchar('Found it'));
+                        OutputDebugString(pchar('Found it'));
                         result := TAutomationMenuItem.Create(imenuElement);
                         break;
                       end;
@@ -184,72 +197,97 @@ begin
           end;
         end;
       end;
+    end;
+  end
+  else
+  begin
+    condition := TUIAuto.CreateTrueCondition;
+
+    self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+
+    collection.Get_Length(lLength);
+
+    for count := 0 to lLength - 1 do
+    begin
+      collection.GetElement(count, menuElement);
+      menuElement.Get_CurrentControlType(retVal);
+
+      if (retVal = UIA_MenuItemControlTypeId) then
+      begin
+        menuElement.Get_CurrentName(name);
+
+        if name = path then
+        begin
+          result := TAutomationMenuItem.Create(menuElement);
+        end;
+      end;
+    end;
   end;
 end;
 
 procedure TAutomationMenu.MenuItemFudge(const path: string);
 var
-  regexpr : TRegEx;
-  matches : TMatchCollection;
-  match : TMatch;
-  value, value1 : string;
+  regexpr: TRegEx;
+  matches: TMatchCollection;
+  match: TMatch;
+  value, value1: string;
 
-  condition : IUIAutomationCondition;
-  collection : IUIAutomationElementArray;
-  lLength : Integer;
-  count : integer;
+  condition: IUIAutomationCondition;
+  collection: IUIAutomationElementArray;
+  lLength: Integer;
+  count: Integer;
   menuElement: IUIAutomationElement;
   retVal: Integer;
-  name : widestring;
-  pattern : IUIAutomationExpandCollapsePattern;
+  name: widestring;
+  pattern: IUIAutomationExpandCollapsePattern;
 
 begin
-  regexpr := TRegEx.Create('(.*)\|(.*)',[roIgnoreCase,roMultiline]);
-  matches := regexpr.Matches(path);
+  regexpr := TRegEx.Create('(.*)\|(.*)', [roIgnoreCase, roMultiline]);
+  matches := regexpr.matches(path);
 
   for match in matches do
   begin
     if match.success then
     begin
-      if match.Groups.Count > 1 then
+      if match.Groups.count > 1 then
       begin
-          value := match.Groups.Item[1].Value;
-          value1 := match.Groups.Item[2].Value;
+        value := match.Groups.Item[1].value;
+        value1 := match.Groups.Item[2].value;
 
-          // 1. Find top level and expand
-          condition := TUIAuto.CreateTrueCondition;
+        // 1. Find top level and expand
+        condition := TUIAuto.CreateTrueCondition;
 
-          self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+        self.FElement.FindAll(TreeScope_Descendants, condition, collection);
 
-          collection.Get_Length(lLength);
+        collection.Get_Length(lLength);
 
-          for count := 0 to lLength - 1 do
+        for count := 0 to lLength - 1 do
+        begin
+          collection.GetElement(count, menuElement);
+          menuElement.Get_CurrentControlType(retVal);
+
+          if (retVal = UIA_MenuItemControlTypeId) then
           begin
-            collection.GetElement(Count, menuElement);
-            menuElement.Get_CurrentControlType(retVal);
+            menuElement.Get_CurrentName(name);
 
-            if (retVal = UIA_MenuItemControlTypeId) then
+            if name = value then
             begin
-              menuElement.Get_CurrentName(name);
-
-              if name = value then
+              // 2. Find leaf level and click
+              menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId,
+                IInterface(pattern));
+              if Assigned(pattern) then
               begin
-                // 2. Find leaf level and click
-                menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(pattern));
-                if Assigned(pattern) then
-                begin
-                  pattern.Expand;
-                  sleep(750);
+                pattern.Expand;
+                sleep(750);
 
-                  TAutomationKeyBoard.Enter(copy(value1, 1));
-                end;
+                TAutomationKeyBoard.Enter(copy(value1, 1));
               end;
             end;
           end;
         end;
       end;
+    end;
   end;
 end;
 
 end.
-

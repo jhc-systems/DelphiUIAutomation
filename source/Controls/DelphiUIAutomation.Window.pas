@@ -39,6 +39,7 @@ type
   IAutomationWindow = interface (IAutomationContainer)
     ['{4ECCEFCA-7A72-4CBC-A192-568031A28F2B}']
     function GetMainMenu: IAutomationMainMenu;
+    function GetPopupMenu : IAutomationMenu;
     function GetStatusBar : IAutomationStatusbar;
 
     /// <summary>
@@ -79,6 +80,7 @@ type
     function GetStatusBar : IAutomationStatusbar;
     function GetMainMenu: IAutomationMainMenu;
     function GetControlMenu : IAutomationMenu;
+    function GetPopupMenu : IAutomationMenu;
 
   public
     /// <summary>
@@ -125,6 +127,11 @@ type
     /// Gets the main menu associated with this window
     ///</summary>
     property MainMenu : IAutomationMainMenu read GetMainMenu;
+
+    ///<summary>
+    /// Gets the popup menu associated with this window
+    ///</summary>
+    property PopupMenu : IAutomationMenu read GetPopupMenu;
 
     ///<summary>
     /// Gets the control menu associated with this window
@@ -303,6 +310,20 @@ begin
   if (element <> nil) then
   begin
     result := TAutomationMainMenu.Create(self.FElement, element);
+  end;
+end;
+
+function TAutomationWindow.GetPopupMenu: IAutomationMenu;
+var
+  element : IUIAutomationElement;
+
+begin
+  result := nil;
+  element := GetControlByControlType(0, UIA_MenuControlTypeId);
+
+  if (element <> nil) then
+  begin
+    result := TAutomationMenu.Create(self.FElement, element);
   end;
 end;
 
