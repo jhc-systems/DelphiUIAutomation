@@ -34,8 +34,10 @@ type
     function Get_Value(out pRetVal: WideString): HResult; stdcall;
     function Get_IsReadOnly(out pRetVal: Integer): HResult; stdcall;
 
-  published
-    { Published declarations }
+
+  published
+
+    { Published declarations }
   end;
 
 procedure Register;
@@ -88,7 +90,7 @@ begin
   else if(propertyId = UIA_ControlTypePropertyId) then
   begin
     TVarData(pRetVal).VType := varInteger;
-    TVarData(pRetVal).VInteger := UIA_EditControlTypeId;
+    TVarData(pRetVal).VInteger := UIA_ComboboxControlTypeId;
     result := S_OK;
   end
   else
