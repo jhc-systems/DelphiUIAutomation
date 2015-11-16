@@ -2,8 +2,8 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 514
-  ClientWidth = 334
+  ClientHeight = 590
+  ClientWidth = 394
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -134,8 +134,8 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 495
-    Width = 334
+    Top = 571
+    Width = 394
     Height = 19
     Panels = <
       item
@@ -145,6 +145,8 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
+    ExplicitTop = 495
+    ExplicitWidth = 334
   end
   object ComboBox1: TComboBox
     Left = 24
@@ -161,6 +163,22 @@ object Form1: TForm1
       'Third'
       'Forth'
       'Beezer Conference')
+  end
+  object AutomatedEdit1: TAutomatedEdit
+    Left = 24
+    Top = 496
+    Width = 121
+    Height = 21
+    TabOrder = 12
+    Text = 'AutomatedEdit1'
+  end
+  object AutomatedCombobox1: TAutomatedCombobox
+    Left = 24
+    Top = 536
+    Width = 145
+    Height = 21
+    TabOrder = 13
+    Text = 'AutomatedCombobox1'
   end
   object MainMenu1: TMainMenu
     Left = 24

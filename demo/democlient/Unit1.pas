@@ -25,7 +25,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
+  AutomatedCombobox, AutomatedEdit;
 
 type
   TForm1 = class(TForm)
@@ -54,6 +55,8 @@ type
     About1: TMenuItem;
     PopupMenu1: TPopupMenu;
     PopupMenu2: TMenuItem;
+    AutomatedEdit1: TAutomatedEdit;
+    AutomatedCombobox1: TAutomatedCombobox;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

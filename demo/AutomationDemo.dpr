@@ -75,6 +75,8 @@ var
   Statusbar: IAutomationStatusBar;
   check: IAutomationCheckBox;
   radio: IAutomationRadioButton;
+  eb2 : IAutomationEditBox;
+  cb2: IAutomationCombobox;
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
@@ -106,6 +108,13 @@ begin
   Statusbar := enquiry.Statusbar;
   eb0 := Statusbar.GetTextBoxByIndex(1);
   writeln('Text is ' + eb0.Text);
+
+  // Now get and set the text in an editbox, by name
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb2.Text);
+  cb2.Text := 'Replacements';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb2.Text);
 
   application.Kill;
 

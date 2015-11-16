@@ -3,10 +3,13 @@
         <ProjectGuid>{1E70C34A-A56D-4FBC-BA5E-081EEF70B3C2}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="AutomationDemo.dproj">
+        <Projects Include="..\controls\AutomatedControls.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="democlient\Project1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="AutomationDemo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,14 +20,14 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="AutomationDemo">
-        <MSBuild Projects="AutomationDemo.dproj"/>
+    <Target Name="AutomatedControls">
+        <MSBuild Projects="..\controls\AutomatedControls.dproj"/>
     </Target>
-    <Target Name="AutomationDemo:Clean">
-        <MSBuild Projects="AutomationDemo.dproj" Targets="Clean"/>
+    <Target Name="AutomatedControls:Clean">
+        <MSBuild Projects="..\controls\AutomatedControls.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="AutomationDemo:Make">
-        <MSBuild Projects="AutomationDemo.dproj" Targets="Make"/>
+    <Target Name="AutomatedControls:Make">
+        <MSBuild Projects="..\controls\AutomatedControls.dproj" Targets="Make"/>
     </Target>
     <Target Name="Project1">
         <MSBuild Projects="democlient\Project1.dproj"/>
@@ -35,14 +38,23 @@
     <Target Name="Project1:Make">
         <MSBuild Projects="democlient\Project1.dproj" Targets="Make"/>
     </Target>
+    <Target Name="AutomationDemo">
+        <MSBuild Projects="AutomationDemo.dproj"/>
+    </Target>
+    <Target Name="AutomationDemo:Clean">
+        <MSBuild Projects="AutomationDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AutomationDemo:Make">
+        <MSBuild Projects="AutomationDemo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="AutomationDemo;Project1"/>
+        <CallTarget Targets="AutomatedControls;Project1;AutomationDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="AutomationDemo:Clean;Project1:Clean"/>
+        <CallTarget Targets="AutomatedControls:Clean;Project1:Clean;AutomationDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="AutomationDemo:Make;Project1:Make"/>
+        <CallTarget Targets="AutomatedControls:Make;Project1:Make;AutomationDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
