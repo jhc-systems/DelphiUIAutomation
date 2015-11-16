@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.ComCtrls,
   Vcl.DBGrids, Vcl.DBCGrids, Vcl.Menus, Vcl.StdCtrls,
-  Vcl.Buttons, AutomatedStringGrid;
+  Vcl.Buttons, AutomatedStringGrid, AutomatedEdit;
 
 type
   TForm2 = class(TForm)
@@ -17,6 +17,8 @@ type
     here1: TMenuItem;
     Everyyone1: TMenuItem;
     item1: TMenuItem;
+    AutomatedEdit1: TAutomatedEdit;
+    Edit1: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);

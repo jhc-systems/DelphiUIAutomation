@@ -1,4 +1,4 @@
-package Package2;
+package AutomatedControls;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -34,7 +34,8 @@ requires
 contains
   UIAutomationCore_TLB in 'UIAutomationCore_TLB.pas',
   AutomatedStringGrid in 'AutomatedStringGrid.pas',
-  StringGridItem in 'StringGridItem.pas';
+  StringGridItem in 'StringGridItem.pas',
+  AutomatedEdit in 'AutomatedEdit.pas';
 
 end.
 

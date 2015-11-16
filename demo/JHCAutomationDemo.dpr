@@ -107,7 +107,6 @@ begin
 
   writeln(item.Name);
 
-  // Assume grid is 24 'things' high
   mouse := TAutomationMouse.Create;
 
   // Get the top left of the grid
