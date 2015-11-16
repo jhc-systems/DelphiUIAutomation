@@ -101,7 +101,13 @@ The currently supported controls are ...
 
 [More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
 
-# TStringGrid
+# Added Automation Support for Controls
+
+Many Delphi controls do not implement the automatin interfaces in the same manner as Visual Studio does in WPF, so that the Automation ID and Name are not 'properly' populated, so the controls can only be found by knowing their position within the tree, and cannot be found via the name or ID. The controls below extend the basic controls to export these values, amongst other properties.
+
+## TEdit
+
+## TStringGrid
 
 The [automatedstringgrid sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/automatedstringgrid) allows the automation of some of the elements of the TStringGrid. It extends the control to allow it to interact with the MS-UIAutomation libraries.
 
