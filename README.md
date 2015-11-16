@@ -107,9 +107,11 @@ Many Delphi controls do not implement the automatin interfaces in the same manne
 
 ## TEdit
 
+The [controls sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/controls) extends the automation properties of the TEdit, to simulate the way that WPF populates the Automation ID and the name with the NAME of the actual control, not a random value.
+
 ## TStringGrid
 
-The [automatedstringgrid sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/automatedstringgrid) allows the automation of some of the elements of the TStringGrid. It extends the control to allow it to interact with the MS-UIAutomation libraries.
+The [controls sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/controls) allows the automation of some of the elements of the TStringGrid. It extends the control to allow it to interact with the MS-UIAutomation libraries.
 
 ```pascal
 var
