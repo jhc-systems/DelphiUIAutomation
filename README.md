@@ -105,9 +105,9 @@ The currently supported controls are ...
 
 Many Delphi controls do not implement the automatin interfaces in the same manner as Visual Studio does in WPF, so that the Automation ID and Name are not 'properly' populated, so the controls can only be found by knowing their position within the tree, and cannot be found via the name or ID. The controls below extend the basic controls to export these values, amongst other properties.
 
-## TEdit
+## TEdit & TCombobox
 
-The [controls sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/controls) extends the automation properties of the TEdit, to simulate the way that WPF populates the Automation ID and the name with the NAME of the actual control, not a random value.
+The [controls sub-project](https://github.com/jhc-systems/DelphiUIAutomation/tree/master/controls) extends the automation properties of the TEdit and TComboBox, to simulate the way that WPF populates the Automation ID and the name with the NAME of the actual control, not a random value.
 
 ## TStringGrid
 
