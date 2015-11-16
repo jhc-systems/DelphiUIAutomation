@@ -997,10 +997,21 @@ const
   UIA_IsEnabledPropertyId = 30010;
 
   UIA_ButtonControlTypeId = 50000;
+  UIA_CalendarControlTypeId = 50001;
+  UIA_CheckBoxControlTypeId = 50002;
+  UIA_ComboBoxControlTypeId = 50003;
   UIA_EditControlTypeId = 50004;
+  UIA_HyperlinkControlTypeId = 50005;
+  UIA_ImageControlTypeId = 50006;
+  UIA_ListItemControlTypeId = 50007;
+  UIA_ListControlTypeId = 50008;
+  UIA_MenuControlTypeId = 50009;
+  UIA_MenuBarControlTypeId = 50010;
+  UIA_MenuItemControlTypeId = 50011;
   UIA_CustomControlTypeId = 50025;
   UIA_DataGridControlTypeId = 50028;
   UIA_DataItemControlTypeId = 50029;
+  UIA_AppBarControlTypeId = 50040;
 
 procedure Register;
 

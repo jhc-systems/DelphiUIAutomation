@@ -35,7 +35,8 @@ contains
   UIAutomationCore_TLB in 'UIAutomationCore_TLB.pas',
   AutomatedStringGrid in 'AutomatedStringGrid.pas',
   StringGridItem in 'StringGridItem.pas',
-  AutomatedEdit in 'AutomatedEdit.pas';
+  AutomatedEdit in 'AutomatedEdit.pas',
+  AutomatedCombobox in 'AutomatedCombobox.pas';
 
 end.
 

@@ -2,7 +2,8 @@ program AutomationDemo;
 
 uses
   Vcl.Forms,
-  DemoForm in 'DemoForm.pas' {Form2};
+  DemoForm in 'DemoForm.pas' {Form2},
+  AutomatedCombobox in 'AutomatedCombobox.pas';
 
 {$R *.res}
 

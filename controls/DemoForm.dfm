@@ -28,20 +28,36 @@ object Form2: TForm2
     TabOrder = 0
   end
   object AutomatedEdit1: TAutomatedEdit
-    Left = 240
-    Top = 400
+    Left = 144
+    Top = 408
     Width = 121
     Height = 21
     TabOrder = 1
     Text = 'AutomatedEdit1'
   end
   object Edit1: TEdit
-    Left = 240
-    Top = 440
+    Left = 144
+    Top = 435
     Width = 121
     Height = 21
     TabOrder = 2
     Text = 'Edit1'
+  end
+  object ComboBox1: TComboBox
+    Left = 368
+    Top = 435
+    Width = 145
+    Height = 21
+    TabOrder = 3
+    Text = 'ComboBox1'
+  end
+  object AutomatedCombobox1: TAutomatedCombobox
+    Left = 368
+    Top = 408
+    Width = 145
+    Height = 21
+    TabOrder = 4
+    Text = 'AutomatedCombobox1'
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup

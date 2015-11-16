@@ -124,6 +124,7 @@
         <DCCReference Include="AutomatedStringGrid.pas"/>
         <DCCReference Include="StringGridItem.pas"/>
         <DCCReference Include="AutomatedEdit.pas"/>
+        <DCCReference Include="AutomatedCombobox.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
