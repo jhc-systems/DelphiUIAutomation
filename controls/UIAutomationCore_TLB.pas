@@ -983,10 +983,12 @@ const
   UIA_ValuePatternId = 10002;
   UIA_GridPatternId = 10006;
   UIA_GridItemPatternId = 10007;
-  UIA_TablePatternId = 10012;
   UIA_SelectionItemPatternId = 10010;
+  UIA_TablePatternId = 10012;
+  UIA_TextPatternID = 10014;
 
   UIA_NamePropertyId = 30005;
+  UIA_AutomationIdPropertyId = 30011;
   UIA_ClassNamePropertyId = 30012;
   UIA_ControlTypePropertyId = 30003;
 

@@ -21,11 +21,27 @@ object Form2: TForm2
     Left = 8
     Top = 8
     Width = 668
-    Height = 490
+    Height = 369
     Anchors = [akLeft, akTop, akRight, akBottom]
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goFixedRowClick]
     PopupMenu = PopupMenu1
     TabOrder = 0
+  end
+  object AutomatedEdit1: TAutomatedEdit
+    Left = 240
+    Top = 400
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    Text = 'AutomatedEdit1'
+  end
+  object Edit1: TEdit
+    Left = 240
+    Top = 440
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Text = 'Edit1'
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup

@@ -105,7 +105,6 @@ var
 
 begin
   pRetVal := nil;
-  result := S_FALSE;
 
   // is a cell selected?
   if (self.FixedRows <> 0) then

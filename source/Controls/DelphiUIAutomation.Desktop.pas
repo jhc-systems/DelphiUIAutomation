@@ -80,8 +80,6 @@ end;
 
 class function TAutomationDesktop.GetContextMenu(timeout: DWORD = DEFAULT_TIMEOUT): IAutomationMenu;
 var
-  item : TAutomationMenu;
-  n : string;
   collection : IUIAutomationElementArray;
   condition : IUIAutomationCondition;
   element : IUIAutomationElement;

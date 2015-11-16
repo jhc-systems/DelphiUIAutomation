@@ -123,8 +123,6 @@ var
   collection : IUIAutomationElementArray;
   count : integer;
   length : integer;
-  retval : integer;
-  name : WideString;
   element : IUIAutomationElement;
   items : TObjectList<TAutomationStringGridItem>;
 
