@@ -57,6 +57,7 @@ type
     PopupMenu2: TMenuItem;
     AutomatedEdit1: TAutomatedEdit;
     AutomatedCombobox1: TAutomatedCombobox;
+    AutomatedCombobox2: TAutomatedCombobox;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

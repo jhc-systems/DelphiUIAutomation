@@ -145,8 +145,6 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
-    ExplicitTop = 495
-    ExplicitWidth = 334
   end
   object ComboBox1: TComboBox
     Left = 24
@@ -179,6 +177,18 @@ object Form1: TForm1
     Height = 21
     TabOrder = 13
     Text = 'AutomatedCombobox1'
+  end
+  object AutomatedCombobox2: TAutomatedCombobox
+    Left = 192
+    Top = 536
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    TabOrder = 14
+    Items.Strings = (
+      'First'
+      'Second'
+      'Third')
   end
   object MainMenu1: TMainMenu
     Left = 24
