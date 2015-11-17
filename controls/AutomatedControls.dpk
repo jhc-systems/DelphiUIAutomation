@@ -36,7 +36,8 @@ contains
   AutomatedStringGrid in 'AutomatedStringGrid.pas',
   StringGridItem in 'StringGridItem.pas',
   AutomatedEdit in 'AutomatedEdit.pas',
-  AutomatedCombobox in 'AutomatedCombobox.pas';
+  AutomatedCombobox in 'AutomatedCombobox.pas',
+  AutomatedMaskEdit in 'AutomatedMaskEdit.pas';
 
 end.
 

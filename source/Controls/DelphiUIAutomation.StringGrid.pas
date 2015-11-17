@@ -170,7 +170,6 @@ function TAutomationStringGrid.GetItem(row,
   column: SYSINT): IAutomationStringGridItem;
 var
   value : IUIAutomationElement;
-  name : WideString;
 
 begin
   FGridPattern.GetItem(row, column, value);
