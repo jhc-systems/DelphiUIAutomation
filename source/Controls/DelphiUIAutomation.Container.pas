@@ -99,6 +99,16 @@ type
     /// Finds the button with the title supplied
     /// </summary>
     function GetButton (const title : string) : IAutomationButton;
+
+    /// <summary>
+    /// Finds the editbox, by name
+    /// </summary>
+    function GetEditBoxByName (name: String) : IAutomationEditBox;
+
+    /// <summary>
+    /// Finds the combobox, by name
+    /// </summary>
+    function GetComboboxByName (name : String) : IAutomationComboBox;
   end;
 
 implementation
@@ -312,6 +322,26 @@ end;
 function TAutomationContainer.GetTabByIndex (index : integer) : IAutomationTab;
 begin
   result := TAutomationTab.Create(GetControlByControlType(index, UIA_TabControlTypeId));
+end;
+
+function TAutomationContainer.GetEditBoxByName(
+  name: String): IAutomationEditBox;
+var
+  eb : IUIAutomationElement;
+
+begin
+  eb := GetControlByControlType(name, UIA_EditControlTypeId);
+  result := TAutomationEditBox.Create(eb);
+end;
+
+function TAutomationContainer.GetComboboxByName(
+  name: String): IAutomationComboBox;
+var
+  cb : IUIAutomationElement;
+
+begin
+  cb := GetControlByControlType(name, UIA_ComboBoxControlTypeId);
+  result := TAutomationComboBox.Create(cb);
 end;
 
 end.

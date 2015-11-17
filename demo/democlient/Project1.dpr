@@ -23,7 +23,10 @@ program Project1;
 
 uses
   Vcl.Forms,
-  Unit1 in 'Unit1.pas' {Form1};
+  Unit1 in 'Unit1.pas' {Form1},
+  AutomatedCombobox in '..\..\controls\AutomatedCombobox.pas',
+  AutomatedEdit in '..\..\controls\AutomatedEdit.pas',
+  UIAutomationCore_TLB in '..\..\controls\UIAutomationCore_TLB.pas';
 
 {$R *.res}
 

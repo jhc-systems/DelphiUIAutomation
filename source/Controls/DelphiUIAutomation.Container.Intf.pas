@@ -88,6 +88,16 @@ type
     /// Finds the editbox, by index
     /// </summary>
     function GetEditBoxByIndex (index : integer) : IAutomationEditBox;
+
+    /// <summary>
+    /// Finds the editbox, by name
+    /// </summary>
+    function GetEditBoxByName (name: String) : IAutomationEditBox;
+
+    /// <summary>
+    /// Finds the combobox, by name
+    /// </summary>
+    function GetComboboxByName (name : String) : IAutomationComboBox;
   end;
 
 implementation
