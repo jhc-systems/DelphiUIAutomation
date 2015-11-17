@@ -75,7 +75,8 @@ var
   Statusbar: IAutomationStatusBar;
   check: IAutomationCheckBox;
   radio: IAutomationRadioButton;
-  eb2 : IAutomationEditBox;
+//  eb2 : IAutomationEditBox;
+  cb1: IAutomationCombobox;
   cb2: IAutomationCombobox;
 
 begin
@@ -110,11 +111,25 @@ begin
   writeln('Text is ' + eb0.Text);
 
   // Now get and set the text in an editbox, by name
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox1');
-  writeln('Combo text is ' + cb2.Text);
-  cb2.Text := 'Replacements';
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox1');
-  writeln('Combo text is ' + cb2.Text);
+  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb1.Text);
+  cb1.Text := 'Replacements';
+  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb1.Text);
+
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+  cb2.Text := 'First';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+  cb2.Text := 'No there';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+
+  cb2.Text := 'Third';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+
 
   application.Kill;
 

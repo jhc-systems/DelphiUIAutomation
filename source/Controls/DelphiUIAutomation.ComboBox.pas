@@ -129,7 +129,7 @@ begin
   begin
     if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
     begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+      raise EDelphiAutomationException.Create('Unable to initialise ExpandCollapse control pattern');
     end;
   end;
 end;
@@ -144,7 +144,7 @@ begin
   begin
   if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
     begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+      raise EDelphiAutomationException.Create('Unable to initialise value control pattern');
     end;
   end;
 end;

@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{           Copyright 2015 JHC Systems Limited                              }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 unit AutomatedCombobox;
 
 interface
@@ -11,6 +32,7 @@ uses
 type
   TAutomatedCombobox = class(TCombobox,
         IValueProvider,
+        IExpandCollapseProvider,
         IRawElementProviderSimple)
   private
     { Private declarations }
@@ -34,6 +56,10 @@ type
     function Get_Value(out pRetVal: WideString): HResult; stdcall;
     function Get_IsReadOnly(out pRetVal: Integer): HResult; stdcall;
 
+    // IExpandCollapseProvider
+    function Expand: HResult; stdcall;
+    function Collapse: HResult; stdcall;
+    function Get_ExpandCollapseState(out pRetVal: ExpandCollapseState): HResult; stdcall;
 
   published
 
@@ -54,13 +80,30 @@ end;
 
 { TAutomatedCombobox }
 
+function TAutomatedCombobox.Collapse: HResult;
+begin
+  if (self.DroppedDown) then
+    self.DroppedDown := false;
+
+  result := S_OK;
+end;
+
+function TAutomatedCombobox.Expand: HResult;
+begin
+  if (not self.DroppedDown) then
+    self.DroppedDown := true;
+
+  result := S_OK;
+end;
+
 function TAutomatedCombobox.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   result := S_OK;
   pRetval := nil;
 
-  if (patternID = UIA_ValuePatternID) then
+  if (patternID = UIA_ValuePatternID) or
+     (patternID = UIA_ExpandCollapsePatternId) then
   begin
     pRetVal := self;
   end;
@@ -97,6 +140,17 @@ begin
     result := S_FALSE;
 end;
 
+function TAutomatedCombobox.Get_ExpandCollapseState(
+  out pRetVal: ExpandCollapseState): HResult;
+begin
+  if self.DroppedDown then
+    pRetVal := ExpandCollapseState_Expanded
+  else
+    pRetVal := ExpandCollapseState_Collapsed;
+
+  result := S_OK;
+end;
+
 function TAutomatedCombobox.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
@@ -123,9 +177,23 @@ begin
 end;
 
 function TAutomatedCombobox.SetValue(val: PWideChar): HResult;
+var
+  idx : integer;
+  
 begin
-  self.Text := val;
   Result := S_OK;
+
+  if (self.Style = csDropDownList) then
+  begin
+    // try and find the value in the list  
+    idx := self.items.indexOf(val);   
+    if (idx <> -1) then    
+      self.ItemIndex := idx
+    else
+      Result := S_FALSE;    
+  end
+  else  
+    self.Text := val;    
 end;
 
 procedure TAutomatedCombobox.WMGetObject(var Message: TMessage);

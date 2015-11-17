@@ -981,6 +981,7 @@ const
   UIA_InvokePatternId = 10000;
   UIA_SelectionPatternId = 10001;
   UIA_ValuePatternId = 10002;
+  UIA_ExpandCollapsePatternId = 10005;
   UIA_GridPatternId = 10006;
   UIA_GridItemPatternId = 10007;
   UIA_SelectionItemPatternId = 10010;
