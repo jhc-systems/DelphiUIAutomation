@@ -189,6 +189,13 @@ begin
     TVarData(pRetVal).VOleStr := pWideChar(self.Name);
     result := S_OK;
   end
+  else if (propertyId = UIA_ControlTypePropertyId) then
+  begin
+    TVarData(pRetVal).VType := varInteger;
+    TVarData(pRetVal).VInteger := UIA_DataGridControlTypeId;
+    result := S_OK;
+  end
+
   else
     result := S_FALSE;
 
