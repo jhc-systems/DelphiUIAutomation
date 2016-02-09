@@ -26,7 +26,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
-  AutomatedCombobox, AutomatedEdit;
+  AutomatedCombobox, AutomatedEdit, Vcl.Grids, AutomatedStringGrid, Vcl.Mask,
+  AutomatedMaskEdit;
 
 type
   TForm1 = class(TForm)
@@ -58,10 +59,13 @@ type
     AutomatedEdit1: TAutomatedEdit;
     AutomatedCombobox1: TAutomatedCombobox;
     AutomatedCombobox2: TAutomatedCombobox;
+    AutomationStringGrid1: TAutomationStringGrid;
+    AutomatedMaskEdit1: TAutomatedMaskEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
     procedure PopupMenu2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -88,6 +92,28 @@ end;
 procedure TForm1.Exit1Click(Sender: TObject);
 begin
   ShowMessage('Oh well done');
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  AutomationStringGrid1.Cells[0,0] := 'Title 1';
+  AutomationStringGrid1.Cells[1,0] := 'Title 2';
+  AutomationStringGrid1.Cells[2,0] := 'Title 3';
+  AutomationStringGrid1.Cells[3,0] := 'Title 4';
+  AutomationStringGrid1.Cells[4,0] := 'Title 5';
+
+  AutomationStringGrid1.Cells[0,1] := 'Row 1, Col 0';
+  AutomationStringGrid1.Cells[1,1] := 'Row 1, Col 1';
+  AutomationStringGrid1.Cells[2,1] := 'Row 1, Col 2';
+  AutomationStringGrid1.Cells[3,1] := 'Row 1, Col 3';
+  AutomationStringGrid1.Cells[4,1] := 'Row 1, Col 4';
+
+  AutomationStringGrid1.Cells[0,3] := 'Row 3, Col 0';
+  AutomationStringGrid1.Cells[1,3] := 'Row 3, Col 1';
+  AutomationStringGrid1.Cells[2,3] := 'Row 3, Col 2';
+  AutomationStringGrid1.Cells[3,3] := 'Row 3, Col 3';
+  AutomationStringGrid1.Cells[4,3] := 'Row 3, Col 4';
+
 end;
 
 procedure TForm1.PopupMenu2Click(Sender: TObject);
