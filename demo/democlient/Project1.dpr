@@ -25,10 +25,11 @@ uses
   Vcl.Forms,
   Unit1 in 'Unit1.pas' {Form1},
   AutomatedCombobox in '..\..\controls\AutomatedCombobox.pas',
-  AutomatedEdit in '..\..\controls\AutomatedEdit.pas',
   UIAutomationCore_TLB in '..\..\controls\UIAutomationCore_TLB.pas',
   AutomatedStringGrid in '..\..\controls\AutomatedStringGrid.pas',
-  StringGridItem in '..\..\controls\StringGridItem.pas';
+  StringGridItem in '..\..\controls\StringGridItem.pas',
+  AutomatedEdit in '..\..\controls\AutomatedEdit.pas',
+  AutomatedMaskEdit in '..\..\controls\AutomatedMaskEdit.pas';
 
 {$R *.res}
 
