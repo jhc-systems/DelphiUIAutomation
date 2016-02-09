@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 590
-  ClientWidth = 394
+  ClientWidth = 650
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,6 +13,10 @@ object Form1: TForm1
   Menu = MainMenu1
   OldCreateOrder = False
   PopupMenu = PopupMenu1
+  OnCreate = FormCreate
+  DesignSize = (
+    650
+    590)
   PixelsPerInch = 96
   TextHeight = 13
   object Edit1: TEdit
@@ -135,7 +139,7 @@ object Form1: TForm1
   object StatusBar1: TStatusBar
     Left = 0
     Top = 571
-    Width = 394
+    Width = 650
     Height = 19
     Panels = <
       item
@@ -189,6 +193,24 @@ object Form1: TForm1
       'First'
       'Second'
       'Third')
+  end
+  object AutomationStringGrid1: TAutomationStringGrid
+    Left = 328
+    Top = 131
+    Width = 313
+    Height = 232
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    TabOrder = 15
+  end
+  object AutomatedMaskEdit1: TAutomatedMaskEdit
+    Left = 400
+    Top = 456
+    Width = 120
+    Height = 21
+    EditMask = '!99/99/00;1;_'
+    MaxLength = 8
+    TabOrder = 16
+    Text = '  /  /  '
   end
   object MainMenu1: TMainMenu
     Left = 24
