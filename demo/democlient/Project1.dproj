@@ -87,10 +87,11 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\..\controls\AutomatedCombobox.pas"/>
-        <DCCReference Include="..\..\controls\AutomatedEdit.pas"/>
         <DCCReference Include="..\..\controls\UIAutomationCore_TLB.pas"/>
         <DCCReference Include="..\..\controls\AutomatedStringGrid.pas"/>
         <DCCReference Include="..\..\controls\StringGridItem.pas"/>
+        <DCCReference Include="..\..\controls\AutomatedEdit.pas"/>
+        <DCCReference Include="..\..\controls\AutomatedMaskEdit.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
