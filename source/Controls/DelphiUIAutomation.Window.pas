@@ -76,11 +76,18 @@ type
     FMainMenu : IAutomationMainMenu;
     FControlMenu : IAutomationMenu;
     FWithMenu : boolean;
+    FWindowPattern : IUIAutomationWindowPattern;
   private
     function GetStatusBar : IAutomationStatusbar;
     function GetMainMenu: IAutomationMainMenu;
     function GetControlMenu : IAutomationMenu;
     function GetPopupMenu : IAutomationMenu;
+
+  protected
+    /// <summary>
+    ///  Gets the window control pattern
+    /// </summary>
+    procedure GetWindowPattern;
 
   public
     /// <summary>
@@ -97,11 +104,6 @@ type
     /// Finds the child window with the title supplied, with a timeout
     /// </summary>
     function Window (const title : string; timeout : DWORD; WithMenu : boolean = true) : IAutomationWindow; overload;
-
-    /// <summary>
-    /// Finds the child window with the title supplied
-    /// </summary>
-//    function Window (const title : string) : IAutomationWindow; overload;
 
     ///<summary>
     ///  Sets the focus to this window
@@ -169,6 +171,25 @@ begin
 
   if WithMenu then
     self.FMainMenu := GetMenuBar(1);
+
+
+  GetWindowPattern();
+end;
+
+procedure TAutomationWindow.GetWindowPattern;
+var
+  inter: IInterface;
+
+begin
+  self.fElement.GetCurrentPattern(UIA_WindowPatternId, inter);
+
+  if (inter <> nil) then
+  begin
+    if inter.QueryInterface(IID_IUIAutomationWindowPattern, self.FWindowPattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise Window control pattern');
+    end;
+  end;
 end;
 
 destructor TAutomationWindow.Destroy;
@@ -187,21 +208,8 @@ begin
 end;
 
 procedure TAutomationWindow.Maximize;
-var
-  unknown: IInterface;
-  Pattern : IUIAutomationWindowPattern;
 begin
-  //Pattern.SetWindowVisualState(WindowVisualState_Maximized);
-
-  fElement.GetCurrentPattern(UIA_WindowPatternId, unknown);
-
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationWindowPattern, Pattern) = S_OK then
-    begin
-      Pattern.SetWindowVisualState(WindowVisualState_Maximized);
-    end;
-  end;
+  self.FWindowPattern.SetWindowVisualState(WindowVisualState_Maximized);
 end;
 
 function TAutomationWindow.GetMainMenu: IAutomationMainMenu;
@@ -242,11 +250,6 @@ begin
   if result = nil then
     raise EDelphiAutomationException.Create('Unable to find statusbar');
 end;
-
-//function TAutomationWindow.Window(const title: string): IAutomationWindow;
-//begin
-//  result := Window(title, DEFAULT_TIMEOUT);
-//end;
 
 function TAutomationWindow.Window(const title: string; timeout : DWORD; WithMenu : Boolean): IAutomationWindow;
 var
@@ -329,11 +332,9 @@ end;
 
 procedure TAutomationWindow.WaitWhileBusy(timeout: DWORD);
 var
-  process : integer;
+  success : integer;
 begin
-  self.FElement.Get_CurrentProcessId(process);
-
-  WaitForInputIdle(process, timeout);
+  self.FWindowPattern.WaitForInputIdle(timeout, success);
 end;
 
 procedure TAutomationWindow.WaitWhileBusy;

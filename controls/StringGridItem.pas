@@ -188,6 +188,8 @@ begin
   // Not sure about these
   pRetVal.width := self.FCellRect.Right;
   pRetVal.height := self.FCellRect.Bottom;
+
+  result := S_OK;
 end;
 
 function TAutomationStringGridItem.Get_HostRawElementProvider(
