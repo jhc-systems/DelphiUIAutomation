@@ -61,6 +61,7 @@ type
     AutomatedCombobox2: TAutomatedCombobox;
     AutomationStringGrid1: TAutomationStringGrid;
     AutomatedMaskEdit1: TAutomatedMaskEdit;
+    RichEdit1: TRichEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

@@ -187,8 +187,8 @@ object Form1: TForm1
     Top = 536
     Width = 145
     Height = 21
-    Style = csDropDownList
     TabOrder = 14
+    Text = 'First'
     Items.Strings = (
       'First'
       'Second'
@@ -203,14 +203,30 @@ object Form1: TForm1
     TabOrder = 15
   end
   object AutomatedMaskEdit1: TAutomatedMaskEdit
-    Left = 400
-    Top = 456
+    Left = 328
+    Top = 382
     Width = 120
     Height = 21
     EditMask = '!99/99/00;1;_'
     MaxLength = 8
     TabOrder = 16
     Text = '  /  /  '
+  end
+  object RichEdit1: TRichEdit
+    Left = 328
+    Top = 409
+    Width = 314
+    Height = 108
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Lines.Strings = (
+      'This is a RichEdit, I wonder what will happen')
+    ParentFont = False
+    PlainText = True
+    TabOrder = 17
   end
   object MainMenu1: TMainMenu
     Left = 24
