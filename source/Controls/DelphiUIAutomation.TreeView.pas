@@ -25,7 +25,10 @@ unit DelphiUIAutomation.TreeView;
 interface
 
 uses
-  DelphiUIAutomation.Base;
+  generics.collections,
+  DelphiUIAutomation.Base,
+  DelphiUIAutomation.ListItem,
+  UIAutomationClient_TLB;
 
 type
   IAutomationTreeView = interface (IAutomationBase)
@@ -33,10 +36,57 @@ type
   end;
 
   TAutomationTreeView = class (TAutomationBase, IAutomationTreeView)
+  strict private
+    FItems : TObjectList<TAutomationListItem>;
+  private
+    procedure getItems;
+  public
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
+uses
+  DelphiUIAutomation.ControlTypeIDs;
+
+procedure TAutomationTreeView.getItems;
+var
+  collection : IUIAutomationElementArray;
+  itemElement : IUIAutomationElement;
+  count : integer;
+  length : integer;
+  retVal : integer;
+  item : TAutomationListItem;
+
+begin
+  FItems := TObjectList<TAutomationListItem>.create;
+
+  // Find the elements
+  collection := self.FindAll(TreeScope_Children);
+
+  collection.Get_Length(length);
+
+  for count := 0 to length -1 do
+  begin
+    collection.GetElement(count, itemElement);
+    itemElement.Get_CurrentControlType(retVal);
+
+    if (retVal = UIA_TreeItemControlTypeId) then
+    begin
+      item := TAutomationListItem.Create(itemElement);
+      FItems.Add(item);
+    end;
+  end;
+
+end;
+
 { TAutomationTreeView }
+
+constructor TAutomationTreeView.Create(element : IUIAutomationElement);
+begin
+  inherited Create(element);
+
+  getItems;
+end;
 
 end.
