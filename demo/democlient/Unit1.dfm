@@ -62,6 +62,10 @@ object Form1: TForm1
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'First Tab'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Edit3: TEdit
         Left = 24
         Top = 32
@@ -86,6 +90,10 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Last Tab'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Edit5: TEdit
         Left = 40
         Top = 40
@@ -227,6 +235,25 @@ object Form1: TForm1
     ParentFont = False
     PlainText = True
     TabOrder = 17
+  end
+  object TreeView1: TTreeView
+    Left = 328
+    Top = 8
+    Width = 314
+    Height = 117
+    Indent = 19
+    TabOrder = 18
+    Items.NodeData = {
+      0303000000280000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      00020000000105460069007200730074002E0000000000000000000000FFFFFF
+      FFFFFFFFFF00000000000000000100000001085300750062004900740065006D
+      003100340000000000000000000000FFFFFFFFFFFFFFFF000000000000000000
+      000000010B5300750062002D005300750062004900740065006D002E00000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000108530075
+      0062004900740065006D0032002A0000000000000000000000FFFFFFFFFFFFFF
+      FF00000000000000000000000001065300650063006F006E0064002800000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000105540068
+      00690072006400}
   end
   object MainMenu1: TMainMenu
     Left = 24

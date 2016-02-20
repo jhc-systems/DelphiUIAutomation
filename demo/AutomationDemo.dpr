@@ -64,7 +64,8 @@ uses
   DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas',
   DelphiUIAutomation.Panel.Intf in '..\source\Controls\DelphiUIAutomation.Panel.Intf.pas',
   DelphiUIAutomation.StringGridItem in '..\source\Controls\DelphiUIAutomation.StringGridItem.pas',
-  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas';
+  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas',
+  DelphiUIAutomation.TreeView in '..\source\Controls\DelphiUIAutomation.TreeView.pas';
 
 var
   application: IAutomationApplication;
@@ -78,6 +79,7 @@ var
 //  eb2 : IAutomationEditBox;
   cb1: IAutomationCombobox;
   cb2: IAutomationCombobox;
+  tv1: IAutomationTreeView;
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
@@ -130,6 +132,10 @@ begin
   cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
   writeln('Combo2 text is ' + cb2.Text);
 
+  // Now try and get stuff from TreeView
+
+  tv1 := enquiry.getTreeViewByIndex(0);
+  writeln('Treeview name is ' + tv1.name);
 
   application.Kill;
 

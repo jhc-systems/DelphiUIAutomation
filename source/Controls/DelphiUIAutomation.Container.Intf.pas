@@ -31,6 +31,7 @@ uses
   DelphiUIAutomation.Button,
   DelphiUIAutomation.Combobox,
   DelphiUIAutomation.Panel.Intf,
+  DelphiUIAutomation.TreeView,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
   DelphiUIAutomation.StringGrid,
@@ -98,6 +99,11 @@ type
     /// Finds the combobox, by name
     /// </summary>
     function GetComboboxByName (name : String) : IAutomationComboBox;
+
+    /// <summary>
+    /// Finds the treeview, by index
+    /// </summary>
+    function GetTreeViewByIndex (index : integer): IAutomationTreeView;
   end;
 
 implementation
