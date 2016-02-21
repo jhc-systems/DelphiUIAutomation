@@ -53,6 +53,10 @@ type
     function getName: string; virtual;
     function GetBoundingRectangle : TRect;
   protected
+    function GetSelectionItemPattern: IUIAutomationSelectionItemPattern;
+    function GetValuePattern: IUIAutomationValuePattern;
+    function GetSelectionPattern: IUIAutomationSelectionPattern;
+
     /// <summary>
     ///  Finds the elements
     /// </summary>
@@ -88,6 +92,8 @@ type
 implementation
 
 uses
+  DelphiUIAutomation.PatternIDs,
+  DelphiUIAutomation.Exception,
   DelphiUIAutomation.Automation;
 
 constructor TAutomationBase.Create(element: IUIAutomationElement);
@@ -142,6 +148,61 @@ begin
   outRect.Height := rect.bottom;
 
   result := outRect;
+end;
+
+function TAutomationBase.GetSelectionItemPattern : IUIAutomationSelectionItemPattern;
+var
+  inter: IInterface;
+  pattern : IUIAutomationSelectionItemPattern;
+
+begin
+
+  fElement.GetCurrentPattern(UIA_SelectionItemPatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationSelectionItemPattern, pattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
+  end;
+
+  result := pattern;
+end;
+
+function TAutomationBase.GetSelectionPattern: IUIAutomationSelectionPattern;
+var
+  inter: IInterface;
+  pattern: IUIAutomationSelectionPattern;
+
+begin
+  fElement.GetCurrentPattern(UIA_SelectionPatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationSelectionPattern, pattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
+    end;
+  end;
+
+  result := pattern;
+end;
+
+function TAutomationBase.GetValuePattern : IUIAutomationValuePattern;
+var
+  inter: IInterface;
+  pattern : IUIAutomationValuePattern;
+
+begin
+  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
+  if (inter <> nil) then
+  begin
+  if Inter.QueryInterface(IID_IUIAutomationValuePattern, pattern) <> S_OK then
+    begin
+      raise EDelphiAutomationException.Create('Unable to initialise value pattern');
+    end;
+  end;
+
+  result := pattern;
 end;
 
 function TAutomationBase.getName: string;

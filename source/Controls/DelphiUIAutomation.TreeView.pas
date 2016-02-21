@@ -31,62 +31,69 @@ uses
   UIAutomationClient_TLB;
 
 type
+  IAutomationTreeViewItem = interface (IAutomationBase)
+    ['{ED19F4CE-6A7B-4C53-B42B-5487A32E8696}']
+    procedure select;
+  end;
+
   IAutomationTreeView = interface (IAutomationBase)
     ['{7228845F-E622-442F-A38B-491CE7392245}']
+    function GetItem(name: String): IAutomationTreeViewItem;
+  end;
+
+  TAutomationTreeViewItem = class(TAutomationBase, IAutomationTreeViewItem)
+  public
+    procedure select;
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
   TAutomationTreeView = class (TAutomationBase, IAutomationTreeView)
-  strict private
-    FItems : TObjectList<TAutomationListItem>;
-  private
-    procedure getItems;
   public
+    function GetItem(name: String): IAutomationTreeViewItem;
     constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.ControlTypeIDs;
-
-procedure TAutomationTreeView.getItems;
-var
-  collection : IUIAutomationElementArray;
-  itemElement : IUIAutomationElement;
-  count : integer;
-  length : integer;
-  retVal : integer;
-  item : TAutomationListItem;
-
-begin
-  FItems := TObjectList<TAutomationListItem>.create;
-
-  // Find the elements
-  collection := self.FindAll(TreeScope_Children);
-
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, itemElement);
-    itemElement.Get_CurrentControlType(retVal);
-
-    if (retVal = UIA_TreeItemControlTypeId) then
-    begin
-      item := TAutomationListItem.Create(itemElement);
-      FItems.Add(item);
-    end;
-  end;
-
-end;
+  DelphiUIAutomation.PropertyIDs,
+  DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.Automation;
 
 { TAutomationTreeView }
 
 constructor TAutomationTreeView.Create(element : IUIAutomationElement);
 begin
   inherited Create(element);
+end;
 
-  getItems;
+function TAutomationTreeView.GetItem(name: String): IAutomationTreeViewItem;
+var
+  item : IUIAutomationElement;
+  condition,
+  condition1,
+  condition2 : IUIAutomationCondition;
+begin
+  uiAuto.createPropertyCondition(UIA_NamePropertyId, name, condition1);
+  uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, UIA_TreeItemControlTypeId, condition2);
+  UIAuto.createAndCondition(condition1, condition2, condition);
+
+  FElement.FindFirst(TreeScope_Descendants, condition, item);
+
+  result := TAutomationTreeViewItem.create(item);
+end;
+
+{ TAutomationTreeViewItem }
+
+constructor TAutomationTreeViewItem.Create(element: IUIAutomationElement);
+begin
+  inherited;
+
+end;
+
+procedure TAutomationTreeViewItem.select;
+begin
+
 end;
 
 end.

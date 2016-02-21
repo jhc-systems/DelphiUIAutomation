@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -80,12 +80,15 @@ var
   cb1: IAutomationCombobox;
   cb2: IAutomationCombobox;
   tv1: IAutomationTreeView;
+  tvi: IAutomationTreeViewItem;
+  exit1: IAutomationMenuItem;
+  menu: IAutomationMenu;
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-  application := TAutomationApplication.Launch
+  application := TAutomationApplication.LaunchOrAttach
     ('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   application.WaitWhileBusy;
@@ -133,9 +136,15 @@ begin
   writeln('Combo2 text is ' + cb2.Text);
 
   // Now try and get stuff from TreeView
-
   tv1 := enquiry.getTreeViewByIndex(0);
-  writeln('Treeview name is ' + tv1.name);
+  tvi := tv1.GetItem('');
+  tvi.select;
+
+//  writeln('Treeview name is ' + tv1.name);
+
+  menu := enquiry.GetMainMenu;
+  exit1 := menu.MenuItemAlt('File|Exit');
+  exit1.Click;
 
   application.Kill;
 

@@ -62,9 +62,7 @@ type
     FTablePattern : IUIAutomationTablePattern;
   private
     function GetValue: string;
-    procedure GetValuePattern;
     procedure GetGridPattern;
-    procedure GetSelectionPattern;
     procedure GetTablePattern;
     procedure GetPatterns;
     function GetSelected : IAutomationStringGridItem;
@@ -95,21 +93,6 @@ uses
   DelphiUIAutomation.PatternIDs;
 
 { TAutomationStringGrid }
-
-procedure TAutomationStringGrid.GetValuePattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
 
 constructor TAutomationStringGrid.Create(element: IUIAutomationElement);
 begin
@@ -179,9 +162,9 @@ end;
 
 procedure TAutomationStringGrid.GetPatterns;
 begin
-  GetValuePattern;
+  FValuePattern := GetValuePattern;
   GetGridPattern;
-  GetSelectionPattern;
+  FSelectionPattern := GetSelectionPattern;
   GetTablePattern;
 end;
 
@@ -210,21 +193,6 @@ begin
   end;
 
   result := item;
-end;
-
-procedure TAutomationStringGrid.GetSelectionPattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_SelectionPatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationSelectionPattern, FSelectionPattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
 end;
 
 procedure TAutomationStringGrid.GetTablePattern;

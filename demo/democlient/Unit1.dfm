@@ -62,10 +62,6 @@ object Form1: TForm1
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'First Tab'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Edit3: TEdit
         Left = 24
         Top = 32
@@ -90,10 +86,6 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Last Tab'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Edit5: TEdit
         Left = 40
         Top = 40
@@ -242,6 +234,7 @@ object Form1: TForm1
     Width = 314
     Height = 117
     Indent = 19
+    PopupMenu = PopupMenu3
     TabOrder = 18
     Items.NodeData = {
       0303000000280000000000000000000000FFFFFFFFFFFFFFFF00000000000000
@@ -278,6 +271,16 @@ object Form1: TForm1
     object PopupMenu2: TMenuItem
       Caption = 'Popup Menu '
       OnClick = PopupMenu2Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 208
+    Top = 16
+    object Popup11: TMenuItem
+      Caption = 'Popup1'
+    end
+    object Popup21: TMenuItem
+      Caption = 'Popup2'
     end
   end
 end
