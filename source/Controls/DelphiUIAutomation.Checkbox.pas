@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -53,8 +53,6 @@ type
   TAutomationCheckBox = class (TAutomationBase, IAutomationCheckBox)
   strict private
     FTogglePattern : IUIAutomationTogglePattern;
-  private
-    procedure GetTogglePattern;
   public
     ///<summary>
     ///  Performs a toggle action
@@ -89,23 +87,7 @@ constructor TAutomationCheckBox.Create(element: IUIAutomationElement);
 begin
   inherited create(element);
 
-  GetTogglePattern;
-end;
-
-procedure TAutomationCheckBox.GetTogglePattern;
-var
-  inter: IInterface;
-
-begin
-  self.fElement.GetCurrentPattern(UIA_TogglePatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if inter.QueryInterface(IID_IUIAutomationTogglePattern, self.FTogglePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
+  FTogglePattern := GetTogglePattern;
 end;
 
 function TAutomationCheckBox.Toggle: HRESULT;

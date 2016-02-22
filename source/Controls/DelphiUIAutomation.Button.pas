@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -48,6 +48,8 @@ type
   ///  Representation of a button control
   /// </summary>
   TAutomationButton = class (TAutomationBase, IAutomationButton)
+  private
+    fInvokePattern : IUIAutomationInvokePattern;
   public
     /// <summary>
     ///  Clicks the button
@@ -58,6 +60,8 @@ type
     ///  Focuses the button
     /// </summary>
     function Focus : HResult;
+
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
@@ -70,22 +74,15 @@ uses
 { TAutomationButton }
 
 function TAutomationButton.Click : HResult;
-var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
-
 begin
-  result := -1;
+  result := FInvokePattern.Invoke;
+end;
 
-  fElement.GetCurrentPattern(UIA_InvokePatternID, unknown);
+constructor TAutomationButton.Create(element: IUIAutomationElement);
+begin
+  inherited Create(element);
 
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationInvokePattern, Pattern) = S_OK then
-    begin
-      result := Pattern.Invoke;
-    end;
-  end;
+  fInvokePattern := getInvokePattern;
 end;
 
 function TAutomationButton.Focus: HResult;

@@ -69,7 +69,6 @@ type
     procedure setText(const Value: string);
 
     function getItems: TObjectList<TAutomationListItem>;
-    procedure GetExpandCollapsePattern;
     procedure InitialiseList;
 
   public
@@ -117,27 +116,11 @@ uses
 
 { TAutomationComboBox }
 
-procedure TAutomationComboBox.GetExpandCollapsePattern;
-var
-  inter: IInterface;
-
-begin
-  self.fElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise ExpandCollapse control pattern');
-    end;
-  end;
-end;
-
 constructor TAutomationComboBox.Create(element: IUIAutomationElement);
 begin
   inherited Create(element);
 
-  GetExpandCollapsePattern;
+  FExpandCollapsePattern := GetExpandCollapsePattern;
   FValuePattern := GetValuePattern;
 
   self.Expand; // Have to expand for the list to be available

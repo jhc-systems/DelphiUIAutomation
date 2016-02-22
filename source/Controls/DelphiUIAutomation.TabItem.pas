@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -40,11 +40,18 @@ type
   ///  Represents a tab item
   /// </summary>
   TAutomationTabItem = class (TAutomationBase, IAutomationTabItem)
+  private
+    FSelectionItemPattern: IUIAutomationSelectionItemPattern;
   public
     /// <summary>
     ///  Selects this tabitem
     /// </summary>
     procedure Select;
+
+    /// <summary>
+    ///  Constructor for tab items.
+    /// </summary>
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
@@ -55,21 +62,15 @@ uses
 
 { TAutomationTabItem }
 
-procedure TAutomationTabItem.Select;
-var
-  unknown: IInterface;
-  Pattern  : IUIAutomationInvokePattern;
-
+constructor TAutomationTabItem.Create(element: IUIAutomationElement);
 begin
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternID, unknown);
+  inherited;
+  FSelectionItemPattern := GetSelectionItemPattern;
+end;
 
-  if (unknown <> nil) then
-  begin
-    if unknown.QueryInterface(IUIAutomationSelectionItemPattern, Pattern) = S_OK then
-    begin
-      Pattern.Invoke;
-    end;
-  end;
+procedure TAutomationTabItem.Select;
+begin
+  FSelectionItemPattern.Select;
 end;
 
 end.
