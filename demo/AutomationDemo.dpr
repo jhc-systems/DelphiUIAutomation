@@ -70,7 +70,7 @@ uses
 var
   application: IAutomationApplication;
   enquiry : IAutomationWindow;
-  tb1 : IAutomationEditBox;
+  tb1, tb2 : IAutomationEditBox;
   eb0: IAutomationTextBox;
   Tab: IAutomationTab;
   Statusbar: IAutomationStatusBar;
@@ -103,6 +103,9 @@ begin
 
   tb1 := Tab.GetEditBoxByIndex(0);
   writeln(tb1.Text);
+
+  tb2 := enquiry.GetEditBoxByName('AutomatedEdit1');
+  writeln(tb2.Text);
 
   check := enquiry.GetCheckboxByIndex(0);
   check.toggle;

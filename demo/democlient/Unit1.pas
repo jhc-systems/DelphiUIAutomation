@@ -31,7 +31,6 @@ uses
 
 type
   TForm1 = class(TForm)
-    Edit1: TEdit;
     Edit2: TEdit;
     Button1: TButton;
     Button2: TButton;
@@ -66,6 +65,7 @@ type
     PopupMenu3: TPopupMenu;
     Popup11: TMenuItem;
     Popup21: TMenuItem;
+    Edit1: TEdit;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

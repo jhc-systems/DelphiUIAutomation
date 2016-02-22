@@ -48,7 +48,8 @@ type
   protected
     function GetControlByControlType (index : integer; id : word) : IUIAutomationElement; overload;
     function GetControlByControlType (index : integer;  id: word; controlType : string) : IUIAutomationElement; overload;
-    function GetControlByControlType (title : string; id : word) : IUIAutomationElement; overload;
+//    function GetControlByControlType (title : string; id : word) : IUIAutomationElement; overload;
+    function GetControlByControlType1 (title : string; id : word) : IUIAutomationElement; overload;
 
   public
     /// <summary>
@@ -131,7 +132,7 @@ uses
 
 function TAutomationContainer.GetCheckboxByName(const value: string): IAutomationCheckBox;
 begin
-  result := TAutomationCheckBox.Create(GetControlByControlType(value, UIA_CheckBoxControlTypeId));
+  result := TAutomationCheckBox.Create(GetControlByControlType1(value, UIA_CheckBoxControlTypeId));
 end;
 
 function TAutomationContainer.GetEditBoxByIndex(index: integer): IAutomationEditBox;
@@ -177,7 +178,7 @@ var
   btn : IUIAutomationElement;
 
 begin
-  btn := GetControlByControlType(title, UIA_ButtonControlTypeId);
+  btn := GetControlByControlType1(title, UIA_ButtonControlTypeId);
   result := TAutomationButton.Create(btn);
 end;
 
@@ -191,43 +192,20 @@ begin
   result := TAutomationComboBox.Create(GetControlByControlType(index, UIA_ComboBoxControlTypeId));
 end;
 
-function TAutomationContainer.GetControlByControlType(title: string; id: word): IUIAutomationElement;
+function TAutomationContainer.GetControlByControlType1(title: string; id: word): IUIAutomationElement;
 var
+  condition0,
+  condition, condition1, condition2: IUIAutomationCondition;
   element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  count : integer;
-  name : widestring;
-  length : integer;
-  retVal : integer;
 
 begin
-  result := nil;
+  uiAuto.createPropertyCondition(UIA_NamePropertyId, title, condition1);
+  uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, id, condition2);
+  UIAuto.createAndCondition(condition1, condition2, condition);
 
-  // Find the element
-  collection := FindAll(TreeScope_Descendants);
+  self.FElement.FindFirst(TreeScope_Descendants, condition, element);
 
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-    element.Get_CurrentControlType(retVal);
-
-    if (retval = id) then
-    begin
-      element.Get_CurrentName(name);
-
-      if (name = title)then
-      begin
-        result := element;
-        break;
-      end;
-    end;
-  end;
-
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find control');
-
+  result := element;
 end;
 
 function TAutomationContainer.GetControlByControlType(index: integer; id: word;
@@ -347,7 +325,7 @@ var
   eb : IUIAutomationElement;
 
 begin
-  eb := GetControlByControlType(name, UIA_EditControlTypeId);
+  eb := GetControlByControlType1(name, UIA_EditControlTypeId);
   result := TAutomationEditBox.Create(eb);
 end;
 
@@ -357,8 +335,7 @@ var
   cb : IUIAutomationElement;
 
 begin
-  cb := GetControlByControlType(name, UIA_ComboBoxControlTypeId);
+  cb := GetControlByControlType1(name, UIA_ComboBoxControlTypeId);
   result := TAutomationComboBox.Create(cb);
 end;
-
 end.
