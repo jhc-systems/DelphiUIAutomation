@@ -137,18 +137,17 @@ begin
 
   // Now try and get stuff from TreeView
   tv1 := enquiry.getTreeViewByIndex(0);
-  tvi := tv1.GetItem('');
+  tvi := tv1.GetItem('Sub-SubItem');
   tvi.select;
 
 //  writeln('Treeview name is ' + tv1.name);
 
-  menu := enquiry.GetMainMenu;
-  exit1 := menu.MenuItemAlt('File|Exit');
-  exit1.Click;
-
-  application.Kill;
+//  menu := enquiry.GetMainMenu;
+//  exit1 := menu.MenuItemAlt('File|Exit');
+//  exit1.Click;
 
   WriteLn('Press key to exit');
   ReadLn;
 
+  application.Kill;
 end.

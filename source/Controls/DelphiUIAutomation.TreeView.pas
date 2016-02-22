@@ -42,6 +42,8 @@ type
   end;
 
   TAutomationTreeViewItem = class(TAutomationBase, IAutomationTreeViewItem)
+  private
+    FSelectItemPattern : IUIAutomationSelectionItemPattern;
   public
     procedure select;
     constructor Create(element : IUIAutomationElement); override;
@@ -88,12 +90,12 @@ end;
 constructor TAutomationTreeViewItem.Create(element: IUIAutomationElement);
 begin
   inherited;
-
+  FSelectItemPattern := GetSelectionItemPattern;
 end;
 
 procedure TAutomationTreeViewItem.select;
 begin
-
+  FSelectItemPattern.select;
 end;
 
 end.
