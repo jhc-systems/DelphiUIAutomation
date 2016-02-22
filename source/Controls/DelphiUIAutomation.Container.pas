@@ -36,6 +36,7 @@ uses
   DelphiUIAutomation.Panel,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.TreeView,
   DelphiUIAutomation.StringGrid,
   UIAutomationClient_TLB;
 
@@ -109,6 +110,11 @@ type
     /// Finds the combobox, by name
     /// </summary>
     function GetComboboxByName (name : String) : IAutomationComboBox;
+
+    /// <summary>
+    /// Finds the treeview, by index
+    /// </summary>
+    function GetTreeViewByIndex (index: Integer): IAutomationTreeView;
   end;
 
 implementation
@@ -153,6 +159,17 @@ var
 begin
   tb := GetControlByControlType(index, UIA_TextControlTypeId);
   result := TAutomationTextBox.Create(tb);
+end;
+
+function TAutomationContainer.GetTreeViewByIndex(
+  index: Integer): IAutomationTreeView;
+var
+  treeView : IUIAutomationElement;
+
+begin
+  treeView := GetControlByControlType(0, UIA_TreeControlTypeId);
+
+  result := TAutomationTreeView.Create(treeView);
 end;
 
 function TAutomationContainer.GetButton(const title: string): IAutomationButton;

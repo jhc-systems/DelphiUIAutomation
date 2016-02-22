@@ -40,11 +40,15 @@ type
   ///  Represents a radio button control
   /// </summary>
   TAutomationRadioButton = class (TAutomationBase, IAutomationRadioButton)
+  private
+    FSelectionItemPattern : IUIAutomationSelectionItemPattern;
   public
     ///<summary>
     ///  Selects the control
     ///</summary>
     function Select: HRESULT;
+
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
@@ -54,23 +58,15 @@ uses
 
 { TAutomationRadioButton }
 
-function TAutomationRadioButton.Select: HRESULT;
-var
-  Inter: IInterface;
-  pattern : IUIAutomationSelectionItemPattern;
-
+constructor TAutomationRadioButton.Create(element: IUIAutomationElement);
 begin
-  result := -1;
+  inherited Create(element);
+  FSelectionItemPattern := getSelectionItemPattern;
+end;
 
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if Inter.QueryInterface(IID_IUIAutomationSelectionItemPattern, pattern) = S_OK then
-    begin
-      result := pattern.Select;
-    end;
-  end;
+function TAutomationRadioButton.Select: HRESULT;
+begin
+  result := FSelectionItemPattern.Select;
 end;
 
 end.

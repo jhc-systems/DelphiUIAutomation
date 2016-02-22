@@ -187,8 +187,8 @@ object Form1: TForm1
     Top = 536
     Width = 145
     Height = 21
-    Style = csDropDownList
     TabOrder = 14
+    Text = 'First'
     Items.Strings = (
       'First'
       'Second'
@@ -203,14 +203,50 @@ object Form1: TForm1
     TabOrder = 15
   end
   object AutomatedMaskEdit1: TAutomatedMaskEdit
-    Left = 400
-    Top = 456
+    Left = 328
+    Top = 382
     Width = 120
     Height = 21
     EditMask = '!99/99/00;1;_'
     MaxLength = 8
     TabOrder = 16
     Text = '  /  /  '
+  end
+  object RichEdit1: TRichEdit
+    Left = 328
+    Top = 409
+    Width = 314
+    Height = 108
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Lines.Strings = (
+      'This is a RichEdit, I wonder what will happen')
+    ParentFont = False
+    PlainText = True
+    TabOrder = 17
+  end
+  object TreeView1: TTreeView
+    Left = 328
+    Top = 8
+    Width = 314
+    Height = 117
+    Indent = 19
+    PopupMenu = PopupMenu3
+    TabOrder = 18
+    Items.NodeData = {
+      0303000000280000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      00020000000105460069007200730074002E0000000000000000000000FFFFFF
+      FFFFFFFFFF00000000000000000100000001085300750062004900740065006D
+      003100340000000000000000000000FFFFFFFFFFFFFFFF000000000000000000
+      000000010B5300750062002D005300750062004900740065006D002E00000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000108530075
+      0062004900740065006D0032002A0000000000000000000000FFFFFFFFFFFFFF
+      FF00000000000000000000000001065300650063006F006E0064002800000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000105540068
+      00690072006400}
   end
   object MainMenu1: TMainMenu
     Left = 24
@@ -235,6 +271,16 @@ object Form1: TForm1
     object PopupMenu2: TMenuItem
       Caption = 'Popup Menu '
       OnClick = PopupMenu2Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 208
+    Top = 16
+    object Popup11: TMenuItem
+      Caption = 'Popup1'
+    end
+    object Popup21: TMenuItem
+      Caption = 'Popup2'
     end
   end
 end

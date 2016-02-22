@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -48,6 +48,8 @@ type
   /// </remarks>
   TAutomationEditBox = class (TAutomationBase, IAutomationEditBox)
   private
+    fValuePattern : IUIAutomationValuePattern;
+
     function getIsPassword: boolean;
     function getIsReadOnly: boolean;
     function getText: string;
@@ -67,6 +69,8 @@ type
     ///  Gets whether the control is read-only
     ///</summary>
     property IsReadOnly : boolean read getIsReadOnly;
+
+    constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
@@ -77,6 +81,12 @@ uses
   sysutils;
 
 { TAutomationTextBox }
+
+constructor TAutomationEditBox.Create(element: IUIAutomationElement);
+begin
+  inherited Create(element);
+  fValuePattern := GetValuePattern;
+end;
 
 function TAutomationEditBox.getIsPassword: boolean;
 var
@@ -95,8 +105,6 @@ end;
 
 function TAutomationEditBox.getText: string;
 var
-  Inter: IInterface;
-  ValPattern  : IUIAutomationValuePattern;
   value : widestring;
 
 begin
@@ -108,27 +116,14 @@ begin
   end
   else
   begin
-    fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-    if Inter.QueryInterface(IID_IUIAutomationValuePattern, ValPattern) = S_OK then
-    begin
-      ValPattern.Get_CurrentValue(value);
-      Result := trim(value);
-    end;
+    FValuePattern.Get_CurrentValue(value);
+    Result := trim(value);
   end;
 end;
 
 procedure TAutomationEditBox.setText(const Value: string);
-var
-  Inter: IInterface;
-  ValPattern  : IUIAutomationValuePattern;
-
 begin
-  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, ValPattern) = S_OK then
-  begin
-    ValPattern.SetValue(value);
-  end;
-
+  FValuePattern.SetValue(value);
 end;
 
 end.

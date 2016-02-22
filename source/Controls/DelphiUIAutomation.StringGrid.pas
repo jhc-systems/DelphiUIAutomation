@@ -62,10 +62,6 @@ type
     FTablePattern : IUIAutomationTablePattern;
   private
     function GetValue: string;
-    procedure GetValuePattern;
-    procedure GetGridPattern;
-    procedure GetSelectionPattern;
-    procedure GetTablePattern;
     procedure GetPatterns;
     function GetSelected : IAutomationStringGridItem;
     function GetColumnHeaders : TObjectList<TAutomationStringGridItem>;
@@ -95,21 +91,6 @@ uses
   DelphiUIAutomation.PatternIDs;
 
 { TAutomationStringGrid }
-
-procedure TAutomationStringGrid.GetValuePattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
 
 constructor TAutomationStringGrid.Create(element: IUIAutomationElement);
 begin
@@ -142,21 +123,6 @@ begin
   result := items;
 end;
 
-procedure TAutomationStringGrid.GetGridPattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_GridPatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationGridPattern, FGridPattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
-
 function TAutomationStringGrid.GetValue: string;
 var
   value : WideString;
@@ -179,10 +145,10 @@ end;
 
 procedure TAutomationStringGrid.GetPatterns;
 begin
-  GetValuePattern;
-  GetGridPattern;
-  GetSelectionPattern;
-  GetTablePattern;
+  FValuePattern := GetValuePattern;
+  FGRidPattern := GetGridPattern;
+  FSelectionPattern := GetSelectionPattern;
+  FTablePattern := GetTablePattern;
 end;
 
 function TAutomationStringGrid.GetSelected: IAutomationStringGridItem;
@@ -210,36 +176,6 @@ begin
   end;
 
   result := item;
-end;
-
-procedure TAutomationStringGrid.GetSelectionPattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_SelectionPatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationSelectionPattern, FSelectionPattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
-
-procedure TAutomationStringGrid.GetTablePattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_TablePatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationTablePattern, FTablePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
 end;
 
 end.

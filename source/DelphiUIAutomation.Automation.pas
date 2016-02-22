@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -24,6 +24,7 @@ unit DelphiUIAutomation.Automation;
 interface
 
 uses
+  ActiveX,
   generics.collections,
   winapi.windows,
   DelphiUIAutomation.Window,
@@ -32,10 +33,20 @@ uses
 type
   TUIAuto = class
   public
-   /// <summary>
+    /// <summary>
     ///  Creates a true condition
     /// </summary>
     class function CreateTrueCondition : IUIAutomationCondition;
+
+    /// <summary>
+    ///  Creates an 'and' condition
+    /// </summary>
+    class function CreateAndCondition(condition1, condition2: IUIAutomationCondition) : IUIAutomationCondition;
+
+    /// <summary>
+    ///  Creates a property condition
+    /// </summary>
+    class function CreatePropertyCondition(propertyId: SYSINT; value: OleVariant) : IUIAutomationCondition;
   end;
 
 
@@ -47,10 +58,29 @@ implementation
 
 uses
   DelphiUIAutomation.Exception,
-  sysutils,
-  ActiveX;
+  sysutils;
 
 { TUIAuto }
+
+class function TUIAuto.CreateAndCondition(condition1, condition2: IUIAutomationCondition): IUIAutomationCondition;
+var
+  condition : IUIAutomationCondition;
+
+begin
+  UIAuto.CreateAndCondition(condition1, condition2, condition);
+
+  result := condition;
+end;
+
+class function TUIAuto.CreatePropertyCondition(propertyId: SYSINT; value: OleVariant): IUIAutomationCondition;
+var
+  condition : IUIAutomationCondition;
+
+begin
+  UIAuto.CreatePropertyCondition(propertyId, value, condition);
+
+  result := condition;
+end;
 
 class function TUIAuto.CreateTrueCondition: IUIAutomationCondition;
 var

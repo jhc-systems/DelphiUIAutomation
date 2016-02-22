@@ -61,6 +61,11 @@ type
     AutomatedCombobox2: TAutomatedCombobox;
     AutomationStringGrid1: TAutomationStringGrid;
     AutomatedMaskEdit1: TAutomatedMaskEdit;
+    RichEdit1: TRichEdit;
+    TreeView1: TTreeView;
+    PopupMenu3: TPopupMenu;
+    Popup11: TMenuItem;
+    Popup21: TMenuItem;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

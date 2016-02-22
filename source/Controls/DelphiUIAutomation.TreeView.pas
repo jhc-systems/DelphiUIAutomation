@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015-16 JHC Systems Limited                              }
+{           Copyright 2016 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -19,58 +19,81 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.TabItem;
+
+unit DelphiUIAutomation.TreeView;
 
 interface
 
 uses
+  generics.collections,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.ListItem,
   UIAutomationClient_TLB;
 
 type
-  IAutomationTabItem = interface (IAutomationBase)
-  ['{6FC85416-87FD-4FE6-91C5-3D465F73DBD5}']
-    /// <summary>
-    ///  Selects this tabitem
-    /// </summary>
-    procedure Select;
+  IAutomationTreeViewItem = interface (IAutomationBase)
+    ['{ED19F4CE-6A7B-4C53-B42B-5487A32E8696}']
+    procedure select;
   end;
 
-  /// <summary>
-  ///  Represents a tab item
-  /// </summary>
-  TAutomationTabItem = class (TAutomationBase, IAutomationTabItem)
-  private
-    FSelectionItemPattern: IUIAutomationSelectionItemPattern;
-  public
-    /// <summary>
-    ///  Selects this tabitem
-    /// </summary>
-    procedure Select;
+  IAutomationTreeView = interface (IAutomationBase)
+    ['{7228845F-E622-442F-A38B-491CE7392245}']
+    function GetItem(name: String): IAutomationTreeViewItem;
+  end;
 
-    /// <summary>
-    ///  Constructor for tab items.
-    /// </summary>
+  TAutomationTreeViewItem = class(TAutomationBase, IAutomationTreeViewItem)
+  public
+    procedure select;
+    constructor Create(element : IUIAutomationElement); override;
+  end;
+
+  TAutomationTreeView = class (TAutomationBase, IAutomationTreeView)
+  public
+    function GetItem(name: String): IAutomationTreeViewItem;
     constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.Automation,
-  DelphiUIAutomation.PatternIDs;
+  DelphiUIAutomation.PropertyIDs,
+  DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.Automation;
 
-{ TAutomationTabItem }
+{ TAutomationTreeView }
 
-constructor TAutomationTabItem.Create(element: IUIAutomationElement);
+constructor TAutomationTreeView.Create(element : IUIAutomationElement);
 begin
-  inherited;
-  FSelectionItemPattern := GetSelectionItemPattern;
+  inherited Create(element);
 end;
 
-procedure TAutomationTabItem.Select;
+function TAutomationTreeView.GetItem(name: String): IAutomationTreeViewItem;
+var
+  item : IUIAutomationElement;
+  condition,
+  condition1,
+  condition2 : IUIAutomationCondition;
 begin
-  FSelectionItemPattern.Select;
+  uiAuto.createPropertyCondition(UIA_NamePropertyId, name, condition1);
+  uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, UIA_TreeItemControlTypeId, condition2);
+  UIAuto.createAndCondition(condition1, condition2, condition);
+
+  FElement.FindFirst(TreeScope_Descendants, condition, item);
+
+  result := TAutomationTreeViewItem.create(item);
+end;
+
+{ TAutomationTreeViewItem }
+
+constructor TAutomationTreeViewItem.Create(element: IUIAutomationElement);
+begin
+  inherited;
+
+end;
+
+procedure TAutomationTreeViewItem.select;
+begin
+
 end;
 
 end.

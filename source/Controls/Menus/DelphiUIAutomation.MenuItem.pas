@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -51,9 +51,6 @@ type
     FExpandCollapsePattern : IUIAutomationExpandCollapsePattern;
 
     function getItems: TObjectList<TAutomationMenuItem>;
-  private
-    procedure GetInvokePattern;
-    procedure GetExpandCollapsePattern;
   public
     /// <summary>
     ///  Constructor for menu items.
@@ -97,22 +94,6 @@ uses
   DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.Automation;
 
-procedure TAutomationMenuItem.GetExpandCollapsePattern;
-var
-  inter: IInterface;
-
-begin
-  self.fElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if inter.QueryInterface(IID_IUIAutomationExpandCollapsePattern, self.FExpandCollapsePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
-
 constructor TAutomationMenuItem.Create(element: IUIAutomationElement);
 var
   name : widestring;
@@ -122,8 +103,8 @@ begin
 
   FElement.Get_CurrentName(name);
 
-  GetExpandCollapsePattern;
-  GetInvokePattern;
+  FExpandCollapsePattern := GetExpandCollapsePattern;
+  FInvokePattern := GetInvokePattern;
 end;
 
 destructor TAutomationMenuItem.Destroy;
@@ -161,22 +142,6 @@ begin
 
     if (retval <> ExpandCollapseState_Collapsed) then
       result := self.FExpandCollapsePattern.Collapse;
-  end;
-end;
-
-procedure TAutomationMenuItem.GetInvokePattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_InvokePatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if Inter.QueryInterface(IUIAutomationInvokePattern, FInvokePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
   end;
 end;
 

@@ -83,12 +83,6 @@ type
     function GetControlMenu : IAutomationMenu;
     function GetPopupMenu : IAutomationMenu;
 
-  protected
-    /// <summary>
-    ///  Gets the window control pattern
-    /// </summary>
-    procedure GetWindowPattern;
-
   public
     /// <summary>
     ///  Constructor for window.
@@ -172,24 +166,7 @@ begin
   if WithMenu then
     self.FMainMenu := GetMenuBar(1);
 
-
-  GetWindowPattern();
-end;
-
-procedure TAutomationWindow.GetWindowPattern;
-var
-  inter: IInterface;
-
-begin
-  self.fElement.GetCurrentPattern(UIA_WindowPatternId, inter);
-
-  if (inter <> nil) then
-  begin
-    if inter.QueryInterface(IID_IUIAutomationWindowPattern, self.FWindowPattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise Window control pattern');
-    end;
-  end;
+  FWindowPattern := GetWindowPattern;
 end;
 
 destructor TAutomationWindow.Destroy;
