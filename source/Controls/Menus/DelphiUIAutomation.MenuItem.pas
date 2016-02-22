@@ -116,33 +116,13 @@ begin
 end;
 
 function TAutomationMenuItem.Expand: HRESULT;
-var
-  retVal : TOleEnum;
-
 begin
-  result := -1;
-  if FExpandCollapsePattern <> nil then
-  begin
-    FExpandCollapsePattern.Get_CurrentExpandCollapseState(retval);
-
-    if retval <> ExpandCollapseState_Expanded then
-      result := self.FExpandCollapsePattern.Expand;
-  end;
+  result := FExpandCollapsePattern.Expand;
 end;
 
 function TAutomationMenuItem.Collapse: HRESULT;
-var
-  retVal : TOleEnum;
-
 begin
-  result := -1;
-  if FExpandCollapsePattern <> nil then
-  begin
-    FExpandCollapsePattern.Get_CurrentExpandCollapseState(retval);
-
-    if (retval <> ExpandCollapseState_Collapsed) then
-      result := self.FExpandCollapsePattern.Collapse;
-  end;
+  result := FExpandCollapsePattern.Collapse;
 end;
 
 function TAutomationMenuItem.getItems: TObjectList<TAutomationMenuItem>;

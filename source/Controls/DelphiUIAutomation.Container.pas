@@ -194,7 +194,6 @@ end;
 
 function TAutomationContainer.GetControlByControlType1(title: string; id: word): IUIAutomationElement;
 var
-  condition0,
   condition, condition1, condition2: IUIAutomationCondition;
   element : IUIAutomationElement;
 
