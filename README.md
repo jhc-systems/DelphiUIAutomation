@@ -180,7 +180,8 @@ As the automation does not expose the cells fully (as they do not technically ex
 ```
 
 # Contributors
-[Mark Humphreys](https://github.com/markhumphreysjhc)
+* [Mark Humphreys](https://github.com/markhumphreysjhc)
+* Robert Deutschmann - Example Howto and AutomatedButton
 
 # License
 Apache Version 2.0 Copyright (C) 2015
