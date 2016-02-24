@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 590
+  ClientHeight = 676
   ClientWidth = 650
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,7 +16,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   DesignSize = (
     650
-    590)
+    676)
   PixelsPerInch = 96
   TextHeight = 13
   object Edit2: TEdit
@@ -130,7 +130,7 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 571
+    Top = 657
     Width = 650
     Height = 19
     Panels = <
@@ -141,6 +141,7 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
+    ExplicitTop = 571
   end
   object ComboBox1: TComboBox
     Left = 24
@@ -190,9 +191,10 @@ object Form1: TForm1
     Left = 328
     Top = 131
     Width = 313
-    Height = 232
+    Height = 318
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 14
+    ExplicitHeight = 232
   end
   object AutomatedMaskEdit1: TAutomatedMaskEdit
     Left = 328
@@ -247,6 +249,20 @@ object Form1: TForm1
     Height = 21
     TabOrder = 18
     Text = 'Edit1'
+  end
+  object ListBox1: TListBox
+    Left = 343
+    Top = 523
+    Width = 299
+    Height = 78
+    ItemHeight = 13
+    Items.Strings = (
+      'First (List)'
+      'Second (List)'
+      'Anti-Penultimate (List)'
+      'Penultimate (List)'
+      'Last (List)')
+    TabOrder = 19
   end
   object MainMenu1: TMainMenu
     Left = 24

@@ -66,6 +66,7 @@ type
     Popup11: TMenuItem;
     Popup21: TMenuItem;
     Edit1: TEdit;
+    ListBox1: TListBox;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
