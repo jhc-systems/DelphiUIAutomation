@@ -19,7 +19,6 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-
 unit DelphiUIAutomation.TreeView;
 
 interface

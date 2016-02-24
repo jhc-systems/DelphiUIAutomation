@@ -118,7 +118,7 @@ var
   match: TMatch;
   value, value1: string;
   condition0,
-  condition, condition1, condition2: ICondition;
+  condition : ICondition;
   collection, icollection: IUIAutomationElementArray;
   lLength, iLength: Integer;
   count, icount: Integer;
@@ -144,50 +144,35 @@ begin
           value := match.Groups.Item[1].value;
           value1 := match.Groups.Item[2].value;
 
-          condition1 := TUIAuto.createNameCondition(name);
-          condition2 := TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId);
-          condition := TUIAuto.createAndCondition(condition1, condition2);
+          condition := TUIAuto.createAndCondition(
+            TUIAuto.createNameCondition(value),
+            TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId));
 
           self.FElement.FindFirst(TreeScope_Descendants, condition.getCondition, menuElement);
 
           if (menuElement <> nil) then
           begin
-            // 2. Find leaf level and click
+            // 2. Find leaf level
             menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(pattern));
             if Assigned(pattern) then
             begin
-               pattern.Expand;
-               sleep(750);
+              pattern.Expand;
+              sleep(2000);
 
-               condition0 := TUIAuto.CreateTrueCondition;
+              condition0 := TUIAuto.createAndCondition(
+                TUIAuto.createNameCondition(value1),
+                TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId));
 
-               menuElement.FindAll(TreeScope_Descendants, condition0.getCondition,
-                 icollection);
+              menuElement.FindFirst(TreeScope_Descendants, condition0.getCondition,
+                 imenuElement);
 
-               icollection.Get_Length(iLength);
-
-               for icount := 0 to iLength - 1 do
-               begin
-                 icollection.GetElement(icount, imenuElement);
-                 imenuElement.Get_CurrentControlType(retVal);
-
-                 if (retVal = UIA_MenuItemControlTypeId) then
-                 begin
-                   imenuElement.Get_CurrentName(name);
-                   OutputDebugString(pchar('Inner name = ' + name));
-                   if name = value1 then
-                   begin
-                     OutputDebugString(pchar('Found it'));
-                     result := TAutomationMenuItem.Create(imenuElement);
-                     break;
-                   end;
-                 end;
-               end;
-             end;
-           end;
-         end;
-       end;
-     end;
+              result := TAutomationMenuItem.Create(imenuElement);
+              break;
+            end;
+          end;
+        end;
+      end;
+    end;
   end
   else
   begin

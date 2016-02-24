@@ -150,11 +150,11 @@ begin
   tvi := tv1.GetItem('Sub-SubItem');
   tvi.select;
 
-//  writeln('Treeview name is ' + tv1.name);
+  menu := enquiry.GetMainMenu;
+  exit1 := menu.MenuItemAlt('File|Exit');
 
-//  menu := enquiry.GetMainMenu;
-//  exit1 := menu.MenuItemAlt('File|Exit');
-//  exit1.Click;
+  if assigned(exit1) then
+    exit1.Click;
 
   WriteLn('Press key to exit');
   ReadLn;
