@@ -59,6 +59,7 @@ implementation
 
 uses
   DelphiUIAutomation.PropertyIDs,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Automation;
 
@@ -74,13 +75,14 @@ var
   item : IUIAutomationElement;
   condition,
   condition1,
-  condition2 : IUIAutomationCondition;
+  condition2 : ICondition;
 begin
-  uiAuto.createPropertyCondition(UIA_NamePropertyId, name, condition1);
-  uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, UIA_TreeItemControlTypeId, condition2);
-  UIAuto.createAndCondition(condition1, condition2, condition);
 
-  FElement.FindFirst(TreeScope_Descendants, condition, item);
+  condition1 := TuiAuto.createNameCondition(name);
+  condition2 := TuiAuto.createControlTypeCondition(UIA_TreeItemControlTypeId);
+  condition := TUIAuto.createAndCondition(condition1, condition2);
+
+  FElement.FindFirst(TreeScope_Descendants, condition.getCondition, item);
 
   result := TAutomationTreeViewItem.create(item);
 end;

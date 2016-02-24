@@ -25,6 +25,7 @@ interface
 
 uses
   types,
+  DelphiUIAutomation.Condition,
   UIAutomationClient_TLB;
 
 type
@@ -79,7 +80,7 @@ type
     /// <summary>
     ///  Finds the elements, based on scope and condition
     /// </summary>
-    function FindAll (scope : TreeScope; condition : IUIAutomationCondition) : IUIAutomationElementArray; overload;
+    function FindAll (scope : TreeScope; condition : ICondition) : IUIAutomationElementArray; overload;
 
   public
     /// <summary>
@@ -119,26 +120,26 @@ end;
 
 function TAutomationBase.FindAll(scope: TreeScope): IUIAutomationElementArray;
 var
-  condition : IUIAutomationCondition;
+  condition : ICondition;
   collection : IUIAutomationElementArray;
 
 begin
   condition := TUIAuto.CreateTrueCondition;
 
   // Find the elements
-  self.FElement.FindAll(scope, condition, collection);
+  self.FElement.FindAll(scope, condition.getCondition, collection);
 
   result := collection;
 end;
 
 function TAutomationBase.FindAll(scope: TreeScope;
-  condition: IUIAutomationCondition): IUIAutomationElementArray;
+  condition: ICondition): IUIAutomationElementArray;
 var
   collection : IUIAutomationElementArray;
 
 begin
   // Find the elements
-  self.FElement.FindAll(scope, condition, collection);
+  self.FElement.FindAll(scope, condition.getCondition, collection);
 
   result := collection;
 end;

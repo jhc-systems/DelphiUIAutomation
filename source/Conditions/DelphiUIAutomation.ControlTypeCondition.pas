@@ -19,42 +19,41 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.OrCondition;
+unit DelphiUIAutomation.ControlTypeCondition;
 
 interface
 
 uses
   UIAutomationClient_TLB,
   generics.collections,
+  activex,
   DelphiUIAutomation.Condition;
 
 type
-  TOrCondition = class(TInterfacedObject, ICondition)
+  TControlTypeCondition = class(TInterfacedObject, ICondition)
   strict private
-    conditions : TList<ICondition>;
+    FpropertyId: SYSINT;
   public
     function getCondition : IUIAutomationCondition;
-    constructor Create(firstCondition, secondCondition: ICondition);
+    constructor Create(propertyId: SYSINT);
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Automation;
 
-constructor TOrCondition.Create(firstCondition, secondCondition: ICondition);
+constructor TControlTypeCondition.Create(propertyId: SYSINT);
 begin
-  conditions := TList<ICondition>.create;
-
-  conditions.add(firstCondition);
-  conditions.add(secondCondition);
+  FpropertyId := propertyId;
 end;
 
-function TOrCondition.getCondition: IUIAutomationCondition;
+function TControlTypeCondition.getCondition: IUIAutomationCondition;
 var
   condition : IUIAutomationCondition;
 begin
-  uiAuto.createOrCondition(conditions[0].getCondition, conditions[1].getCondition, condition);
+  uiAuto.CreatePropertyCondition(UIA_ControlTypePropertyId, FpropertyId, condition);
   result := condition;
 end;
 

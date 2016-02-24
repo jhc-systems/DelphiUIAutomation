@@ -148,6 +148,7 @@ type
 implementation
 
 uses
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.MenuItem,
   DelphiUIAutomation.Exception,
   DelphiUIAutomation.ControlTypeIDs,
@@ -198,7 +199,7 @@ function TAutomationWindow.GetStatusBar: IAutomationStatusbar;
 var
   element : IUIAutomationElement;
   collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
+  condition : ICondition;
   count : integer;
   length : integer;
   retVal : integer;
@@ -209,7 +210,7 @@ begin
   condition := TUIAuto.CreateTrueCondition;
 
   // Find the element
-  self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+  collection := self.FindAll(TreeScope_Descendants, condition);
 
   collection.Get_Length(length);
 

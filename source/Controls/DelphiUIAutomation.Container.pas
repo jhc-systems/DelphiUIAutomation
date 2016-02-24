@@ -125,6 +125,7 @@ uses
   sysutils,
   ActiveX,
   DelphiUIAutomation.Tab,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Exception,
@@ -194,15 +195,15 @@ end;
 
 function TAutomationContainer.GetControlByControlType1(title: string; id: word): IUIAutomationElement;
 var
-  condition, condition1, condition2: IUIAutomationCondition;
+  condition, condition1, condition2: ICondition;
   element : IUIAutomationElement;
 
 begin
-  uiAuto.createPropertyCondition(UIA_NamePropertyId, title, condition1);
-  uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, id, condition2);
-  UIAuto.createAndCondition(condition1, condition2, condition);
+  condition1 := TuiAuto.createNameCondition(title);
+  condition2 := TuiAuto.createControlTypeCondition(id);
+  condition := TUIAuto.createAndCondition(condition1, condition2);
 
-  self.FElement.FindFirst(TreeScope_Descendants, condition, element);
+  self.FElement.FindFirst(TreeScope_Descendants, condition.getCondition, element);
 
   result := element;
 end;

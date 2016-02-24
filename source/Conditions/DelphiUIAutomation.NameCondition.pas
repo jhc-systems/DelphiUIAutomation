@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.OrCondition;
+unit DelphiUIAutomation.NameCondition;
 
 interface
 
@@ -29,34 +29,31 @@ uses
   DelphiUIAutomation.Condition;
 
 type
-  TOrCondition = class(TInterfacedObject, ICondition)
+  TNameCondition = class(TInterfacedObject, ICondition)
   strict private
-    conditions : TList<ICondition>;
+    FName: String;
   public
     function getCondition : IUIAutomationCondition;
-    constructor Create(firstCondition, secondCondition: ICondition);
+    constructor Create(name: String);
   end;
 
 implementation
 
 uses
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Automation;
 
-constructor TOrCondition.Create(firstCondition, secondCondition: ICondition);
+constructor TNameCondition.Create(name: String);
 begin
-  conditions := TList<ICondition>.create;
-
-  conditions.add(firstCondition);
-  conditions.add(secondCondition);
+  FName := name;
 end;
 
-function TOrCondition.getCondition: IUIAutomationCondition;
+function TNameCondition.getCondition: IUIAutomationCondition;
 var
   condition : IUIAutomationCondition;
 begin
-  uiAuto.createOrCondition(conditions[0].getCondition, conditions[1].getCondition, condition);
+  uiAuto.CreatePropertyCondition(UIA_NamePropertyId, FName, condition);
   result := condition;
 end;
 
 end.
-

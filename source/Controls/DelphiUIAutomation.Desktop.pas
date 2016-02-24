@@ -65,6 +65,7 @@ implementation
 uses
   ActiveX,
   DelphiUIAutomation.Exception,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.ControlTypeIDs,
   UIAutomationClient_TLB,
@@ -130,7 +131,7 @@ class function TAutomationDesktop.GetDesktopWindow(const title: String;
   timeout: DWORD): TAutomationWindow;
 var
   collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
+  condition : ICondition;
   element : IUIAutomationElement;
   name : WideString;
   count, length : integer;
@@ -154,7 +155,7 @@ begin
   begin
     aborted := TimedOut;
 
-    rootElement.FindAll(TreeScope_Children, condition, collection);
+    rootElement.FindAll(TreeScope_Children, condition.getCondition, collection);
 
     collection.Get_Length(length);
 
@@ -179,7 +180,7 @@ class function TAutomationDesktop.getDesktopWindows: TObjectList<TAutomationWind
 var
   res : TObjectList<TAutomationWindow>;
   collection : IUIAutomationElementArray;
-  condition : IUIAutomationCondition;
+  condition : ICondition;
   element : IUIAutomationElement;
   name : WideString;
   count, length : integer;
@@ -189,7 +190,7 @@ begin
 
   condition := TUIAuto.CreateTrueCondition;
 
-  rootElement.FindAll(TreeScope_Children, condition, collection);
+  rootElement.FindAll(TreeScope_Children, condition.getCondition, collection);
 
   collection.Get_Length(length);
 

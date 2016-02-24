@@ -97,6 +97,7 @@ uses
   DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.Keyboard,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.ControlTypeIDs;
 
@@ -117,7 +118,7 @@ var
   match: TMatch;
   value, value1: string;
   condition0,
-  condition, condition1, condition2: IUIAutomationCondition;
+  condition, condition1, condition2: ICondition;
   collection, icollection: IUIAutomationElementArray;
   lLength, iLength: Integer;
   count, icount: Integer;
@@ -143,11 +144,11 @@ begin
           value := match.Groups.Item[1].value;
           value1 := match.Groups.Item[2].value;
 
-          uiAuto.createPropertyCondition(UIA_NamePropertyId, value, condition1);
-          uiAuto.createPropertyCondition(UIA_ControlTypePropertyId, UIA_MenuItemControlTypeId, condition2);
-          UIAuto.createAndCondition(condition1, condition2, condition);
+          condition1 := TUIAuto.createNameCondition(name);
+          condition2 := TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId);
+          condition := TUIAuto.createAndCondition(condition1, condition2);
 
-          self.FElement.FindFirst(TreeScope_Descendants, condition, menuElement);
+          self.FElement.FindFirst(TreeScope_Descendants, condition.getCondition, menuElement);
 
           if (menuElement <> nil) then
           begin
@@ -160,7 +161,7 @@ begin
 
                condition0 := TUIAuto.CreateTrueCondition;
 
-               menuElement.FindAll(TreeScope_Descendants, condition0,
+               menuElement.FindAll(TreeScope_Descendants, condition0.getCondition,
                  icollection);
 
                icollection.Get_Length(iLength);
@@ -192,7 +193,7 @@ begin
   begin
     condition := TUIAuto.CreateTrueCondition;
 
-    self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+    self.FElement.FindAll(TreeScope_Descendants, condition.getCondition, collection);
 
     collection.Get_Length(lLength);
 
@@ -221,7 +222,7 @@ var
   match: TMatch;
   value, value1: string;
 
-  condition: IUIAutomationCondition;
+  condition: ICondition;
   collection, icollection: IUIAutomationElementArray;
   lLength, iLength: Integer;
   count, icount: Integer;
@@ -250,7 +251,7 @@ begin
           // 1. Find top level and expand
           condition := TUIAuto.CreateTrueCondition;
 
-          self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+          self.FElement.FindAll(TreeScope_Descendants, condition.getCondition, collection);
 
           collection.Get_Length(lLength);
 
@@ -275,7 +276,7 @@ begin
 
                   // TAutomationKeyBoard.Enter('A');
                   // Now do it all again
-                  self.FParentElement.FindAll(TreeScope_Descendants, condition,
+                  self.FParentElement.FindAll(TreeScope_Descendants, condition.getCondition,
                     icollection);
 
                   icollection.Get_Length(iLength);
@@ -311,7 +312,7 @@ begin
   begin
     condition := TUIAuto.CreateTrueCondition;
 
-    self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+    self.FElement.FindAll(TreeScope_Descendants, condition.getCondition, collection);
 
     collection.Get_Length(lLength);
 
@@ -340,7 +341,7 @@ var
   match: TMatch;
   value, value1: string;
 
-  condition: IUIAutomationCondition;
+  condition: ICondition;
   collection: IUIAutomationElementArray;
   lLength: Integer;
   count: Integer;
@@ -365,7 +366,7 @@ begin
         // 1. Find top level and expand
         condition := TUIAuto.CreateTrueCondition;
 
-        self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+        self.FElement.FindAll(TreeScope_Descendants, condition.getCondition, collection);
 
         collection.Get_Length(lLength);
 
