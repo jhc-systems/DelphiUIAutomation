@@ -151,7 +151,7 @@ begin
   tvi.select;
 
   menu := enquiry.GetMainMenu;
-  exit1 := menu.MenuItemAlt('File|Exit');
+  exit1 := menu.MenuItem('File|Exit');
 
   if assigned(exit1) then
     exit1.Click;
