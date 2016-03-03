@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -64,12 +64,20 @@ uses
   DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas',
   DelphiUIAutomation.Panel.Intf in '..\source\Controls\DelphiUIAutomation.Panel.Intf.pas',
   DelphiUIAutomation.StringGridItem in '..\source\Controls\DelphiUIAutomation.StringGridItem.pas',
-  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas';
+  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas',
+  DelphiUIAutomation.TreeView in '..\source\Controls\DelphiUIAutomation.TreeView.pas',
+  DelphiUIAutomation.Condition in '..\source\Conditions\DelphiUIAutomation.Condition.pas',
+  DelphiUIAutomation.AndCondition in '..\source\Conditions\DelphiUIAutomation.AndCondition.pas',
+  DelphiUIAutomation.OrCondition in '..\source\Conditions\DelphiUIAutomation.OrCondition.pas',
+  DelphiUIAutomation.FalseCondition in '..\source\Conditions\DelphiUIAutomation.FalseCondition.pas',
+  DelphiUIAutomation.TrueCondition in '..\source\Conditions\DelphiUIAutomation.TrueCondition.pas',
+  DelphiUIAutomation.NameCondition in '..\source\Conditions\DelphiUIAutomation.NameCondition.pas',
+  DelphiUIAutomation.ControlTypeCondition in '..\source\Conditions\DelphiUIAutomation.ControlTypeCondition.pas';
 
 var
   application: IAutomationApplication;
   enquiry : IAutomationWindow;
-  tb1 : IAutomationEditBox;
+  tb1, tb2 : IAutomationEditBox;
   eb0: IAutomationTextBox;
   Tab: IAutomationTab;
   Statusbar: IAutomationStatusBar;
@@ -78,12 +86,16 @@ var
 //  eb2 : IAutomationEditBox;
   cb1: IAutomationCombobox;
   cb2: IAutomationCombobox;
+  tv1: IAutomationTreeView;
+  tvi: IAutomationTreeViewItem;
+  exit1: IAutomationMenuItem;
+  menu: IAutomationMenu;
 
 begin
   ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
   // First launch the application
-  application := TAutomationApplication.Launch
+  application := TAutomationApplication.LaunchOrAttach
     ('..\..\democlient\Win32\Debug\Project1.exe', '');
 
   application.WaitWhileBusy;
@@ -98,6 +110,9 @@ begin
 
   tb1 := Tab.GetEditBoxByIndex(0);
   writeln(tb1.Text);
+
+  tb2 := enquiry.GetEditBoxByName('AutomatedEdit1');
+  writeln(tb2.Text);
 
   check := enquiry.GetCheckboxByIndex(0);
   check.toggle;
@@ -130,10 +145,19 @@ begin
   cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
   writeln('Combo2 text is ' + cb2.Text);
 
+  // Now try and get stuff from TreeView
+  tv1 := enquiry.getTreeViewByIndex(0);
+  tvi := tv1.GetItem('Sub-SubItem');
+  tvi.select;
 
-  application.Kill;
+  menu := enquiry.GetMainMenu;
+  exit1 := menu.MenuItem('File|Exit');
+
+  if assigned(exit1) then
+    exit1.Click;
 
   WriteLn('Press key to exit');
   ReadLn;
 
+  application.Kill;
 end.

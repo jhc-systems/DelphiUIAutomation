@@ -32,8 +32,6 @@ uses
 type
   IAutomationMenu = interface
     ['{503033B8-D055-40F3-B3F1-DAB915295CCA}']
-    procedure MenuItemFudge(const path: string);
-
     /// <summary>
     /// Gets the menu associated with the given path
     /// </summary>
@@ -63,9 +61,6 @@ type
     /// Currently working to 2 levels i.e. 'Help|About';
     /// </remarks>
     function MenuItem(const path: string): IAutomationMenuItem;
-
-    procedure MenuItemFudge(const path: string);
-
   end;
 
   /// <summary>
@@ -91,8 +86,10 @@ uses
   System.RegularExpressions,
   sysutils,
   generics.Defaults,
+  DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.Automation,
   DelphiUIAutomation.Keyboard,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.PatternIDs,
   DelphiUIAutomation.ControlTypeIDs;
 
@@ -112,11 +109,11 @@ var
   matches: TMatchCollection;
   match: TMatch;
   value, value1: string;
-
-  condition: IUIAutomationCondition;
-  collection, icollection: IUIAutomationElementArray;
-  lLength, iLength: Integer;
-  count, icount: Integer;
+  condition0,
+  condition : ICondition;
+  collection: IUIAutomationElementArray;
+  lLength: Integer;
+  count: Integer;
   menuElement, imenuElement: IUIAutomationElement;
   retVal: Integer;
   name: widestring;
@@ -139,60 +136,30 @@ begin
           value := match.Groups.Item[1].value;
           value1 := match.Groups.Item[2].value;
 
-          // 1. Find top level and expand
-          condition := TUIAuto.CreateTrueCondition;
+          condition := TUIAuto.createAndCondition(
+            TUIAuto.createNameCondition(value),
+            TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId));
 
-          self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+          self.FElement.FindFirst(TreeScope_Descendants, condition.getCondition, menuElement);
 
-          collection.Get_Length(lLength);
-
-          for count := 0 to lLength - 1 do
+          if (menuElement <> nil) then
           begin
-            collection.GetElement(count, menuElement);
-            menuElement.Get_CurrentControlType(retVal);
-
-            if (retVal = UIA_MenuItemControlTypeId) then
+            // 2. Find leaf level
+            menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId, IInterface(pattern));
+            if Assigned(pattern) then
             begin
-              menuElement.Get_CurrentName(name);
+              pattern.Expand;
+              sleep(750);
 
-              if name = value then
-              begin
-                // 2. Find leaf level and click
-                menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId,
-                  IInterface(pattern));
-                if Assigned(pattern) then
-                begin
-                  pattern.Expand;
-                  sleep(750);
+              condition0 := TUIAuto.createAndCondition(
+                TUIAuto.createNameCondition(value1),
+                TUIAuto.createControlTypeCondition(UIA_MenuItemControlTypeId));
 
-                  // TAutomationKeyBoard.Enter('A');
-                  // Now do it all again
-                  self.FParentElement.FindAll(TreeScope_Descendants, condition,
-                    icollection);
+              self.FParentElement.FindFirst(TreeScope_Descendants, condition0.getCondition,
+                 imenuElement);
 
-                  icollection.Get_Length(iLength);
-
-                  for icount := 0 to iLength - 1 do
-                  begin
-                    icollection.GetElement(icount, imenuElement);
-                    imenuElement.Get_CurrentControlType(retVal);
-
-                    if (retVal = UIA_MenuItemControlTypeId) then
-                    begin
-                      imenuElement.Get_CurrentName(name);
-
-                      OutputDebugString(pchar('Inner name = ' + name));
-
-                      if name = value1 then
-                      begin
-                        OutputDebugString(pchar('Found it'));
-                        result := TAutomationMenuItem.Create(imenuElement);
-                        break;
-                      end;
-                    end;
-                  end;
-                end;
-              end;
+              result := TAutomationMenuItem.Create(imenuElement);
+              break;
             end;
           end;
         end;
@@ -203,7 +170,7 @@ begin
   begin
     condition := TUIAuto.CreateTrueCondition;
 
-    self.FElement.FindAll(TreeScope_Descendants, condition, collection);
+    self.FElement.FindAll(TreeScope_Descendants, condition.getCondition, collection);
 
     collection.Get_Length(lLength);
 
@@ -219,71 +186,6 @@ begin
         if name = path then
         begin
           result := TAutomationMenuItem.Create(menuElement);
-        end;
-      end;
-    end;
-  end;
-end;
-
-procedure TAutomationMenu.MenuItemFudge(const path: string);
-var
-  regexpr: TRegEx;
-  matches: TMatchCollection;
-  match: TMatch;
-  value, value1: string;
-
-  condition: IUIAutomationCondition;
-  collection: IUIAutomationElementArray;
-  lLength: Integer;
-  count: Integer;
-  menuElement: IUIAutomationElement;
-  retVal: Integer;
-  name: widestring;
-  pattern: IUIAutomationExpandCollapsePattern;
-
-begin
-  regexpr := TRegEx.Create('(.*)\|(.*)', [roIgnoreCase, roMultiline]);
-  matches := regexpr.matches(path);
-
-  for match in matches do
-  begin
-    if match.success then
-    begin
-      if match.Groups.count > 1 then
-      begin
-        value := match.Groups.Item[1].value;
-        value1 := match.Groups.Item[2].value;
-
-        // 1. Find top level and expand
-        condition := TUIAuto.CreateTrueCondition;
-
-        self.FElement.FindAll(TreeScope_Descendants, condition, collection);
-
-        collection.Get_Length(lLength);
-
-        for count := 0 to lLength - 1 do
-        begin
-          collection.GetElement(count, menuElement);
-          menuElement.Get_CurrentControlType(retVal);
-
-          if (retVal = UIA_MenuItemControlTypeId) then
-          begin
-            menuElement.Get_CurrentName(name);
-
-            if name = value then
-            begin
-              // 2. Find leaf level and click
-              menuElement.GetCurrentPattern(UIA_ExpandCollapsePatternId,
-                IInterface(pattern));
-              if Assigned(pattern) then
-              begin
-                pattern.Expand;
-                sleep(750);
-
-                TAutomationKeyBoard.Enter(copy(value1, 1));
-              end;
-            end;
-          end;
         end;
       end;
     end;

@@ -36,6 +36,7 @@ uses
   DelphiUIAutomation.Panel,
   DelphiUIAutomation.Menu,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.TreeView,
   DelphiUIAutomation.StringGrid,
   UIAutomationClient_TLB;
 
@@ -47,7 +48,8 @@ type
   protected
     function GetControlByControlType (index : integer; id : word) : IUIAutomationElement; overload;
     function GetControlByControlType (index : integer;  id: word; controlType : string) : IUIAutomationElement; overload;
-    function GetControlByControlType (title : string; id : word) : IUIAutomationElement; overload;
+//    function GetControlByControlType (title : string; id : word) : IUIAutomationElement; overload;
+    function GetControlByControlType1 (title : string; id : word) : IUIAutomationElement; overload;
 
   public
     /// <summary>
@@ -109,6 +111,11 @@ type
     /// Finds the combobox, by name
     /// </summary>
     function GetComboboxByName (name : String) : IAutomationComboBox;
+
+    /// <summary>
+    /// Finds the treeview, by index
+    /// </summary>
+    function GetTreeViewByIndex (index: Integer): IAutomationTreeView;
   end;
 
 implementation
@@ -118,6 +125,7 @@ uses
   sysutils,
   ActiveX,
   DelphiUIAutomation.Tab,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.PropertyIDs,
   DelphiUIAutomation.ControlTypeIDs,
   DelphiUIAutomation.Exception,
@@ -125,7 +133,7 @@ uses
 
 function TAutomationContainer.GetCheckboxByName(const value: string): IAutomationCheckBox;
 begin
-  result := TAutomationCheckBox.Create(GetControlByControlType(value, UIA_CheckBoxControlTypeId));
+  result := TAutomationCheckBox.Create(GetControlByControlType1(value, UIA_CheckBoxControlTypeId));
 end;
 
 function TAutomationContainer.GetEditBoxByIndex(index: integer): IAutomationEditBox;
@@ -155,12 +163,23 @@ begin
   result := TAutomationTextBox.Create(tb);
 end;
 
+function TAutomationContainer.GetTreeViewByIndex(
+  index: Integer): IAutomationTreeView;
+var
+  treeView : IUIAutomationElement;
+
+begin
+  treeView := GetControlByControlType(0, UIA_TreeControlTypeId);
+
+  result := TAutomationTreeView.Create(treeView);
+end;
+
 function TAutomationContainer.GetButton(const title: string): IAutomationButton;
 var
   btn : IUIAutomationElement;
 
 begin
-  btn := GetControlByControlType(title, UIA_ButtonControlTypeId);
+  btn := GetControlByControlType1(title, UIA_ButtonControlTypeId);
   result := TAutomationButton.Create(btn);
 end;
 
@@ -174,43 +193,19 @@ begin
   result := TAutomationComboBox.Create(GetControlByControlType(index, UIA_ComboBoxControlTypeId));
 end;
 
-function TAutomationContainer.GetControlByControlType(title: string; id: word): IUIAutomationElement;
+function TAutomationContainer.GetControlByControlType1(title: string; id: word): IUIAutomationElement;
 var
+  condition, condition1, condition2: ICondition;
   element : IUIAutomationElement;
-  collection : IUIAutomationElementArray;
-  count : integer;
-  name : widestring;
-  length : integer;
-  retVal : integer;
 
 begin
-  result := nil;
+  condition1 := TuiAuto.createNameCondition(title);
+  condition2 := TuiAuto.createControlTypeCondition(id);
+  condition := TUIAuto.createAndCondition(condition1, condition2);
 
-  // Find the element
-  collection := FindAll(TreeScope_Descendants);
+  self.FElement.FindFirst(TreeScope_Descendants, condition.getCondition, element);
 
-  collection.Get_Length(length);
-
-  for count := 0 to length -1 do
-  begin
-    collection.GetElement(count, element);
-    element.Get_CurrentControlType(retVal);
-
-    if (retval = id) then
-    begin
-      element.Get_CurrentName(name);
-
-      if (name = title)then
-      begin
-        result := element;
-        break;
-      end;
-    end;
-  end;
-
-  if result = nil then
-    raise EDelphiAutomationException.Create('Unable to find control');
-
+  result := element;
 end;
 
 function TAutomationContainer.GetControlByControlType(index: integer; id: word;
@@ -330,7 +325,7 @@ var
   eb : IUIAutomationElement;
 
 begin
-  eb := GetControlByControlType(name, UIA_EditControlTypeId);
+  eb := GetControlByControlType1(name, UIA_EditControlTypeId);
   result := TAutomationEditBox.Create(eb);
 end;
 
@@ -340,8 +335,7 @@ var
   cb : IUIAutomationElement;
 
 begin
-  cb := GetControlByControlType(name, UIA_ComboBoxControlTypeId);
+  cb := GetControlByControlType1(name, UIA_ComboBoxControlTypeId);
   result := TAutomationComboBox.Create(cb);
 end;
-
 end.

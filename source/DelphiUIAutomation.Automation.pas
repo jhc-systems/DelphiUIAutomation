@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-16 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -24,18 +24,45 @@ unit DelphiUIAutomation.Automation;
 interface
 
 uses
+  ActiveX,
   generics.collections,
   winapi.windows,
+  DelphiUIAutomation.Condition,
   DelphiUIAutomation.Window,
   UIAutomationClient_TLB;
 
 type
   TUIAuto = class
   public
-   /// <summary>
+    /// <summary>
     ///  Creates a true condition
     /// </summary>
-    class function CreateTrueCondition : IUIAutomationCondition;
+    class function CreateTrueCondition : ICondition;
+
+    /// <summary>
+    ///  Creates a false condition
+    /// </summary>
+    class function CreateFalseCondition : ICondition;
+
+    /// <summary>
+    ///  Creates a name condition
+    /// </summary>
+    class function createNameCondition(name: String) : ICondition;
+
+    /// <summary>
+    ///  Creates a controlID condition
+    /// </summary>
+    class function createControlTypeCondition(propertyId: SYSINT) : ICondition;
+
+    /// <summary>
+    ///  Creates an 'and' condition
+    /// </summary>
+    class function CreateAndCondition(condition1, condition2: ICondition) : ICondition;
+
+    /// <summary>
+    ///  Creates a property condition
+    /// </summary>
+//    class function CreatePropertyCondition(propertyId: SYSINT; value: OleVariant) : IUIAutomationCondition;
   end;
 
 
@@ -46,20 +73,39 @@ var
 implementation
 
 uses
+  DelphiUIAutomation.AndCondition,
+  DelphiUIAutomation.TrueCondition,
+  DelphiUIAutomation.ControlTypeCondition,
+  DelphiUIAutomation.NameCondition,
+  DelphiUIAutomation.FalseCondition,
   DelphiUIAutomation.Exception,
-  sysutils,
-  ActiveX;
+  sysutils;
 
 { TUIAuto }
 
-class function TUIAuto.CreateTrueCondition: IUIAutomationCondition;
-var
-  condition : IUIAutomationCondition;
-
+class function TUIAuto.CreateAndCondition(condition1, condition2: ICondition): ICondition;
 begin
-  UIAuto.CreateTrueCondition(condition);
+  result := TAndCondition.create(condition1, condition2);
+end;
 
-  result := condition;
+class function TUIAuto.createControlTypeCondition(propertyId: SYSINT): ICondition;
+begin
+  result := TControlTypeCondition.create(propertyId);
+end;
+
+class function TUIAuto.CreateFalseCondition: ICondition;
+begin
+  result := TFalseCondition.create;
+end;
+
+class function TUIAuto.createNameCondition(name: String): ICondition;
+begin
+  result := TNameCondition.create(name);
+end;
+
+class function TUIAuto.CreateTrueCondition: ICondition;
+begin
+  result := TTrueCondition.create;
 end;
 
 initialization

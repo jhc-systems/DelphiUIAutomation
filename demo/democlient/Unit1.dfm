@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Form1'
-  ClientHeight = 590
+  ClientHeight = 676
   ClientWidth = 650
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,23 +16,15 @@ object Form1: TForm1
   OnCreate = FormCreate
   DesignSize = (
     650
-    590)
+    676)
   PixelsPerInch = 96
   TextHeight = 13
-  object Edit1: TEdit
-    Left = 96
-    Top = 40
-    Width = 217
-    Height = 21
-    TabOrder = 0
-    Text = 'Edit1'
-  end
   object Edit2: TEdit
     Left = 96
     Top = 80
     Width = 217
     Height = 21
-    TabOrder = 1
+    TabOrder = 0
     Text = 'Edit1'
   end
   object Button1: TButton
@@ -41,7 +33,7 @@ object Form1: TForm1
     Width = 75
     Height = 25
     Caption = 'OK'
-    TabOrder = 2
+    TabOrder = 1
     OnClick = Button1Click
   end
   object Button2: TButton
@@ -50,7 +42,7 @@ object Form1: TForm1
     Width = 75
     Height = 25
     Caption = 'Cancel'
-    TabOrder = 3
+    TabOrder = 2
     OnClick = Button2Click
   end
   object PageControl1: TPageControl
@@ -59,7 +51,7 @@ object Form1: TForm1
     Width = 289
     Height = 193
     ActivePage = TabSheet2
-    TabOrder = 4
+    TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = 'First Tab'
       object Edit3: TEdit
@@ -102,7 +94,7 @@ object Form1: TForm1
     Width = 97
     Height = 17
     Caption = 'First'
-    TabOrder = 5
+    TabOrder = 4
   end
   object CheckBox2: TCheckBox
     Left = 28
@@ -110,7 +102,7 @@ object Form1: TForm1
     Width = 97
     Height = 17
     Caption = 'Second'
-    TabOrder = 6
+    TabOrder = 5
   end
   object RadioButton1: TRadioButton
     Left = 176
@@ -118,7 +110,7 @@ object Form1: TForm1
     Width = 113
     Height = 17
     Caption = 'Radio 1'
-    TabOrder = 7
+    TabOrder = 6
   end
   object RadioButton2: TRadioButton
     Left = 176
@@ -126,7 +118,7 @@ object Form1: TForm1
     Width = 113
     Height = 17
     Caption = 'Radio 1 Extra'
-    TabOrder = 8
+    TabOrder = 7
   end
   object RadioButton3: TRadioButton
     Left = 176
@@ -134,11 +126,11 @@ object Form1: TForm1
     Width = 113
     Height = 17
     Caption = 'Radio 2'
-    TabOrder = 9
+    TabOrder = 8
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 571
+    Top = 657
     Width = 650
     Height = 19
     Panels = <
@@ -149,13 +141,14 @@ object Form1: TForm1
         Text = 'Statusbar Text'
         Width = 50
       end>
+    ExplicitTop = 571
   end
   object ComboBox1: TComboBox
     Left = 24
     Top = 456
     Width = 285
     Height = 21
-    TabOrder = 11
+    TabOrder = 10
     Text = 'ComboBox1'
     Items.Strings = (
       'Premier'
@@ -171,7 +164,7 @@ object Form1: TForm1
     Top = 496
     Width = 121
     Height = 21
-    TabOrder = 12
+    TabOrder = 11
     Text = 'AutomatedEdit1'
   end
   object AutomatedCombobox1: TAutomatedCombobox
@@ -179,7 +172,7 @@ object Form1: TForm1
     Top = 536
     Width = 145
     Height = 21
-    TabOrder = 13
+    TabOrder = 12
     Text = 'AutomatedCombobox1'
   end
   object AutomatedCombobox2: TAutomatedCombobox
@@ -187,8 +180,8 @@ object Form1: TForm1
     Top = 536
     Width = 145
     Height = 21
-    Style = csDropDownList
-    TabOrder = 14
+    TabOrder = 13
+    Text = 'First'
     Items.Strings = (
       'First'
       'Second'
@@ -198,19 +191,78 @@ object Form1: TForm1
     Left = 328
     Top = 131
     Width = 313
-    Height = 232
+    Height = 318
     Anchors = [akLeft, akTop, akRight, akBottom]
-    TabOrder = 15
+    TabOrder = 14
+    ExplicitHeight = 232
   end
   object AutomatedMaskEdit1: TAutomatedMaskEdit
-    Left = 400
-    Top = 456
+    Left = 328
+    Top = 382
     Width = 120
     Height = 21
     EditMask = '!99/99/00;1;_'
     MaxLength = 8
-    TabOrder = 16
+    TabOrder = 15
     Text = '  /  /  '
+  end
+  object RichEdit1: TRichEdit
+    Left = 328
+    Top = 409
+    Width = 314
+    Height = 108
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Lines.Strings = (
+      'This is a RichEdit, I wonder what will happen')
+    ParentFont = False
+    PlainText = True
+    TabOrder = 16
+  end
+  object TreeView1: TTreeView
+    Left = 328
+    Top = 8
+    Width = 314
+    Height = 117
+    Indent = 19
+    PopupMenu = PopupMenu3
+    TabOrder = 17
+    Items.NodeData = {
+      0303000000280000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      00020000000105460069007200730074002E0000000000000000000000FFFFFF
+      FFFFFFFFFF00000000000000000100000001085300750062004900740065006D
+      003100340000000000000000000000FFFFFFFFFFFFFFFF000000000000000000
+      000000010B5300750062002D005300750062004900740065006D002E00000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000108530075
+      0062004900740065006D0032002A0000000000000000000000FFFFFFFFFFFFFF
+      FF00000000000000000000000001065300650063006F006E0064002800000000
+      00000000000000FFFFFFFFFFFFFFFF0000000000000000000000000105540068
+      00690072006400}
+  end
+  object Edit1: TEdit
+    Left = 96
+    Top = 40
+    Width = 217
+    Height = 21
+    TabOrder = 18
+    Text = 'Edit1'
+  end
+  object ListBox1: TListBox
+    Left = 343
+    Top = 523
+    Width = 299
+    Height = 78
+    ItemHeight = 13
+    Items.Strings = (
+      'First (List)'
+      'Second (List)'
+      'Anti-Penultimate (List)'
+      'Penultimate (List)'
+      'Last (List)')
+    TabOrder = 19
   end
   object MainMenu1: TMainMenu
     Left = 24
@@ -235,6 +287,16 @@ object Form1: TForm1
     object PopupMenu2: TMenuItem
       Caption = 'Popup Menu '
       OnClick = PopupMenu2Click
+    end
+  end
+  object PopupMenu3: TPopupMenu
+    Left = 208
+    Top = 16
+    object Popup11: TMenuItem
+      Caption = 'Popup1'
+    end
+    object Popup21: TMenuItem
+      Caption = 'Popup2'
     end
   end
 end

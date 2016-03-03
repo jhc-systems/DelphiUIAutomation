@@ -31,7 +31,6 @@ uses
 
 type
   TForm1 = class(TForm)
-    Edit1: TEdit;
     Edit2: TEdit;
     Button1: TButton;
     Button2: TButton;
@@ -61,6 +60,13 @@ type
     AutomatedCombobox2: TAutomatedCombobox;
     AutomationStringGrid1: TAutomationStringGrid;
     AutomatedMaskEdit1: TAutomatedMaskEdit;
+    RichEdit1: TRichEdit;
+    TreeView1: TTreeView;
+    PopupMenu3: TPopupMenu;
+    Popup11: TMenuItem;
+    Popup21: TMenuItem;
+    Edit1: TEdit;
+    ListBox1: TListBox;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

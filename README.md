@@ -97,6 +97,7 @@ The currently supported controls are ...
 * TPageControl
 * TTab
 * TTextBox
+* TTreeView and TTreeViewItem
 
 
 [More details, and the status of currently supported controls](https://github.com/jhc-systems/DelphiUIAutomation/wiki/CurrentSupportedControls)
@@ -120,10 +121,10 @@ var
   item : TAutomationStringGridItem;
   item1 : IAutomationStringGridItem;
   ...
-  
+
   // Get the first string grid associated with the window
   grid := enquiry.GetStringGridByIndex(0);
-  
+
   // Show what the value is (i.e. the contents of the selected cell)
   writeln ('Value is ' + grid.Value);
 
@@ -132,7 +133,7 @@ var
 
   // Get the selected cell
   item := grid.Selected;
-  
+
   // Show the value of the selected cell (should be the same as the Grid's value
   writeln ('Selected is ' + item.Name);
 
@@ -150,7 +151,19 @@ var
 
   // Show that selection has changed.
   writeln ('Selected is ' + grid.Selected.Name);
-  
+
+```
+
+## TTreeView and TTreeViewItem
+```pascal
+  // Get the 0th treeview
+  tv1 := enquiry.getTreeViewByIndex(0);
+
+  // Get the item with the following text
+  tvi := tv1.GetItem('Sub-SubItem');
+
+  // Select the item
+  tvi.select;
 ```
 
 ## Navigating to specific elements in the StringGrid and right-clicking

@@ -40,6 +40,7 @@ type
   /// </remarks>
   TAutomationTab = class (TAutomationContainer, IAutomationTab)
   strict private
+    FSelectionPattern : IUIAutomationSelectionPattern;
     FTabItems : TObjectList<TAutomationTabItem>;
 //    FSelectedItem : TAutomationTabItem;
   private
@@ -91,6 +92,8 @@ var
 
 begin
   inherited Create(element);
+
+  FSelectionPattern := GetSelectionPattern;
 
   FTabItems := TObjectList<TAutomationTabItem>.create;
 

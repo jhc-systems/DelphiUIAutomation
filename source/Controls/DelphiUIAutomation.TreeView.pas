@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2016 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -19,55 +19,84 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.RadioButton;
+unit DelphiUIAutomation.TreeView;
 
 interface
 
 uses
+  generics.collections,
   DelphiUIAutomation.Base,
+  DelphiUIAutomation.ListItem,
   UIAutomationClient_TLB;
 
 type
-  IAutomationRadioButton = interface (IAutomationBase)
-  ['{B40E22FF-6E10-4E9C-8900-48C4D1F83F19}']
-    ///<summary>
-    ///  Selects the control
-    ///</summary>
-    function Select: HRESULT;
+  IAutomationTreeViewItem = interface (IAutomationBase)
+    ['{ED19F4CE-6A7B-4C53-B42B-5487A32E8696}']
+    procedure select;
   end;
 
-  /// <summary>
-  ///  Represents a radio button control
-  /// </summary>
-  TAutomationRadioButton = class (TAutomationBase, IAutomationRadioButton)
-  private
-    FSelectionItemPattern : IUIAutomationSelectionItemPattern;
-  public
-    ///<summary>
-    ///  Selects the control
-    ///</summary>
-    function Select: HRESULT;
+  IAutomationTreeView = interface (IAutomationBase)
+    ['{7228845F-E622-442F-A38B-491CE7392245}']
+    function GetItem(name: String): IAutomationTreeViewItem;
+  end;
 
+  TAutomationTreeViewItem = class(TAutomationBase, IAutomationTreeViewItem)
+  private
+    FSelectItemPattern : IUIAutomationSelectionItemPattern;
+  public
+    procedure select;
+    constructor Create(element : IUIAutomationElement); override;
+  end;
+
+  TAutomationTreeView = class (TAutomationBase, IAutomationTreeView)
+  public
+    function GetItem(name: String): IAutomationTreeViewItem;
     constructor Create(element : IUIAutomationElement); override;
   end;
 
 implementation
 
 uses
-  DelphiUIAutomation.PatternIDs;
+  DelphiUIAutomation.PropertyIDs,
+  DelphiUIAutomation.Condition,
+  DelphiUIAutomation.ControlTypeIDs,
+  DelphiUIAutomation.Automation;
 
-{ TAutomationRadioButton }
+{ TAutomationTreeView }
 
-constructor TAutomationRadioButton.Create(element: IUIAutomationElement);
+constructor TAutomationTreeView.Create(element : IUIAutomationElement);
 begin
   inherited Create(element);
-  FSelectionItemPattern := getSelectionItemPattern;
 end;
 
-function TAutomationRadioButton.Select: HRESULT;
+function TAutomationTreeView.GetItem(name: String): IAutomationTreeViewItem;
+var
+  item : IUIAutomationElement;
+  condition,
+  condition1,
+  condition2 : ICondition;
 begin
-  result := FSelectionItemPattern.Select;
+
+  condition1 := TuiAuto.createNameCondition(name);
+  condition2 := TuiAuto.createControlTypeCondition(UIA_TreeItemControlTypeId);
+  condition := TUIAuto.createAndCondition(condition1, condition2);
+
+  FElement.FindFirst(TreeScope_Descendants, condition.getCondition, item);
+
+  result := TAutomationTreeViewItem.create(item);
+end;
+
+{ TAutomationTreeViewItem }
+
+constructor TAutomationTreeViewItem.Create(element: IUIAutomationElement);
+begin
+  inherited;
+  FSelectItemPattern := GetSelectionItemPattern;
+end;
+
+procedure TAutomationTreeViewItem.select;
+begin
+  FSelectItemPattern.select;
 end;
 
 end.
-

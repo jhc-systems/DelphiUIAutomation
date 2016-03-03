@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015-16 JHC Systems Limited                              }
+{           Copyright 2016 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -19,58 +19,25 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit DelphiUIAutomation.TabItem;
+unit DelphiUIAutomation.Condition;
 
 interface
 
 uses
-  DelphiUIAutomation.Base,
   UIAutomationClient_TLB;
 
 type
-  IAutomationTabItem = interface (IAutomationBase)
-  ['{6FC85416-87FD-4FE6-91C5-3D465F73DBD5}']
-    /// <summary>
-    ///  Selects this tabitem
-    /// </summary>
-    procedure Select;
+  ICondition = interface
+    ['{9548F1A8-5FA7-4318-A22E-B1BE20DFD63A}']
+    function getCondition : IUIAutomationCondition;
   end;
 
-  /// <summary>
-  ///  Represents a tab item
-  /// </summary>
-  TAutomationTabItem = class (TAutomationBase, IAutomationTabItem)
-  private
-    FSelectionItemPattern: IUIAutomationSelectionItemPattern;
-  public
-    /// <summary>
-    ///  Selects this tabitem
-    /// </summary>
-    procedure Select;
-
-    /// <summary>
-    ///  Constructor for tab items.
-    /// </summary>
-    constructor Create(element : IUIAutomationElement); override;
-  end;
+//type
+//  TCondition = class(TInterfacedObject, ICondition)
+//  public
+//    function getCondition : IUIAutomationCondition; virtual; abstract;
+//  end;
 
 implementation
-
-uses
-  DelphiUIAutomation.Automation,
-  DelphiUIAutomation.PatternIDs;
-
-{ TAutomationTabItem }
-
-constructor TAutomationTabItem.Create(element: IUIAutomationElement);
-begin
-  inherited;
-  FSelectionItemPattern := GetSelectionItemPattern;
-end;
-
-procedure TAutomationTabItem.Select;
-begin
-  FSelectionItemPattern.Select;
-end;
 
 end.

@@ -38,8 +38,6 @@ type
     FSelectionItemPattern : IUIAutomationSelectionItemPattern;
     FValuePattern : IUIAutomationValuePattern;
   private
-    procedure GetSelectionItemPattern;
-    procedure GetValuePattern;
     procedure GetPatterns;
   protected
     function getName: string; override;
@@ -73,38 +71,8 @@ end;
 
 procedure TAutomationStringGridItem.GetPatterns;
 begin
-  GetSelectionItemPattern;
-  GetValuePattern;
-end;
-
-procedure TAutomationStringGridItem.GetSelectionItemPattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_SelectionItemPatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationSelectionItemPattern, FSelectionItemPattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise control pattern');
-    end;
-  end;
-end;
-
-procedure TAutomationStringGridItem.GetValuePattern;
-var
-  inter: IInterface;
-
-begin
-  fElement.GetCurrentPattern(UIA_ValuePatternId, inter);
-  if (inter <> nil) then
-  begin
-  if Inter.QueryInterface(IID_IUIAutomationValuePattern, FValuePattern) <> S_OK then
-    begin
-      raise EDelphiAutomationException.Create('Unable to initialise value pattern');
-    end;
-  end;
+  FSelectionItemPattern := GetSelectionItemPattern;
+  FValuePattern := GetValuePattern;
 end;
 
 constructor TAutomationStringGridItem.Create(element: IUIAutomationElement);
