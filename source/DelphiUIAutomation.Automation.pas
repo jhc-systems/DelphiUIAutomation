@@ -63,8 +63,12 @@ type
     ///  Creates a property condition
     /// </summary>
 //    class function CreatePropertyCondition(propertyId: SYSINT; value: OleVariant) : IUIAutomationCondition;
-  end;
 
+    class procedure CreateUIAuto;
+    class procedure DestroyUIAuto;
+
+    class function GetElementFromHandle(hwnd: Pointer): IUIAutomationElement; static;
+  end;
 
 var
   UIAuto: TCUIAutomation;
@@ -108,14 +112,38 @@ begin
   result := TTrueCondition.create;
 end;
 
-initialization
+class procedure TUIAuto.CreateUIAuto;
+begin
   CoInitializeEx(nil, 2);
   UIAuto := TCUIAutomation.Create(nil);
   if not Succeeded(UIAuto.GetRootElement(RootElement)) then
     raise EDelphiAutomationException.Create('Failed to get root element for Automation');
+end;
 
-finalization
+class procedure TUIAuto.DestroyUIAuto;
+begin
   UIAuto.Free;
   CoUninitialize;
+end;
+
+class function TUIAuto.GetElementFromHandle(hwnd: Pointer) : IUIAutomationElement;
+var
+  elem: IUIAutomationElement;
+begin
+  UIAuto.ElementFromHandle(hwnd, elem);
+
+  result := elem;
+end;
+
+
+//initialization
+//  CoInitializeEx(nil, 2);
+//  UIAuto := TCUIAutomation.Create(nil);
+//  if not Succeeded(UIAuto.GetRootElement(RootElement)) then
+//    raise EDelphiAutomationException.Create('Failed to get root element for Automation');
+
+//finalization
+//  UIAuto.Free;
+//  CoUninitialize;
 
 end.

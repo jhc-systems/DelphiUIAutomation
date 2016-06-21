@@ -29,51 +29,9 @@ uses
   System.SysUtils,
   System.Types,
   dialogs,
-  DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
-  DelphiUIAutomation.Window in '..\source\Controls\DelphiUIAutomation.Window.pas',
-  DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
-  DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
-  DelphiUIAutomation.EditBox in '..\source\Controls\DelphiUIAutomation.EditBox.pas',
-  DelphiUIAutomation.Button in '..\source\Controls\DelphiUIAutomation.Button.pas',
-  DelphiUIAutomation.ControlTypeIDs in '..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas',
-  DelphiUIAutomation.PatternIDs in '..\source\Ids\DelphiUIAutomation.PatternIDs.pas',
-  DelphiUIAutomation.Mouse in '..\source\DelphiUIAutomation.Mouse.pas',
-  DelphiUIAutomation.ComboBox in '..\source\Controls\DelphiUIAutomation.ComboBox.pas',
-  DelphiUIAutomation.PropertyIDs in '..\source\Ids\DelphiUIAutomation.PropertyIDs.pas',
-  DelphiUIAutomation.Tab in '..\source\Controls\DelphiUIAutomation.Tab.pas',
-  DelphiUIAutomation.TabItem in '..\source\Controls\DelphiUIAutomation.TabItem.pas',
-  DelphiUIAutomation.Statusbar in '..\source\Controls\DelphiUIAutomation.Statusbar.pas',
-  DelphiUIAutomation.Checkbox in '..\source\Controls\DelphiUIAutomation.Checkbox.pas',
-  DelphiUIAutomation.RadioButton in '..\source\Controls\DelphiUIAutomation.RadioButton.pas',
-  DelphiUIAutomation.MenuItem in '..\source\Controls\Menus\DelphiUIAutomation.MenuItem.pas',
-  DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas',
-  DelphiUIAutomation.Desktop in '..\source\Controls\DelphiUIAutomation.Desktop.pas',
-  DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas',
-  DelphiUIAutomation.Menu in '..\source\Controls\Menus\DelphiUIAutomation.Menu.pas',
-  DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
-  DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
-  DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
-  DelphiUIAutomation.Container.Intf in '..\source\Controls\DelphiUIAutomation.Container.Intf.pas',
-  DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas',
-  DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
-  DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
-  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
-  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
-  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
-  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas',
-  DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas',
-  DelphiUIAutomation.Panel.Intf in '..\source\Controls\DelphiUIAutomation.Panel.Intf.pas',
-  DelphiUIAutomation.StringGridItem in '..\source\Controls\DelphiUIAutomation.StringGridItem.pas',
-  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas',
-  DelphiUIAutomation.TreeView in '..\source\Controls\DelphiUIAutomation.TreeView.pas',
-  DelphiUIAutomation.Condition in '..\source\Conditions\DelphiUIAutomation.Condition.pas',
-  DelphiUIAutomation.AndCondition in '..\source\Conditions\DelphiUIAutomation.AndCondition.pas',
-  DelphiUIAutomation.OrCondition in '..\source\Conditions\DelphiUIAutomation.OrCondition.pas',
-  DelphiUIAutomation.FalseCondition in '..\source\Conditions\DelphiUIAutomation.FalseCondition.pas',
-  DelphiUIAutomation.TrueCondition in '..\source\Conditions\DelphiUIAutomation.TrueCondition.pas',
-  DelphiUIAutomation.NameCondition in '..\source\Conditions\DelphiUIAutomation.NameCondition.pas',
-  DelphiUIAutomation.ControlTypeCondition in '..\source\Conditions\DelphiUIAutomation.ControlTypeCondition.pas';
+  UIAutoWrapper in 'UIAutoWrapper.pas';
 
+(*
 var
   application: IAutomationApplication;
   enquiry : IAutomationWindow;
@@ -160,4 +118,56 @@ begin
   ReadLn;
 
   application.Kill;
+*)
+var
+  wrapper: TUIAutoWrapper;
+  window: Pointer;
+  tab: Pointer;
+  tb1, tb2 : Pointer;
+  check: Pointer;
+
+begin
+  WriteLn('Creating wrapper');
+  wrapper := TUIAutoWrapper.create;
+  WriteLn('Created wrapper');
+
+  try
+    ReportMemoryLeaksOnShutdown := DebugHook <> 0;
+    // Should do something here
+
+    wrapper.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
+
+    wrapper.Initialize;
+
+    wrapper.WaitWhileBusy;
+
+    // Now wait for a very long time for the enquiry screen to come up
+    window := wrapper.GetDesktopWindow('Form1');
+    wrapper.Focus(window);
+    wrapper.Maximize(window);
+
+    tab := wrapper.GetTab(window, 0);
+    wrapper.SelectTab(tab, 'Second Tab');
+
+    tb1 := wrapper.GetEditBox(tab, 0);
+    writeLn(wrapper.GetText(tb1));
+
+    tb2 := wrapper.GetEditBox(window, 'AutomatedEdit1');
+    writeLn(wrapper.GetText(tb2));
+
+    check := wrapper.GetCheckBox(window, 0);
+    wrapper.Toggle(check);
+
+    WriteLn('Press key to continue');
+    ReadLn;
+
+  finally
+    WriteLn('About to kill');
+    wrapper.Kill;
+    WriteLn('Killed');
+
+    wrapper.Finalize;
+    wrapper.free;
+  end;
+
 end.

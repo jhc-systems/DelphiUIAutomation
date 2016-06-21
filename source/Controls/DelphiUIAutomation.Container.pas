@@ -338,4 +338,5 @@ begin
   cb := GetControlByControlType1(name, UIA_ComboBoxControlTypeId);
   result := TAutomationComboBox.Create(cb);
 end;
+
 end.

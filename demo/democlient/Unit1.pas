@@ -27,7 +27,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   AutomatedCombobox, AutomatedEdit, Vcl.Grids, AutomatedStringGrid, Vcl.Mask,
-  AutomatedMaskEdit;
+  AutomatedMaskEdit, Vcl.ToolWin, Vcl.ExtCtrls, Vcl.ImgList;
 
 type
   TForm1 = class(TForm)
@@ -67,11 +67,25 @@ type
     Popup21: TMenuItem;
     Edit1: TEdit;
     ListBox1: TListBox;
+    LinkLabel1: TLinkLabel;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ImageList1: TImageList;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);
     procedure PopupMenu2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure LinkLabel1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -122,9 +136,29 @@ begin
 
 end;
 
+procedure TForm1.LinkLabel1Click(Sender: TObject);
+begin
+  ShowMessage ('LinkLabel1Click');
+end;
+
 procedure TForm1.PopupMenu2Click(Sender: TObject);
 begin
   ShowMessage ('Popup menu clicked');
+end;
+
+procedure TForm1.ToolButton1Click(Sender: TObject);
+begin
+  ShowMessage ('ToolButton1Click');
+end;
+
+procedure TForm1.ToolButton5Click(Sender: TObject);
+begin
+  ShowMessage ('ToolButton5Click');
+end;
+
+procedure TForm1.ToolButton7Click(Sender: TObject);
+begin
+  ShowMessage ('ToolButton7Click');
 end;
 
 end.

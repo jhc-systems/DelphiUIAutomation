@@ -43,6 +43,11 @@ type
     ///  Gets the bounding rectangle of the element
     /// </summary>
     property BoundingRectangle : TRect read GetBoundingRectangle;
+
+    ///<summary>
+    /// Gets the window handle of the Window Element
+    ///</summary>
+    function GetHandle : Pointer;
   end;
 
   /// <summary>
@@ -97,6 +102,11 @@ type
     ///  Constructor for the element.
     /// </summary>
     constructor Create(element : IUIAutomationElement); virtual;
+
+    ///<summary>
+    /// Gets the window handle of the Window Element
+    ///</summary>
+    function GetHandle : Pointer;
   end;
 
 implementation
@@ -334,6 +344,15 @@ var
 begin
   FElement.Get_CurrentName(name);
   result := name;
+end;
+
+function TAutomationBase.GetHandle: Pointer;
+var
+  retVal : Pointer;
+begin
+  self.FElement.Get_CurrentNativeWindowHandle(retVal);
+
+  result := retVal;
 end;
 
 end.

@@ -38,6 +38,9 @@ type
     ///  Gets or sets the text
     ///</summary>
     property Text : string read getText write setText;
+
+    function GetHandle: Pointer;
+
   end;
 
   /// <summary>
