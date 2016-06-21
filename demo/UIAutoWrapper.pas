@@ -3,12 +3,16 @@ unit UIAutoWrapper;
 interface
 
 type
+  // TODO: Better names for these types please
   TSimpleFunc = procedure; stdcall;
   TLaunchFunc = procedure (const val1, val2: String);
   TStringFunc = function (const value: String): Pointer;
   TPointerFunc = procedure (handle: Pointer);
   TSelectTabFunc = procedure (handle: Pointer; text: String);
   TGetTabFunc = function (handle: Pointer; value: Integer): Pointer;
+  TGetEditBoxByNameFunc = function (handle: Pointer; text: String): Pointer;
+  TGetTextFunc = function (handle: Pointer): String;
+  TToggleFunc = procedure (handle: Pointer);
 
   TUIAutoWrapper = class
   private
@@ -24,6 +28,13 @@ type
     maximizeFunc: TPointerFunc;
     selectTabFunc: TSelectTabFunc;
     getTabFunc: TGetTabFunc;
+    getCheckBoxFunc: TGetTabFunc;
+
+    getEditBoxFunc: TGetTabFunc;
+    getEditBoxByNameFunc: TGetEditBoxByNameFunc;
+
+    getTextFunc: TGetTextFunc;
+    toggleFunc: TToggleFunc;
 
   public
     constructor Create;
@@ -44,6 +55,15 @@ type
 
     procedure SelectTab(handle: Pointer; text: String);
     function GetTab(handle: Pointer; item: integer): Pointer;
+
+    function GetEditBox(handle: Pointer; item: Integer): pointer; overload;
+    function GetEditBox(handle: Pointer; name: String): pointer; overload;
+
+    function GetText(handle: Pointer): String;
+
+    function GetCheckBox(handle: Pointer; index: Integer): Pointer;
+    procedure Toggle(handle: Pointer);
+
   end;
 
 implementation
@@ -105,6 +125,26 @@ begin
     @maximizeFunc := getProcAddress(dllHandle, 'Maximize');
     if not Assigned (maximizeFunc) then
       WriteLn('"Maximize" function not found');
+
+    @getEditBoxByNameFunc := getProcAddress(dllHandle, 'GetEditBoxByName');
+    if not Assigned (getEditBoxByNameFunc) then
+      WriteLn('"GetEditBoxByName" function not found');
+
+    @getEditBoxFunc := getProcAddress(dllHandle, 'GetEditBox');
+    if not Assigned (getEditBoxFunc) then
+      WriteLn('"GetEditBox" function not found');
+
+    @getTextFunc := getProcAddress(dllHandle, 'GetText');
+    if not Assigned (getTextFunc) then
+      WriteLn('"GetText" function not found');
+
+    @getCheckBoxFunc := getProcAddress(dllHandle, 'GetCheckBox');
+    if not Assigned (getCheckBoxFunc) then
+      WriteLn('"GetCheckBox" function not found');
+
+    @toggleFunc := getProcAddress(dllHandle, 'Toggle');
+    if not Assigned (toggleFunc) then
+      WriteLn('"Toggle" function not found');
   end
   else
   begin
@@ -153,14 +193,39 @@ begin
   self.maximizeFunc (handle);
 end;
 
-function TUIAutoWrapper.getTab(handle: Pointer; item: Integer) : Pointer;
+function TUIAutoWrapper.getTab(handle: Pointer; item: Integer): Pointer;
 begin
   result := self.GetTabFunc(handle, item);
+end;
+
+function TUIAutoWrapper.GetEditBox(handle: Pointer; item: Integer): pointer;
+begin
+  result := self.getEditBoxFunc(handle, item);
+end;
+
+function TUIAutoWrapper.GetText(handle: Pointer): String;
+begin
+  result := self.getTextFunc(handle);
+end;
+
+function TUIAutoWrapper. GetCheckBox(handle: Pointer; index: Integer): Pointer;
+begin
+  result := self.getCheckBoxFunc(handle, index);
+end;
+
+function TUIAutoWrapper.GetEditBox(handle: Pointer; name: String): pointer;
+begin
+  result := self.getEditBoxByNameFunc(handle, name);
 end;
 
 procedure TUIAutoWrapper.SelectTab(handle: Pointer; text: String);
 begin
   self.SelectTabFunc(handle, text);
+end;
+
+procedure TUIAutoWrapper.Toggle(handle: Pointer);
+begin
+  self.ToggleFunc(handle);
 end;
 
 procedure TUIAutoWrapper.Launch(const val1, val2: String);
@@ -169,3 +234,4 @@ begin
 end;
 
 end.
+

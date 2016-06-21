@@ -123,6 +123,8 @@ var
   wrapper: TUIAutoWrapper;
   window: Pointer;
   tab: Pointer;
+  tb1, tb2 : Pointer;
+  check: Pointer;
 
 begin
   WriteLn('Creating wrapper');
@@ -145,9 +147,18 @@ begin
     wrapper.Maximize(window);
 
     tab := wrapper.GetTab(window, 0);
-    wrapper.SelectTab(tab, 'Last Tab');
+    wrapper.SelectTab(tab, 'Second Tab');
 
-    WriteLn('Press key to exit');
+    tb1 := wrapper.GetEditBox(tab, 0);
+    writeLn(wrapper.GetText(tb1));
+
+    tb2 := wrapper.GetEditBox(window, 'AutomatedEdit1');
+    writeLn(wrapper.GetText(tb2));
+
+    check := wrapper.GetCheckBox(window, 0);
+    wrapper.Toggle(check);
+
+    WriteLn('Press key to continue');
     ReadLn;
 
   finally

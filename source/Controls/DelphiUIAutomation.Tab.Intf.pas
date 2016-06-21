@@ -30,10 +30,11 @@ uses
   DelphiUIAutomation.Button,
   DelphiUIAutomation.TabItem,
   DelphiUIAutomation.Combobox,
+  DelphiUIAutomation.Base,
   DelphiUIAutomation.RadioButton;
 
 type
-  IAutomationTab = interface
+  IAutomationTab = interface (IAutomationBase)
     ['{542BED07-5345-4E0F-993C-26C121B66371}']
     function GetSelectedItem: IAutomationTabItem;
 
@@ -81,11 +82,6 @@ type
     ///  Gets the currently selected item
     /// </summary>
     property SelectedItem : IAutomationTabItem read GetSelectedItem;
-
-    ///<summary>
-    /// Gets the window handle of the Window Element
-    ///</summary>
-    function GetHandle : Pointer;
   end;
 
 implementation

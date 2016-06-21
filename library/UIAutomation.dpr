@@ -138,8 +138,77 @@ begin
   result := tab.GetHandle;
 end;
 
+function GetEditBoxByName(handle: Pointer; name: String) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  eb : IAutomationEditBox;
 
-exports Kill, LaunchOrAttach, GetTab, Initialize, Finalize, GetDesktopWindow, WaitWhileBusy, Maximize, SelectTab;
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  eb := parent.GetEditBoxByName(name);
+
+  result := eb.GetHandle;
+end;
+
+procedure Toggle(handle: Pointer); export;
+var
+  cb : IAutomationCheckBox;
+  elem : IUIAutomationElement;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  cb := TAutomationCheckBox.Create(elem);
+
+  cb.Toggle;
+end;
+
+function GetCheckBox(handle: Pointer; index: Integer) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  cb : IAutomationCheckBox;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+  cb := parent.GetCheckboxByIndex(index);
+  result := cb.GetHandle;
+end;
+
+function GetEditBox(handle: Pointer; index: Integer) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  eb : IAutomationEditBox;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  eb := parent.GetEditBoxByIndex(index);
+
+  result := eb.GetHandle;
+end;
+
+function GetText(handle: Pointer) : String; export;
+var
+  elem : IUIAutomationElement;
+  tb : IAutomationEditBox;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  tb := TAutomationEditBox.Create(elem);
+
+  result := tb.Text;
+end;
+
+exports
+  GetEditBoxByName, GetEditBox, GetText, GetCheckBox, Toggle,
+  Kill, LaunchOrAttach, GetTab, Initialize,
+  Finalize, GetDesktopWindow, WaitWhileBusy, Maximize, SelectTab;
 
 begin
 end.
