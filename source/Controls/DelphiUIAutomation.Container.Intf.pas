@@ -104,6 +104,11 @@ type
     /// Finds the treeview, by index
     /// </summary>
     function GetTreeViewByIndex (index : integer): IAutomationTreeView;
+
+    ///<summary>
+    /// Gets the window handle of the Window Element
+    ///</summary>
+    function GetHandle : Pointer;
   end;
 
 implementation

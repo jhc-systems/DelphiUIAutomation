@@ -66,6 +66,8 @@ type
 
     class procedure CreateUIAuto;
     class procedure DestroyUIAuto;
+
+    class function GetElementFromHandle(hwnd: Pointer): IUIAutomationElement; static;
   end;
 
 var
@@ -123,6 +125,16 @@ begin
   UIAuto.Free;
   CoUninitialize;
 end;
+
+class function TUIAuto.GetElementFromHandle(hwnd: Pointer) : IUIAutomationElement;
+var
+  elem: IUIAutomationElement;
+begin
+  UIAuto.ElementFromHandle(hwnd, elem);
+
+  result := elem;
+end;
+
 
 //initialization
 //  CoInitializeEx(nil, 2);

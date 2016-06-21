@@ -5,7 +5,10 @@ interface
 type
   TSimpleFunc = procedure; stdcall;
   TLaunchFunc = procedure (const val1, val2: String);
-  TStringFunc = procedure (const value: String);
+  TStringFunc = function (const value: String): Pointer;
+  TPointerFunc = procedure (handle: Pointer);
+  TSelectTabFunc = procedure (handle: Pointer; text: String);
+  TGetTabFunc = function (handle: Pointer; value: Integer): Pointer;
 
   TUIAutoWrapper = class
   private
@@ -18,7 +21,9 @@ type
     finalizeFunc: TSimpleFunc;
     waitWhileBusyFunc: TSimpleFunc;
     getDesktopWindowFunc: TStringFunc;
-    maximizeFunc: TSimpleFunc;
+    maximizeFunc: TPointerFunc;
+    selectTabFunc: TSelectTabFunc;
+    getTabFunc: TGetTabFunc;
 
   public
     constructor Create;
@@ -32,9 +37,13 @@ type
 
     procedure WaitWhileBusy;
 
-    procedure GetDesktopWindow(const name: String);
+    function GetDesktopWindow(const name: String) : Pointer;
 
-    procedure Maximize;
+    procedure Maximize(handle: Pointer);
+    procedure Focus(handle: Pointer);
+
+    procedure SelectTab(handle: Pointer; text: String);
+    function GetTab(handle: Pointer; item: integer): Pointer;
   end;
 
 implementation
@@ -85,18 +94,28 @@ begin
     if not Assigned (getDesktopWindowFunc) then
       WriteLn('"GetDesktopWindow" function not found');
 
+    @selectTabFunc := getProcAddress(dllHandle, 'SelectTab');
+    if not Assigned (selectTabFunc) then
+      WriteLn('"SelectTab" function not found');
+
+    @getTabFunc := getProcAddress(dllHandle, 'GetTab');
+    if not Assigned (getTabFunc) then
+      WriteLn('"GetTab" function not found');
+
     @maximizeFunc := getProcAddress(dllHandle, 'Maximize');
     if not Assigned (maximizeFunc) then
       WriteLn('"Maximize" function not found');
   end
   else
+  begin
     WriteLn('Dll not found') ;
+    Exit;
+  end;
 end;
 
 destructor TUIAutoWrapper.Destroy;
 begin
-  if (dllHandle <> -1) then
-    FreeLibrary(dllHandle) ;
+  FreeLibrary(dllHandle) ;
 end;
 
 procedure TUIAutoWrapper.Finalize;
@@ -114,9 +133,14 @@ begin
   self.waitWhileBusyFunc;
 end;
 
-procedure TUIAutoWrapper.GetDesktopWindow(const name: String);
+function TUIAutoWrapper.GetDesktopWindow(const name: String) : Pointer;
 begin
-  self.getDesktopWindowFunc(name);
+  result := self.getDesktopWindowFunc(name);
+end;
+
+procedure TUIAutoWrapper.Focus (handle: Pointer);
+begin
+  // Nothing yet.
 end;
 
 procedure TUIAutoWrapper.Kill;
@@ -124,9 +148,19 @@ begin
   self.KillFunc;
 end;
 
-procedure TUIautoWrapper.maximize;
+procedure TUIautoWrapper.maximize(handle: Pointer);
 begin
-  self.maximizeFunc;
+  self.maximizeFunc (handle);
+end;
+
+function TUIAutoWrapper.getTab(handle: Pointer; item: Integer) : Pointer;
+begin
+  result := self.GetTabFunc(handle, item);
+end;
+
+procedure TUIAutoWrapper.SelectTab(handle: Pointer; text: String);
+begin
+  self.SelectTabFunc(handle, text);
 end;
 
 procedure TUIAutoWrapper.Launch(const val1, val2: String);

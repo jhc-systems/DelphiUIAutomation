@@ -64,12 +64,6 @@ uses
 
 var
   application: IAutomationApplication;
-  window: IAutomationWindow;
-
-procedure DllMessage; export;
-begin
-  ShowMessage('Hello world from a Delphi DLL');
-end;
 
 procedure Initialize; export;
 begin
@@ -83,21 +77,20 @@ end;
 
 procedure LaunchOrAttach(const val1, val2 : String); export;
 begin
-  WriteLn('LaunchOrAttach - ' + val1 + ' - ' + val2);
   application := TAutomationApplication.LaunchOrAttach (val1, val2);
-  WriteLn('LaunchOrAttach - done');
 end;
 
 procedure Kill; export;
 begin
-  WriteLn('Kill');
   application.Kill;
-  WriteLn('Kill - done');
 end;
 
-procedure GetDesktopWindow(const value: String); export;
+function GetDesktopWindow(const value: String): Pointer; export;
+var
+  window: TAutomationWindow;
 begin
   window := TAutomationDesktop.GetDesktopWindow(value);
+  result := window.GetHandle;
 end;
 
 procedure WaitWhileBusy; export;
@@ -105,12 +98,48 @@ begin
   application.WaitWhileBusy;
 end;
 
-procedure Maximize; export;
+procedure Maximize(handle: Pointer); export;
+var
+  window : IAutomationWindow;
+  elem : IUIAutomationElement;
+
 begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+
+  window := TAutomationWindow.Create(elem, false);
+
   window.Maximize;
 end;
 
-exports DllMessage, Kill, LaunchOrAttach, Initialize, Finalize, GetDesktopWindow, WaitWhileBusy, Maximize;
+procedure SelectTab(handle: Pointer; text: String); export;
+var
+  elem : IUIAutomationElement;
+  tab : IAutomationTab;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  tab := TAutomationTab.Create(elem);
+
+  tab.SelectTabPage(text);
+end;
+
+function GetTab(handle: Pointer; item: Integer) : Pointer; export;
+var
+  window : IAutomationWindow;
+  elem : IUIAutomationElement;
+  tab : IAutomationTab;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  window := TAutomationWindow.Create(elem, false);
+
+  tab := window.GetTabByIndex(item);
+
+  result := tab.GetHandle;
+end;
+
+
+exports Kill, LaunchOrAttach, GetTab, Initialize, Finalize, GetDesktopWindow, WaitWhileBusy, Maximize, SelectTab;
 
 begin
 end.

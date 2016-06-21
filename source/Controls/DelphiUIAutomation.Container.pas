@@ -116,6 +116,11 @@ type
     /// Finds the treeview, by index
     /// </summary>
     function GetTreeViewByIndex (index: Integer): IAutomationTreeView;
+
+    ///<summary>
+    /// Gets the window handle of the Window Element
+    ///</summary>
+    function GetHandle : Pointer;
   end;
 
 implementation
@@ -338,4 +343,14 @@ begin
   cb := GetControlByControlType1(name, UIA_ComboBoxControlTypeId);
   result := TAutomationComboBox.Create(cb);
 end;
+
+function TAutomationContainer.GetHandle: Pointer;
+var
+  retVal : Pointer;
+begin
+  self.FElement.Get_CurrentNativeWindowHandle(retVal);
+
+  result := retVal;
+end;
+
 end.

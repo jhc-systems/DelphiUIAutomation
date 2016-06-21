@@ -81,6 +81,11 @@ type
     ///  Gets the currently selected item
     /// </summary>
     property SelectedItem : IAutomationTabItem read GetSelectedItem;
+
+    ///<summary>
+    /// Gets the window handle of the Window Element
+    ///</summary>
+    function GetHandle : Pointer;
   end;
 
 implementation

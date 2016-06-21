@@ -121,6 +121,8 @@ begin
 *)
 var
   wrapper: TUIAutoWrapper;
+  window: Pointer;
+  tab: Pointer;
 
 begin
   WriteLn('Creating wrapper');
@@ -131,29 +133,19 @@ begin
     ReportMemoryLeaksOnShutdown := DebugHook <> 0;
     // Should do something here
 
-    WriteLn('About to launch');
     wrapper.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
-    WriteLn('Launched');
-
 
     wrapper.Initialize;
 
-    WriteLn('Initialised');
-
-    WriteLn('Press key to exit');
-    ReadLn;
-
     wrapper.WaitWhileBusy;
 
-    WriteLn('Waited');
-
     // Now wait for a very long time for the enquiry screen to come up
-    wrapper.GetDesktopWindow('Form1');
-//    enquiry.Focus;
+    window := wrapper.GetDesktopWindow('Form1');
+    wrapper.Focus(window);
+    wrapper.Maximize(window);
 
-    wrapper.Maximize;
-
-    WriteLn('Got desktop');
+    tab := wrapper.GetTab(window, 0);
+    wrapper.SelectTab(tab, 'Last Tab');
 
     WriteLn('Press key to exit');
     ReadLn;
