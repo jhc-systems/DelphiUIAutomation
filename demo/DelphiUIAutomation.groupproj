@@ -9,6 +9,9 @@
         <Projects Include="democlient\Project1.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\library\UIAutomation.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="AutomationDemo.dproj">
             <Dependencies/>
         </Projects>
@@ -38,6 +41,15 @@
     <Target Name="Project1:Make">
         <MSBuild Projects="democlient\Project1.dproj" Targets="Make"/>
     </Target>
+    <Target Name="UIAutomation">
+        <MSBuild Projects="..\library\UIAutomation.dproj"/>
+    </Target>
+    <Target Name="UIAutomation:Clean">
+        <MSBuild Projects="..\library\UIAutomation.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="UIAutomation:Make">
+        <MSBuild Projects="..\library\UIAutomation.dproj" Targets="Make"/>
+    </Target>
     <Target Name="AutomationDemo">
         <MSBuild Projects="AutomationDemo.dproj"/>
     </Target>
@@ -48,13 +60,13 @@
         <MSBuild Projects="AutomationDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="AutomatedControls;Project1;AutomationDemo"/>
+        <CallTarget Targets="AutomatedControls;Project1;UIAutomation;AutomationDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="AutomatedControls:Clean;Project1:Clean;AutomationDemo:Clean"/>
+        <CallTarget Targets="AutomatedControls:Clean;Project1:Clean;UIAutomation:Clean;AutomationDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="AutomatedControls:Make;Project1:Make;AutomationDemo:Make"/>
+        <CallTarget Targets="AutomatedControls:Make;Project1:Make;UIAutomation:Make;AutomationDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
