@@ -13,6 +13,8 @@ type
   TGetEditBoxByNameFunc = function (handle: Pointer; text: String): Pointer;
   TGetTextFunc = function (handle: Pointer): String;
   TToggleFunc = procedure (handle: Pointer);
+  TGetStatusBarFunc = function (handle: Pointer): Pointer;
+  TSetTextFunc = procedure (handle: Pointer; text: String);
 
   TUIAutoWrapper = class
   private
@@ -31,10 +33,18 @@ type
     getCheckBoxFunc: TGetTabFunc;
 
     getEditBoxFunc: TGetTabFunc;
+    getTextBoxFunc: TGetTabFunc;
     getEditBoxByNameFunc: TGetEditBoxByNameFunc;
 
     getTextFunc: TGetTextFunc;
+    getTextFromTextFunc: TGetTextFunc;
     toggleFunc: TToggleFunc;
+    getStatusbarFunc: TGetStatusBarFunc;
+
+    getComboBoxByNameFunc: TGetEditBoxByNameFunc;
+    getComboBoxFunc: TGetTabFunc;
+
+    setTextFunc: TSetTextFunc;
 
   public
     constructor Create;
@@ -59,11 +69,20 @@ type
     function GetEditBox(handle: Pointer; item: Integer): pointer; overload;
     function GetEditBox(handle: Pointer; name: String): pointer; overload;
 
+    function GetTextBox(handle: Pointer; item: Integer): pointer;
+
     function GetText(handle: Pointer): String;
+    function GetTextFromText(handle: Pointer): String;
 
     function GetCheckBox(handle: Pointer; index: Integer): Pointer;
     procedure Toggle(handle: Pointer);
 
+    function GetStatusbar(handle: Pointer): Pointer;
+
+    function GetComboBox(handle: Pointer; item: Integer): Pointer; overload;
+    function GetComboBox(handle: Pointer; name: String): Pointer; overload;
+
+    procedure SetText(handle: Pointer; text: String);
   end;
 
 implementation
@@ -81,15 +100,6 @@ begin
   WriteLn('Loaded DLL');
   if dllHandle <> 0 then
   begin
-    // Loaded the DLL successfully
-
-    @simpleFunc := GetProcAddress(dllHandle, 'DllMessage') ;
-    if Assigned (simpleFunc) then
-      // call the function
-      simpleFunc()
-    else
-      WriteLn('"DllMessage" function not found') ;
-
     @launchOrAttachFunc := getProcAddress(dllHandle, 'LaunchOrAttach');
     if not Assigned (launchOrAttachFunc) then
       WriteLn('"LaunchOrAttach" function not found') ;
@@ -145,6 +155,31 @@ begin
     @toggleFunc := getProcAddress(dllHandle, 'Toggle');
     if not Assigned (toggleFunc) then
       WriteLn('"Toggle" function not found');
+
+    @getStatusbarFunc := getProcAddress(dllHandle, 'GetStatusBar');
+    if not Assigned (getStatusbarFunc) then
+      WriteLn('"GetStatusbar" function not found');
+
+    @getTextBoxFunc := getProcAddress(dllHandle, 'GetTextBox');
+    if not Assigned (getTextBoxFunc) then
+      WriteLn('"GetTextBox" function not found');
+
+    @getTextFromTextFunc := getProcAddress(dllHandle, 'GetTextFromText');
+    if not Assigned (getTextFromTextFunc) then
+      WriteLn('"GetTextFromText" function not found');
+
+    @getComboBoxByNameFunc := getProcAddress(dllHandle, 'GetComboBoxByName');
+    if not Assigned (getComboBoxByNameFunc) then
+      WriteLn('"GetComboBoxByName" function not found');
+
+    @getComboBoxFunc := getProcAddress(dllHandle, 'GetComboBox');
+    if not Assigned (getComboBoxFunc) then
+      WriteLn('"GetComboBox" function not found');
+
+    @setTextFunc := getProcAddress(dllHandle, 'SetText');
+    if not Assigned (setTextFunc) then
+      WriteLn('"SetText" function not found');
+
   end
   else
   begin
@@ -203,14 +238,39 @@ begin
   result := self.getEditBoxFunc(handle, item);
 end;
 
+function TUIAutoWrapper.GetTextBox(handle: Pointer; item: Integer): pointer;
+begin
+  result := self.getTextBoxFunc(handle, item);
+end;
+
+function TUIAutoWrapper.GetTextFromText(handle: Pointer): String;
+begin
+  result := self.getTextFromTextFunc(handle);
+end;
+
 function TUIAutoWrapper.GetText(handle: Pointer): String;
 begin
   result := self.getTextFunc(handle);
 end;
 
-function TUIAutoWrapper. GetCheckBox(handle: Pointer; index: Integer): Pointer;
+function TUIAutoWrapper.GetCheckBox(handle: Pointer; index: Integer): Pointer;
 begin
   result := self.getCheckBoxFunc(handle, index);
+end;
+
+function TUIAutoWrapper.GetComboBox(handle: Pointer; name: String): Pointer;
+begin
+  result := self.getComboBoxByNameFunc(handle, name);
+end;
+
+function TUIAutoWrapper.GetComboBox(handle: Pointer; item: Integer): Pointer;
+begin
+  result := self.getComboBoxFunc(handle, item);
+end;
+
+function TUIAutoWrapper.GetStatusbar(handle: Pointer): Pointer;
+begin
+  result := self.getStatusbarFunc(handle);
 end;
 
 function TUIAutoWrapper.GetEditBox(handle: Pointer; name: String): pointer;
@@ -221,6 +281,11 @@ end;
 procedure TUIAutoWrapper.SelectTab(handle: Pointer; text: String);
 begin
   self.SelectTabFunc(handle, text);
+end;
+
+procedure TUIAutoWrapper.SetText(handle: Pointer; text: String);
+begin
+  self.setTextFunc(handle, text);
 end;
 
 procedure TUIAutoWrapper.Toggle(handle: Pointer);

@@ -50,13 +50,15 @@ type
   ///  TEdit for example.
   /// </remarks>
   TAutomationEditBox = class (TAutomationBase, IAutomationEditBox)
-  private
+  strict private
     fValuePattern : IUIAutomationValuePattern;
 
+  private
     function getIsPassword: boolean;
     function getIsReadOnly: boolean;
     function getText: string;
     procedure setText(const Value: string);
+
   public
     ///<summary>
     ///  Gets or sets the text
