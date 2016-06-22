@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{           Copyright 2016 JHC Systems Limited                              }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 library UIAutomation;
 
 { Important note about DLL memory management: ShareMem must be the
@@ -165,6 +186,20 @@ begin
   cb.Toggle;
 end;
 
+procedure SelectRadioButton(handle: Pointer; index: Integer); export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  rb : IAutomationRadioButton;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+  rb := parent.GetRadioButtonByIndex(index);
+
+  rb.Select;
+end;
+
 function GetCheckBox(handle: Pointer; index: Integer) : Pointer; export;
 var
   parent : IAutomationContainer;
@@ -185,15 +220,12 @@ var
   tb : IAutomationTextBox;
 
 begin
-  writeln('GetTextBox');
   elem := TUIAuto.GetElementFromHandle(handle);
   parent := TAutomationContainer.Create(elem);
 
   tb := parent.GetTextBoxByIndex(index);
 
   result := tb.GetHandle;
-
-  writeln('GetTextBox - done');
 end;
 
 function GetEditBox(handle: Pointer; index: Integer) : Pointer; export;
@@ -217,14 +249,10 @@ var
   tb : IAutomationEditBox;
 
 begin
-  writeln('GetText');
-
   elem := TUIAuto.GetElementFromHandle(handle);
   tb := TAutomationEditBox.Create(elem);
 
   result := tb.Text;
-
-  writeln('GetText - done');
 end;
 
 function GetTextFromText(handle: Pointer) : String; export;
@@ -233,18 +261,10 @@ var
   tb : IAutomationTextBox;
 
 begin
-  writeln('GetTextFromText');
-
   elem := TUIAuto.GetElementFromHandle(handle);
-  writeln('GetTextFromText - got handle');
   tb := TAutomationTextBox.Create(elem);
-  writeln('GetTextFromText - created TextBox');
 
   result := tb.Text;
-
-  writeln(tb.Text);
-
-  writeln('GetTextFromText - done');
 end;
 
 function GetStatusBar(handle: Pointer): Pointer; export;
@@ -269,8 +289,6 @@ var
   cb : IAutomationComboBox;
 
 begin
-  writeln('GetComboBoxByName');
-
   elem := TUIAuto.GetElementFromHandle(handle);
   parent := TAutomationContainer.Create(elem);
 
@@ -286,7 +304,6 @@ var
   cb : IAutomationComboBox;
 
 begin
-  writeln('GetComboBox');
   elem := TUIAuto.GetElementFromHandle(handle);
   parent := TAutomationContainer.Create(elem);
 
@@ -301,21 +318,73 @@ var
   tb : IAutomationEditBox;
 
 begin
-  writeln('SetText');
-
   elem := TUIAuto.GetElementFromHandle(handle);
   tb := TAutomationEditBox.Create(elem);
 
   tb.Text := name;
-
-  writeln('SetText - done');
 end;
 
+procedure SelectTreeViewItem(handle: Pointer; index: Integer; text: String);
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  tv : IAutomationTreeView;
+  tvi : IAutomationTreeViewItem;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  tv := parent.GetTreeViewByIndex(index);
+  tvi := tv.GetItem(text);
+  tvi.select;
+end;
+
+procedure ClickMenuItem(handle: Pointer; name: String) export;
+var
+  menu : IAutomationMenu;
+  parent: IAutomationWindow;
+  elem : IUIAutomationElement;
+  mi : IAutomationMenuItem;
+
+begin
+  writeln('ClickMenuItem');
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationWindow.Create(elem, true);
+  writeln('ClickMenuItem - got parent window');
+  writeln('ClickMenuItem: ' + parent.Name);
+  menu := parent.MainMenu;
+  mi := menu.MenuItem(name);
+
+  writeln('ClickMenuItem:About to click - ' + mi.Name);
+
+  mi.Click;
+end;
+
+function GetStatusBarText(handle: Pointer; index: Integer) : String; export;
+var
+  parent : IAutomationWindow;
+  elem : IUIAutomationElement;
+  sb : IAutomationStatusBar;
+  tb : IAutomationTextBox;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationWindow.Create(elem, false);
+
+  sb := parent.StatusBar;
+
+  tb := sb.GetTextBoxByIndex(index);
+
+  result := tb.Text;
+end;
 
 exports
+  ClickMenuItem, SelectRadioButton,
+  SelectTreeViewItem,
   GetComboBox, GetComboBoxByName, SetText,
   GetTextBox, GetTextFromText,
-  GetStatusBar, GetEditBoxByName, GetEditBox, GetText, GetCheckBox, Toggle,
+  GetStatusBarText, GetEditBoxByName, GetEditBox, GetText, GetCheckBox, Toggle,
   Kill, LaunchOrAttach, GetTab, Initialize,
   Finalize, GetDesktopWindow, WaitWhileBusy, Maximize, SelectTab;
 
