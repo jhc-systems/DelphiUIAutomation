@@ -125,11 +125,17 @@ var
   tab: Pointer;
   tb1, tb2 : Pointer;
   check: Pointer;
+  radio: Pointer;
+  statusBar, eb0: Pointer;
+  cb1: Pointer;
 
 begin
   WriteLn('Creating wrapper');
   wrapper := TUIAutoWrapper.create;
   WriteLn('Created wrapper');
+
+  WriteLn('Press key to continue');
+  ReadLn;
 
   try
     ReportMemoryLeaksOnShutdown := DebugHook <> 0;
@@ -157,6 +163,33 @@ begin
 
     check := wrapper.GetCheckBox(window, 0);
     wrapper.Toggle(check);
+
+    //radio := wrapper.GetRadioButtonByIndex(window, 2);
+    //wrapper.Select(radio);
+(*
+    writeln('Getting status bar');
+
+    // Now see whether we can get the statusbar and associated text
+
+    statusBar := wrapper.GetStatusbar(window);
+
+    writeln('Got status bar');
+
+    eb0 := wrapper.GetTextBox(statusBar, 1);
+    writeln('Getting status bar Text');
+
+    writeln('Text is ' + wrapper.GetTextFromText(eb0));
+*)
+
+    writeln('Getting Combobox');
+
+    cb1 := wrapper.GetComboBox(window, 'AutomatedCombobox1');
+    writeln('Got combobox');
+
+    writeLn(wrapper.GetText(cb1));
+
+    wrapper.SetText(cb1, 'Helloo');
+    writeLn('Value is now - ' + wrapper.GetText(cb1));
 
     WriteLn('Press key to continue');
     ReadLn;

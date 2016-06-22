@@ -178,6 +178,24 @@ begin
   result := cb.GetHandle;
 end;
 
+function GetTextBox(handle: Pointer; index: Integer) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  tb : IAutomationTextBox;
+
+begin
+  writeln('GetTextBox');
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  tb := parent.GetTextBoxByIndex(index);
+
+  result := tb.GetHandle;
+
+  writeln('GetTextBox - done');
+end;
+
 function GetEditBox(handle: Pointer; index: Integer) : Pointer; export;
 var
   parent : IAutomationContainer;
@@ -199,14 +217,105 @@ var
   tb : IAutomationEditBox;
 
 begin
+  writeln('GetText');
+
   elem := TUIAuto.GetElementFromHandle(handle);
   tb := TAutomationEditBox.Create(elem);
 
   result := tb.Text;
+
+  writeln('GetText - done');
 end;
 
+function GetTextFromText(handle: Pointer) : String; export;
+var
+  elem : IUIAutomationElement;
+  tb : IAutomationTextBox;
+
+begin
+  writeln('GetTextFromText');
+
+  elem := TUIAuto.GetElementFromHandle(handle);
+  writeln('GetTextFromText - got handle');
+  tb := TAutomationTextBox.Create(elem);
+  writeln('GetTextFromText - created TextBox');
+
+  result := tb.Text;
+
+  writeln(tb.Text);
+
+  writeln('GetTextFromText - done');
+end;
+
+function GetStatusBar(handle: Pointer): Pointer; export;
+var
+  parent : IAutomationWindow;
+  elem : IUIAutomationElement;
+  sb : IAutomationStatusBar;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationWindow.Create(elem, false);
+
+  sb := parent.StatusBar;
+
+  result := sb.GetHandle;
+end;
+
+function GetComboBoxByName(handle: Pointer; name: String) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  cb : IAutomationComboBox;
+
+begin
+  writeln('GetComboBoxByName');
+
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  cb := parent.GetComboBoxByName(name);
+
+  result := cb.GetHandle;
+end;
+
+function GetComboBox(handle: Pointer; index: Integer) : Pointer; export;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  cb : IAutomationComboBox;
+
+begin
+  writeln('GetComboBox');
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  cb := parent.GetComboBoxByIndex(index);
+
+  result := cb.GetHandle;
+end;
+
+function SetText(handle: Pointer; name: String) : String; export;
+var
+  elem : IUIAutomationElement;
+  tb : IAutomationEditBox;
+
+begin
+  writeln('SetText');
+
+  elem := TUIAuto.GetElementFromHandle(handle);
+  tb := TAutomationEditBox.Create(elem);
+
+  tb.Text := name;
+
+  writeln('SetText - done');
+end;
+
+
 exports
-  GetEditBoxByName, GetEditBox, GetText, GetCheckBox, Toggle,
+  GetComboBox, GetComboBoxByName, SetText,
+  GetTextBox, GetTextFromText,
+  GetStatusBar, GetEditBoxByName, GetEditBox, GetText, GetCheckBox, Toggle,
   Kill, LaunchOrAttach, GetTab, Initialize,
   Finalize, GetDesktopWindow, WaitWhileBusy, Maximize, SelectTab;
 
