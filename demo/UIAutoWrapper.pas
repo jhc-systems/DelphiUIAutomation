@@ -80,7 +80,7 @@ type
 
   public
     constructor Create;
-    destructor Destroy; virtual;
+    destructor Destroy; override;
 
     procedure Launch(const val1, val2: String);
     procedure Kill;
@@ -248,6 +248,8 @@ end;
 destructor TUIAutoWrapper.Destroy;
 begin
   FreeLibrary(dllHandle);
+
+  inherited Destroy;
 end;
 
 procedure TUIAutoWrapper.Finalize;
