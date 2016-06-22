@@ -1,3 +1,24 @@
+{***************************************************************************}
+{                                                                           }
+{           DelphiUIAutomation                                              }
+{                                                                           }
+{           Copyright 2016 JHC Systems Limited                              }
+{                                                                           }
+{***************************************************************************}
+{                                                                           }
+{  Licensed under the Apache License, Version 2.0 (the "License");          }
+{  you may not use this file except in compliance with the License.         }
+{  You may obtain a copy of the License at                                  }
+{                                                                           }
+{      http://www.apache.org/licenses/LICENSE-2.0                           }
+{                                                                           }
+{  Unless required by applicable law or agreed to in writing, software      }
+{  distributed under the License is distributed on an "AS IS" BASIS,        }
+{  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. }
+{  See the License for the specific language governing permissions and      }
+{  limitations under the License.                                           }
+{                                                                           }
+{***************************************************************************}
 unit UIAutoWrapper;
 
 interface
@@ -15,12 +36,18 @@ type
   TToggleFunc = procedure (handle: Pointer);
   TGetStatusBarFunc = function (handle: Pointer): Pointer;
   TSetTextFunc = procedure (handle: Pointer; text: String);
+  TGetMenuItemFunc = function (parent: Pointer; handle: Pointer; text: String): Pointer;
+
+  TGetStatusbarTextFunc = function (handle: Pointer; value: Integer): String;
+  TClickMenuItemFunc = procedure(handle: Pointer; text: String);
+
+  TSelectTreeViewItemFunc = procedure (handle: Pointer; item: Integer; text: String);
+  TRadioButtonSelectFunc = procedure (handle: Pointer; item: Integer);
 
   TUIAutoWrapper = class
   private
     dllHandle : THandle;
 
-    simpleFunc: TSimpleFunc;
     launchOrAttachFunc: TLaunchFunc;
     killFunc: TSimpleFunc;
     initializeFunc: TSimpleFunc;
@@ -39,16 +66,21 @@ type
     getTextFunc: TGetTextFunc;
     getTextFromTextFunc: TGetTextFunc;
     toggleFunc: TToggleFunc;
-    getStatusbarFunc: TGetStatusBarFunc;
+    getStatusbarTextFunc: TGetStatusbarTextFunc;
 
     getComboBoxByNameFunc: TGetEditBoxByNameFunc;
     getComboBoxFunc: TGetTabFunc;
 
     setTextFunc: TSetTextFunc;
+    selectTreeViewItemFunc: TSelectTreeViewItemFunc;
+
+    selectRadioButtonFunc: TRadioButtonSelectFunc;
+
+    clickMenuItemFunc : TClickMenuItemFunc;
 
   public
     constructor Create;
-    destructor Destroy;
+    destructor Destroy; override;
 
     procedure Launch(const val1, val2: String);
     procedure Kill;
@@ -77,12 +109,19 @@ type
     function GetCheckBox(handle: Pointer; index: Integer): Pointer;
     procedure Toggle(handle: Pointer);
 
-    function GetStatusbar(handle: Pointer): Pointer;
+    function GetStatusbarText(handle: Pointer; item: Integer): String;
 
     function GetComboBox(handle: Pointer; item: Integer): Pointer; overload;
     function GetComboBox(handle: Pointer; name: String): Pointer; overload;
 
     procedure SetText(handle: Pointer; text: String);
+
+    procedure SelectTreeViewItem(parent: Pointer; item: Integer; name: String);
+
+    procedure ClickMenu(parent: Pointer; value: String);
+
+    procedure SelectRadioButton(handle: Pointer; index: Integer);
+
   end;
 
 implementation
@@ -92,6 +131,13 @@ uses
   windows;
 
 { TUIAutoWrapper }
+
+procedure TUIAutoWrapper.ClickMenu(parent: Pointer; value: String);
+begin
+  writeln('About to click on ' + value);
+  self.clickMenuItemFunc(parent, value);
+  writeln('Clicked ' + value);
+end;
 
 constructor TUIAutoWrapper.Create;
 begin
@@ -107,6 +153,10 @@ begin
     @killFunc := getProcAddress(dllHandle, 'Kill');
     if not Assigned (killFunc) then
       WriteLn('"Kill" function not found') ;
+
+    @clickMenuItemFunc := getProcAddress(dllHandle, 'ClickMenuItem');
+    if not Assigned (clickMenuItemFunc) then
+      WriteLn('"ClickMenuItem" function not found') ;
 
     @initializeFunc := getProcAddress(dllHandle, 'Initialize');
     if not Assigned (initializeFunc) then
@@ -156,9 +206,9 @@ begin
     if not Assigned (toggleFunc) then
       WriteLn('"Toggle" function not found');
 
-    @getStatusbarFunc := getProcAddress(dllHandle, 'GetStatusBar');
-    if not Assigned (getStatusbarFunc) then
-      WriteLn('"GetStatusbar" function not found');
+    @getStatusbarTextFunc := getProcAddress(dllHandle, 'GetStatusBarText');
+    if not Assigned (getStatusbarTextFunc) then
+      WriteLn('"GetStatusBarText" function not found');
 
     @getTextBoxFunc := getProcAddress(dllHandle, 'GetTextBox');
     if not Assigned (getTextBoxFunc) then
@@ -180,6 +230,13 @@ begin
     if not Assigned (setTextFunc) then
       WriteLn('"SetText" function not found');
 
+    @selectTreeViewItemFunc := getProcAddress(dllHandle, 'SelectTreeViewItem');
+    if not Assigned (selectTreeViewItemFunc) then
+      WriteLn('"SelectTreeViewItem" function not found');
+
+    @selectRadioButtonFunc := getProcAddress(dllHandle, 'SelectRadioButton');
+    if not Assigned (selectRadioButtonFunc) then
+      WriteLn('"SelectRadioButton" function not found');
   end
   else
   begin
@@ -190,7 +247,9 @@ end;
 
 destructor TUIAutoWrapper.Destroy;
 begin
-  FreeLibrary(dllHandle) ;
+  FreeLibrary(dllHandle);
+
+  inherited Destroy;
 end;
 
 procedure TUIAutoWrapper.Finalize;
@@ -258,6 +317,11 @@ begin
   result := self.getCheckBoxFunc(handle, index);
 end;
 
+procedure TUIAutoWrapper.SelectRadioButton(handle: Pointer; index: Integer);
+begin
+  self.selectRadioButtonFunc(handle, index);
+end;
+
 function TUIAutoWrapper.GetComboBox(handle: Pointer; name: String): Pointer;
 begin
   result := self.getComboBoxByNameFunc(handle, name);
@@ -268,9 +332,9 @@ begin
   result := self.getComboBoxFunc(handle, item);
 end;
 
-function TUIAutoWrapper.GetStatusbar(handle: Pointer): Pointer;
+function TUIAutoWrapper.GetStatusBarText(handle: Pointer; item: Integer): String;
 begin
-  result := self.getStatusbarFunc(handle);
+  result := self.GetStatusBarTextFunc(handle, item);
 end;
 
 function TUIAutoWrapper.GetEditBox(handle: Pointer; name: String): pointer;
@@ -281,6 +345,12 @@ end;
 procedure TUIAutoWrapper.SelectTab(handle: Pointer; text: String);
 begin
   self.SelectTabFunc(handle, text);
+end;
+
+procedure TUIAutoWrapper.SelectTreeViewItem(parent: Pointer; item: Integer;
+  name: String);
+begin
+  self.selectTreeViewItemFunc(parent, item, name);
 end;
 
 procedure TUIAutoWrapper.SetText(handle: Pointer; text: String);

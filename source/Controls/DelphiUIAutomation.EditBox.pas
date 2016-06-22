@@ -28,7 +28,7 @@ uses
   UIAutomationClient_TLB;
 
 type
-  IAutomationEditBox = interface
+  IAutomationEditBox = interface (IAutomationBase)
     ['{CA47F9E7-ACF6-4B5B-9029-10428C52E1FE}']
 
     function getText: string;
@@ -38,9 +38,6 @@ type
     ///  Gets or sets the text
     ///</summary>
     property Text : string read getText write setText;
-
-    function GetHandle: Pointer;
-
   end;
 
   /// <summary>

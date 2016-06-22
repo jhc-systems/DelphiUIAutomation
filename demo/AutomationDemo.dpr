@@ -125,9 +125,7 @@ var
   tab: Pointer;
   tb1, tb2 : Pointer;
   check: Pointer;
-  radio: Pointer;
-  statusBar, eb0: Pointer;
-  cb1: Pointer;
+  cb1, cb2: Pointer;
 
 begin
   WriteLn('Creating wrapper');
@@ -164,32 +162,49 @@ begin
     check := wrapper.GetCheckBox(window, 0);
     wrapper.Toggle(check);
 
-    //radio := wrapper.GetRadioButtonByIndex(window, 2);
-    //wrapper.Select(radio);
-(*
-    writeln('Getting status bar');
+    wrapper.SelectRadioButton(window, 2);
+
+    writeln('Getting status bar, etc.');
 
     // Now see whether we can get the statusbar and associated text
 
-    statusBar := wrapper.GetStatusbar(window);
+    writeln('Text is ' + wrapper.GetStatusBarText(window, 1));
 
-    writeln('Got status bar');
+//    writeln('Got status bar');
 
-    eb0 := wrapper.GetTextBox(statusBar, 1);
-    writeln('Getting status bar Text');
+ //   eb0 := wrapper.GetTextBox(statusBar, 1);
+ //   writeln('Getting status bar Text');
 
-    writeln('Text is ' + wrapper.GetTextFromText(eb0));
-*)
+//    writeln('Text is ' + wrapper.GetTextFromText(eb0));
+
 
     writeln('Getting Combobox');
 
     cb1 := wrapper.GetComboBox(window, 'AutomatedCombobox1');
     writeln('Got combobox');
-
     writeLn(wrapper.GetText(cb1));
 
     wrapper.SetText(cb1, 'Helloo');
     writeLn('Value is now - ' + wrapper.GetText(cb1));
+
+    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
+    writeln('Combo2 text is ' + wrapper.GetText(cb2));
+    wrapper.SetText(cb2, 'First');
+    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
+    writeln('Combo2 text is ' + wrapper.GetText(cb2));
+    wrapper.SetText(cb2, 'No there');
+    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
+    writeln('Combo2 text is ' + wrapper.GetText(cb2));
+
+    wrapper.SetText(cb2, 'Third');
+    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
+    writeln('Combo2 text is ' + wrapper.GetText(cb2));
+
+    // Now try and get stuff to a TreeView
+
+    wrapper.SelectTreeViewItem (window, 0, 'Sub-SubItem');
+
+    wrapper.ClickMenu(window, 'File|Exit');
 
     WriteLn('Press key to continue');
     ReadLn;

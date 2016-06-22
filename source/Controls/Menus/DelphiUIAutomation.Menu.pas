@@ -39,6 +39,8 @@ type
     /// Currently working to 2 levels i.e. 'Help|About';
     /// </remarks>
     function MenuItem(const path: string): IAutomationMenuItem;
+
+    function GetHandle : Pointer;
   end;
 
   /// <summary>

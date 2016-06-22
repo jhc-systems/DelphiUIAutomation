@@ -27,7 +27,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   AutomatedCombobox, AutomatedEdit, Vcl.Grids, AutomatedStringGrid, Vcl.Mask,
-  AutomatedMaskEdit, Vcl.ToolWin, Vcl.ExtCtrls, Vcl.ImgList;
+  AutomatedMaskEdit, Vcl.ToolWin, Vcl.ExtCtrls, Vcl.ImgList, System.ImageList;
 
 type
   TForm1 = class(TForm)

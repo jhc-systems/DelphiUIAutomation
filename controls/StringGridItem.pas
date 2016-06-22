@@ -36,7 +36,6 @@ type
                                     IRawElementProviderFragment,
                                     IGridItemProvider)
   strict private
-    FOwner: TComponent;
     FValue: string;
     FRow: integer;
     FColumn: integer;
