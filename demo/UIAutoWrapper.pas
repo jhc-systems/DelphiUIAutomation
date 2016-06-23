@@ -44,6 +44,9 @@ type
   TSelectTreeViewItemFunc = procedure (handle: Pointer; item: Integer; text: String);
   TRadioButtonSelectFunc = procedure (handle: Pointer; item: Integer);
 
+  TGetGridFunc = function (parent: Pointer; item: Integer) : Pointer;
+  TGetCellValueFunc = function (parent: Pointer; x, y: Integer): String;
+
   TUIAutoWrapper = class
   private
     dllHandle : THandle;
@@ -79,6 +82,8 @@ type
 
     clickMenuItemFunc : TClickFunc;
     clickButtonFunc : TClickFunc;
+    getGridFunc: TGetGridFunc;
+    getCellValueFunc : TGetCellValueFunc;
 
   public
     constructor Create;
@@ -127,6 +132,8 @@ type
 
     procedure ClickButton(parent: Pointer; name: String);
 
+    function GetDataGrid(parent: Pointer; item: Integer): Pointer;
+    function GetCellValue(parent: Pointer; x, y: Integer): String;
   end;
 
 implementation
@@ -250,6 +257,15 @@ begin
     @getWindowFunc := getProcAddress(dllHandle, 'GetWindow');
     if not Assigned (getWindowFunc) then
       WriteLn('"GetWindow" function not found');
+
+    @getGridFunc := getProcAddress(dllHandle, 'GetGrid');
+    if not Assigned (getGridFunc) then
+      WriteLn('"GetGrid" function not found');
+
+    @getCellValueFunc := getProcAddress(dllHandle, 'GetCellValue');
+    if not Assigned (getCellValueFunc) then
+      WriteLn('"GetCellValue" function not found');
+
   end
   else
   begin
@@ -288,6 +304,17 @@ end;
 procedure TUIAutoWrapper.ClickButton(parent: Pointer; name: String);
 begin
   self.clickButtonFunc(parent, name);
+end;
+
+//wrapper.GetDataGrid(window, 0, 'TAutomationStringGrid');
+function TUIAutoWrapper.GetDataGrid(parent: Pointer; item: Integer) : Pointer;
+begin
+  result := self.getGridFunc(parent, item);
+end;
+
+function TUIautoWrapper.GetCellValue(parent: Pointer; x,y : Integer) : String;
+begin
+  result := self.getCellValueFunc(parent, x, y);
 end;
 
 procedure TUIAutoWrapper.Focus (handle: Pointer);

@@ -311,7 +311,7 @@ end;
 
 function TAutomationContainer.GetStringGridByIndex(index: integer): IAutomationStringGrid;
 begin
-  result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_PaneControlTypeId, 'TAutomationStringGrid'));
+  result := TAutomationStringGrid.Create(GetControlByControlType(index, UIA_DataGridControlTypeId, 'TAutomationStringGrid'));
 end;
 
 function TAutomationContainer.GetTabByIndex (index : integer) : IAutomationTab;

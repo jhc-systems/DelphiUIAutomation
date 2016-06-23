@@ -403,7 +403,38 @@ begin
   result := tb.Text;
 end;
 
+
+function GetGrid(handle: Pointer; index: Integer) : Pointer;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  grid : IAutomationStringGrid;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  grid := parent.GetStringGridByIndex(index);
+
+  result := grid.GetHandle;
+end;
+
+function GetCellValue(handle: Pointer; x, y: integer) : String;
+var
+  parent : IAutomationStringGrid;
+  elem : IUIAutomationElement;
+  cell : IAutomationStringGridItem;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationStringGrid.Create(elem);
+
+  cell := parent.GetItem(x,y);
+  result := cell.Name;
+end;
+
 exports
+  GetGrid, GetCellValue,
   GetWindow,
   ClickButton,
   ClickMenuItem, SelectRadioButton,

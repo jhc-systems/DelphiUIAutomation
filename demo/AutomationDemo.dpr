@@ -39,6 +39,8 @@ var
   tb1, tb2 : Pointer;
   check: Pointer;
   cb1, cb2: Pointer;
+  grid: Pointer;
+  cellValue : String;
 
 begin
   WriteLn('Creating wrapper');
@@ -120,6 +122,17 @@ begin
     writeln('Found Window');
     wrapper.ClickButton(popup, 'OK');
     writeln('clicked button');
+
+    writeln('Data grid');
+
+    // Get window again
+    window := wrapper.GetDesktopWindow('Form1');
+
+    grid := wrapper.GetDataGrid(window, 0);
+    writeln('Got datagrid');
+    cellValue := wrapper.GetCellValue(grid, 3,3);
+
+    writeln('Value is = "' + cellValue + '"');
 
     WriteLn('Press key to continue');
     ReadLn;
