@@ -39,10 +39,13 @@ type
   TGetMenuItemFunc = function (parent: Pointer; handle: Pointer; text: String): Pointer;
 
   TGetStatusbarTextFunc = function (handle: Pointer; value: Integer): String;
-  TClickMenuItemFunc = procedure(handle: Pointer; text: String);
+  TClickFunc = procedure(handle: Pointer; text: String);
 
   TSelectTreeViewItemFunc = procedure (handle: Pointer; item: Integer; text: String);
   TRadioButtonSelectFunc = procedure (handle: Pointer; item: Integer);
+
+  TGetGridFunc = function (parent: Pointer; item: Integer) : Pointer;
+  TGetCellValueFunc = function (parent: Pointer; x, y: Integer): String;
 
   TUIAutoWrapper = class
   private
@@ -54,6 +57,7 @@ type
     finalizeFunc: TSimpleFunc;
     waitWhileBusyFunc: TSimpleFunc;
     getDesktopWindowFunc: TStringFunc;
+    getWindowFunc: TGetEditBoxByNameFunc;
     maximizeFunc: TPointerFunc;
     selectTabFunc: TSelectTabFunc;
     getTabFunc: TGetTabFunc;
@@ -76,7 +80,10 @@ type
 
     selectRadioButtonFunc: TRadioButtonSelectFunc;
 
-    clickMenuItemFunc : TClickMenuItemFunc;
+    clickMenuItemFunc : TClickFunc;
+    clickButtonFunc : TClickFunc;
+    getGridFunc: TGetGridFunc;
+    getCellValueFunc : TGetCellValueFunc;
 
   public
     constructor Create;
@@ -91,6 +98,7 @@ type
     procedure WaitWhileBusy;
 
     function GetDesktopWindow(const name: String) : Pointer;
+    function GetWindow(parent: Pointer; const name: String) : Pointer;
 
     procedure Maximize(handle: Pointer);
     procedure Focus(handle: Pointer);
@@ -122,6 +130,10 @@ type
 
     procedure SelectRadioButton(handle: Pointer; index: Integer);
 
+    procedure ClickButton(parent: Pointer; name: String);
+
+    function GetDataGrid(parent: Pointer; item: Integer): Pointer;
+    function GetCellValue(parent: Pointer; x, y: Integer): String;
   end;
 
 implementation
@@ -142,7 +154,7 @@ end;
 constructor TUIAutoWrapper.Create;
 begin
   WriteLn('Loading DLL');
-  dllHandle := LoadLibrary('C:\Users\humphreysm.JHCLLP\Documents\GitHub\DelphiUIAutomation\library\Win32\Debug\UIAutomation.dll') ;
+  dllHandle := LoadLibrary('..\..\..\library\Win32\Debug\UIAutomation.dll') ;
   WriteLn('Loaded DLL');
   if dllHandle <> 0 then
   begin
@@ -237,6 +249,23 @@ begin
     @selectRadioButtonFunc := getProcAddress(dllHandle, 'SelectRadioButton');
     if not Assigned (selectRadioButtonFunc) then
       WriteLn('"SelectRadioButton" function not found');
+
+    @clickButtonFunc := getProcAddress(dllHandle, 'ClickButton');
+    if not Assigned (clickButtonFunc) then
+      WriteLn('"ClickButton" function not found');
+
+    @getWindowFunc := getProcAddress(dllHandle, 'GetWindow');
+    if not Assigned (getWindowFunc) then
+      WriteLn('"GetWindow" function not found');
+
+    @getGridFunc := getProcAddress(dllHandle, 'GetGrid');
+    if not Assigned (getGridFunc) then
+      WriteLn('"GetGrid" function not found');
+
+    @getCellValueFunc := getProcAddress(dllHandle, 'GetCellValue');
+    if not Assigned (getCellValueFunc) then
+      WriteLn('"GetCellValue" function not found');
+
   end
   else
   begin
@@ -272,6 +301,22 @@ begin
   result := self.getDesktopWindowFunc(name);
 end;
 
+procedure TUIAutoWrapper.ClickButton(parent: Pointer; name: String);
+begin
+  self.clickButtonFunc(parent, name);
+end;
+
+//wrapper.GetDataGrid(window, 0, 'TAutomationStringGrid');
+function TUIAutoWrapper.GetDataGrid(parent: Pointer; item: Integer) : Pointer;
+begin
+  result := self.getGridFunc(parent, item);
+end;
+
+function TUIautoWrapper.GetCellValue(parent: Pointer; x,y : Integer) : String;
+begin
+  result := self.getCellValueFunc(parent, x, y);
+end;
+
 procedure TUIAutoWrapper.Focus (handle: Pointer);
 begin
   // Nothing yet.
@@ -305,6 +350,11 @@ end;
 function TUIAutoWrapper.GetTextFromText(handle: Pointer): String;
 begin
   result := self.getTextFromTextFunc(handle);
+end;
+
+function TUIAutoWrapper.GetWindow(parent: Pointer; const name: String): Pointer;
+begin
+  result := self.getWindowFunc(parent, name);
 end;
 
 function TUIAutoWrapper.GetText(handle: Pointer): String;

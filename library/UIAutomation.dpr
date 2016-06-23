@@ -114,6 +114,21 @@ begin
   result := window.GetHandle;
 end;
 
+function GetWindow(parent: Pointer; const value: String): Pointer; export;
+var
+  window : IAutomationWindow;
+  popup : IAutomationWindow;
+  elem : IUIAutomationElement;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(parent);
+  window := TAutomationWindow.Create(elem, false);
+
+  popup := window.Window(value);
+
+  result := popup.GetHandle;
+end;
+
 procedure WaitWhileBusy; export;
 begin
   application.WaitWhileBusy;
@@ -340,6 +355,20 @@ begin
   tvi.select;
 end;
 
+procedure ClickButton(handle: Pointer; name: String) export;
+var
+  parent: IAutomationContainer;
+  elem : IUIAutomationElement;
+  btn : IAutomationButton;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationWindow.Create(elem, false);
+  btn := parent.GetButton(name);
+
+  btn.Click;
+end;
+
 procedure ClickMenuItem(handle: Pointer; name: String) export;
 var
   menu : IAutomationMenu;
@@ -348,15 +377,10 @@ var
   mi : IAutomationMenuItem;
 
 begin
-  writeln('ClickMenuItem');
   elem := TUIAuto.GetElementFromHandle(handle);
   parent := TAutomationWindow.Create(elem, true);
-  writeln('ClickMenuItem - got parent window');
-  writeln('ClickMenuItem: ' + parent.Name);
   menu := parent.MainMenu;
   mi := menu.MenuItem(name);
-
-  writeln('ClickMenuItem:About to click - ' + mi.Name);
 
   mi.Click;
 end;
@@ -379,7 +403,40 @@ begin
   result := tb.Text;
 end;
 
+
+function GetGrid(handle: Pointer; index: Integer) : Pointer;
+var
+  parent : IAutomationContainer;
+  elem : IUIAutomationElement;
+  grid : IAutomationStringGrid;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationContainer.Create(elem);
+
+  grid := parent.GetStringGridByIndex(index);
+
+  result := grid.GetHandle;
+end;
+
+function GetCellValue(handle: Pointer; x, y: integer) : String;
+var
+  parent : IAutomationStringGrid;
+  elem : IUIAutomationElement;
+  cell : IAutomationStringGridItem;
+
+begin
+  elem := TUIAuto.GetElementFromHandle(handle);
+  parent := TAutomationStringGrid.Create(elem);
+
+  cell := parent.GetItem(x,y);
+  result := cell.Name;
+end;
+
 exports
+  GetGrid, GetCellValue,
+  GetWindow,
+  ClickButton,
   ClickMenuItem, SelectRadioButton,
   SelectTreeViewItem,
   GetComboBox, GetComboBoxByName, SetText,

@@ -31,101 +31,16 @@ uses
   dialogs,
   UIAutoWrapper in 'UIAutoWrapper.pas';
 
-(*
-var
-  application: IAutomationApplication;
-  enquiry : IAutomationWindow;
-  tb1, tb2 : IAutomationEditBox;
-  eb0: IAutomationTextBox;
-  Tab: IAutomationTab;
-  Statusbar: IAutomationStatusBar;
-  check: IAutomationCheckBox;
-  radio: IAutomationRadioButton;
-//  eb2 : IAutomationEditBox;
-  cb1: IAutomationCombobox;
-  cb2: IAutomationCombobox;
-  tv1: IAutomationTreeView;
-  tvi: IAutomationTreeViewItem;
-  exit1: IAutomationMenuItem;
-  menu: IAutomationMenu;
-
-begin
-  ReportMemoryLeaksOnShutdown := DebugHook <> 0;
-
-  // First launch the application
-  application := TAutomationApplication.LaunchOrAttach
-    ('..\..\democlient\Win32\Debug\Project1.exe', '');
-
-  application.WaitWhileBusy;
-
-  // Now wait for a very long time for the enquiry screen to come up
-  enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
-  enquiry.Focus;
-
-  // Select the correct tab
-  Tab := enquiry.GetTabByIndex(0);
-  Tab.SelectTabPage('Second Tab'); // 3 is the magic number
-
-  tb1 := Tab.GetEditBoxByIndex(0);
-  writeln(tb1.Text);
-
-  tb2 := enquiry.GetEditBoxByName('AutomatedEdit1');
-  writeln(tb2.Text);
-
-  check := enquiry.GetCheckboxByIndex(0);
-  check.toggle;
-
-  radio := enquiry.GetRadioButtonByIndex(2);
-  radio.Select;
-
-  // Now see whether we can get the statusbar
-  Statusbar := enquiry.Statusbar;
-  eb0 := Statusbar.GetTextBoxByIndex(1);
-  writeln('Text is ' + eb0.Text);
-
-  // Now get and set the text in an editbox, by name
-  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
-  writeln('Combo text is ' + cb1.Text);
-  cb1.Text := 'Replacements';
-  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
-  writeln('Combo text is ' + cb1.Text);
-
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
-  writeln('Combo2 text is ' + cb2.Text);
-  cb2.Text := 'First';
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
-  writeln('Combo2 text is ' + cb2.Text);
-  cb2.Text := 'No there';
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
-  writeln('Combo2 text is ' + cb2.Text);
-
-  cb2.Text := 'Third';
-  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
-  writeln('Combo2 text is ' + cb2.Text);
-
-  // Now try and get stuff from TreeView
-  tv1 := enquiry.getTreeViewByIndex(0);
-  tvi := tv1.GetItem('Sub-SubItem');
-  tvi.select;
-
-  menu := enquiry.GetMainMenu;
-  exit1 := menu.MenuItem('File|Exit');
-
-  if assigned(exit1) then
-    exit1.Click;
-
-  WriteLn('Press key to exit');
-  ReadLn;
-
-  application.Kill;
-*)
 var
   wrapper: TUIAutoWrapper;
   window: Pointer;
+  popup: Pointer;
   tab: Pointer;
   tb1, tb2 : Pointer;
   check: Pointer;
   cb1, cb2: Pointer;
+  grid: Pointer;
+  cellValue : String;
 
 begin
   WriteLn('Creating wrapper');
@@ -170,14 +85,6 @@ begin
 
     writeln('Text is ' + wrapper.GetStatusBarText(window, 1));
 
-//    writeln('Got status bar');
-
- //   eb0 := wrapper.GetTextBox(statusBar, 1);
- //   writeln('Getting status bar Text');
-
-//    writeln('Text is ' + wrapper.GetTextFromText(eb0));
-
-
     writeln('Getting Combobox');
 
     cb1 := wrapper.GetComboBox(window, 'AutomatedCombobox1');
@@ -205,6 +112,27 @@ begin
     wrapper.SelectTreeViewItem (window, 0, 'Sub-SubItem');
 
     wrapper.ClickMenu(window, 'File|Exit');
+
+    // Now look for the popup
+
+    writeln('Finding Window');
+
+    popup := wrapper.GetWindow(window, 'Project1');
+
+    writeln('Found Window');
+    wrapper.ClickButton(popup, 'OK');
+    writeln('clicked button');
+
+    writeln('Data grid');
+
+    // Get window again
+    window := wrapper.GetDesktopWindow('Form1');
+
+    grid := wrapper.GetDataGrid(window, 0);
+    writeln('Got datagrid');
+    cellValue := wrapper.GetCellValue(grid, 3,3);
+
+    writeln('Value is = "' + cellValue + '"');
 
     WriteLn('Press key to continue');
     ReadLn;
