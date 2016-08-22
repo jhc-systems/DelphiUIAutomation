@@ -1009,6 +1009,7 @@ const
   UIA_MenuControlTypeId = 50009;
   UIA_MenuBarControlTypeId = 50010;
   UIA_MenuItemControlTypeId = 50011;
+  UIA_TextControlTypeId = 50020;
   UIA_CustomControlTypeId = 50025;
   UIA_DataGridControlTypeId = 50028;
   UIA_DataItemControlTypeId = 50029;

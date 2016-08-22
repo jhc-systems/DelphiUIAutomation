@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2016 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -19,7 +19,7 @@
 {  limitations under the License.                                           }
 {                                                                           }
 {***************************************************************************}
-unit AutomatedEdit;
+unit AutomatedStaticText;
 
 interface
 
@@ -30,7 +30,7 @@ uses
   System.SysUtils, System.Classes, Vcl.Controls, Vcl.StdCtrls;
 
 type
-  TAutomatedEdit = class(TEdit,
+  TAutomatedStaticText = class(TStaticText,
         IValueProvider,
         IRawElementProviderSimple)
   private
@@ -68,12 +68,12 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Automation', [TAutomatedEdit]);
+  RegisterComponents('Automation', [TAutomatedStaticText]);
 end;
 
-{ TAutomatedEdit }
+{ TAutomatedStaticText }
 
-function TAutomatedEdit.GetPatternProvider(patternId: SYSINT;
+function TAutomatedStaticText.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   result := S_OK;
@@ -85,7 +85,7 @@ begin
   end;
 end;
 
-function TAutomatedEdit.GetPropertyValue(propertyId: SYSINT;
+function TAutomatedStaticText.GetPropertyValue(propertyId: SYSINT;
   out pRetVal: OleVariant): HResult;
 begin
    if(propertyId = UIA_ClassNamePropertyId) then
@@ -109,45 +109,45 @@ begin
   else if(propertyId = UIA_ControlTypePropertyId) then
   begin
     TVarData(pRetVal).VType := varInteger;
-    TVarData(pRetVal).VInteger := UIA_EditControlTypeId;
+    TVarData(pRetVal).VInteger := UIA_TextControlTypeId;
     result := S_OK;
   end
   else
     result := S_FALSE;
 end;
 
-function TAutomatedEdit.Get_HostRawElementProvider(
+function TAutomatedStaticText.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
   result := UiaHostProviderFromHwnd (self.Handle, pRetVal);
 end;
 
-function TAutomatedEdit.Get_IsReadOnly(out pRetVal: Integer): HResult;
+function TAutomatedStaticText.Get_IsReadOnly(out pRetVal: Integer): HResult;
 begin
   pRetVal := 0;   // Maybe?
   Result := S_OK;
 end;
 
-function TAutomatedEdit.Get_ProviderOptions(
+function TAutomatedStaticText.Get_ProviderOptions(
   out pRetVal: ProviderOptions): HResult;
 begin
   pRetVal:= ProviderOptions_ServerSideProvider;
   Result := S_OK;
 end;
 
-function TAutomatedEdit.Get_Value(out pRetVal: WideString): HResult;
+function TAutomatedStaticText.Get_Value(out pRetVal: WideString): HResult;
 begin
   Result := S_OK;
   pRetVal := self.Text;
 end;
 
-function TAutomatedEdit.SetValue(val: PWideChar): HResult;
+function TAutomatedStaticText.SetValue(val: PWideChar): HResult;
 begin
   self.Text := val;
   Result := S_OK;
 end;
 
-procedure TAutomatedEdit.WMGetObject(var Message: TMessage);
+procedure TAutomatedStaticText.WMGetObject(var Message: TMessage);
 begin
   if (Message.Msg = WM_GETOBJECT) then
   begin

@@ -5,7 +5,7 @@ package AutomatedControls;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -37,7 +37,8 @@ contains
   StringGridItem in 'StringGridItem.pas',
   AutomatedEdit in 'AutomatedEdit.pas',
   AutomatedCombobox in 'AutomatedCombobox.pas',
-  AutomatedMaskEdit in 'AutomatedMaskEdit.pas';
+  AutomatedMaskEdit in 'AutomatedMaskEdit.pas',
+  AutomatedStaticText in 'AutomatedStaticText.pas';
 
 end.
 

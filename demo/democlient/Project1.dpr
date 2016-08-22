@@ -29,7 +29,8 @@ uses
   AutomatedStringGrid in '..\..\controls\AutomatedStringGrid.pas',
   StringGridItem in '..\..\controls\StringGridItem.pas',
   AutomatedEdit in '..\..\controls\AutomatedEdit.pas',
-  AutomatedMaskEdit in '..\..\controls\AutomatedMaskEdit.pas';
+  AutomatedMaskEdit in '..\..\controls\AutomatedMaskEdit.pas',
+  AutomatedStaticText in '..\..\controls\AutomatedStaticText.pas';
 
 {$R *.res}
 

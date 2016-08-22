@@ -32,6 +32,7 @@ uses
   grids;
 
 type
+
   TAutomationStringGrid = class(TStringGrid,
                       ISelectionProvider,
                       IGridProvider,
@@ -89,7 +90,7 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Samples', [TAutomationStringGrid]);
+  RegisterComponents('Automation', [TAutomationStringGrid]);
 end;
 
 { TAutomationStringGrid }

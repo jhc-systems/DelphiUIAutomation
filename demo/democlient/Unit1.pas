@@ -27,7 +27,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Menus,
   AutomatedCombobox, AutomatedEdit, Vcl.Grids, AutomatedStringGrid, Vcl.Mask,
-  AutomatedMaskEdit, Vcl.ToolWin, Vcl.ExtCtrls, Vcl.ImgList, System.ImageList;
+  AutomatedMaskEdit, Vcl.ToolWin, Vcl.ExtCtrls, Vcl.ImgList, System.ImageList,
+  AutomatedStaticText;
 
 type
   TForm1 = class(TForm)
@@ -68,15 +69,21 @@ type
     Edit1: TEdit;
     ListBox1: TListBox;
     LinkLabel1: TLinkLabel;
+    Panel6: TPanel;
+    Panel7: TPanel;
     ToolBar1: TToolBar;
+    ToolButton3: TToolButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    Panel8: TPanel;
+    ToolBar2: TToolBar;
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
     ImageList1: TImageList;
+    AutomatedStaticText1: TAutomatedStaticText;
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Exit1Click(Sender: TObject);

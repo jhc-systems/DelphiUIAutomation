@@ -94,6 +94,7 @@
         <DCCReference Include="..\..\controls\StringGridItem.pas"/>
         <DCCReference Include="..\..\controls\AutomatedEdit.pas"/>
         <DCCReference Include="..\..\controls\AutomatedMaskEdit.pas"/>
+        <DCCReference Include="..\..\controls\AutomatedStaticText.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -166,6 +167,12 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="Win32\Debug\Project1.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Project1.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="DependencyModule">
                     <Platform Name="Win32">
                         <Operation>0</Operation>
