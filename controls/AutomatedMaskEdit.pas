@@ -69,7 +69,7 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Samples', [TAutomatedMaskEdit]);
+  RegisterComponents('Automation', [TAutomatedMaskEdit]);
 end;
 
 { TAutomatedMaskEdit }

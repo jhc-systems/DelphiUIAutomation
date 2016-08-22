@@ -75,7 +75,7 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Samples', [TAutomatedCombobox]);
+  RegisterComponents('Automation', [TAutomatedCombobox]);
 end;
 
 { TAutomatedCombobox }
