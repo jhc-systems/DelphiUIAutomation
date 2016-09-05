@@ -38,7 +38,8 @@ contains
   AutomatedEdit in 'AutomatedEdit.pas',
   AutomatedCombobox in 'AutomatedCombobox.pas',
   AutomatedMaskEdit in 'AutomatedMaskEdit.pas',
-  AutomatedStaticText in 'AutomatedStaticText.pas';
+  AutomatedStaticText in 'AutomatedStaticText.pas',
+  AutomatedCustomPanel in 'AutomatedCustomPanel.pas';
 
 end.
 
