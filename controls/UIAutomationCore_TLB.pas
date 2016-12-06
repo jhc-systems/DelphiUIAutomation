@@ -1013,6 +1013,7 @@ const
   UIA_CustomControlTypeId = 50025;
   UIA_DataGridControlTypeId = 50028;
   UIA_DataItemControlTypeId = 50029;
+  UIA_PaneControlTypeId = 50033;
   UIA_AppBarControlTypeId = 50040;
 
 procedure Register;

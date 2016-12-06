@@ -28,122 +28,137 @@ uses
   generics.collections,
   System.SysUtils,
   System.Types,
-  dialogs,
-  UIAutoWrapper in 'UIAutoWrapper.pas';
+  DelphiUIAutomation.Automation in '..\source\DelphiUIAutomation.Automation.pas',
+  DelphiUIAutomation.Base in '..\source\DelphiUIAutomation.Base.pas',
+  DelphiUIAutomation.Client in '..\source\DelphiUIAutomation.Client.pas',
+  DelphiUIAutomation.Clipboard in '..\source\DelphiUIAutomation.Clipboard.pas',
+  DelphiUIAutomation.Exception in '..\source\DelphiUIAutomation.Exception.pas',
+  DelphiUIAutomation.Keyboard in '..\source\DelphiUIAutomation.Keyboard.pas',
+  DelphiUIAutomation.Mouse in '..\source\DelphiUIAutomation.Mouse.pas',
+  DelphiUIAutomation.Processes in '..\source\DelphiUIAutomation.Processes.pas',
+  DelphiUIAutomation.ScreenShot in '..\source\DelphiUIAutomation.ScreenShot.pas',
+  DelphiUIAutomation.Utils in '..\source\DelphiUIAutomation.Utils.pas',
+  UIAutomationClient_TLB in '..\source\UIAutomationClient_TLB.pas',
+  DelphiUIAutomation.AndCondition in '..\source\Conditions\DelphiUIAutomation.AndCondition.pas',
+  DelphiUIAutomation.Condition in '..\source\Conditions\DelphiUIAutomation.Condition.pas',
+  DelphiUIAutomation.ControlTypeCondition in '..\source\Conditions\DelphiUIAutomation.ControlTypeCondition.pas',
+  DelphiUIAutomation.FalseCondition in '..\source\Conditions\DelphiUIAutomation.FalseCondition.pas',
+  DelphiUIAutomation.NameCondition in '..\source\Conditions\DelphiUIAutomation.NameCondition.pas',
+  DelphiUIAutomation.OrCondition in '..\source\Conditions\DelphiUIAutomation.OrCondition.pas',
+  DelphiUIAutomation.TrueCondition in '..\source\Conditions\DelphiUIAutomation.TrueCondition.pas',
+  DelphiUIAutomation.Button in '..\source\Controls\DelphiUIAutomation.Button.pas',
+  DelphiUIAutomation.Checkbox in '..\source\Controls\DelphiUIAutomation.Checkbox.pas',
+  DelphiUIAutomation.ComboBox in '..\source\Controls\DelphiUIAutomation.ComboBox.pas',
+  DelphiUIAutomation.Container.Intf in '..\source\controls\DelphiUIAutomation.Container.Intf.pas',
+  DelphiUIAutomation.Container in '..\source\Controls\DelphiUIAutomation.Container.pas',
+  DelphiUIAutomation.Desktop in '..\source\controls\DelphiUIAutomation.Desktop.pas',
+  DelphiUIAutomation.EditBox in '..\source\Controls\DelphiUIAutomation.EditBox.pas',
+  DelphiUIAutomation.Hyperlink in '..\source\Controls\DelphiUIAutomation.Hyperlink.pas',
+  DelphiUIAutomation.ListItem in '..\source\Controls\DelphiUIAutomation.ListItem.pas',
+  DelphiUIAutomation.Panel.Intf in '..\source\Controls\DelphiUIAutomation.Panel.Intf.pas',
+  DelphiUIAutomation.Panel in '..\source\Controls\DelphiUIAutomation.Panel.pas',
+  DelphiUIAutomation.RadioButton in '..\source\Controls\DelphiUIAutomation.RadioButton.pas',
+  DelphiUIAutomation.Statusbar in '..\source\Controls\DelphiUIAutomation.Statusbar.pas',
+  DelphiUIAutomation.StringGrid in '..\source\Controls\DelphiUIAutomation.StringGrid.pas',
+  DelphiUIAutomation.StringGridItem in '..\source\Controls\DelphiUIAutomation.StringGridItem.pas',
+  DelphiUIAutomation.Tab.Intf in '..\source\Controls\DelphiUIAutomation.Tab.Intf.pas',
+  DelphiUIAutomation.Tab in '..\source\Controls\DelphiUIAutomation.Tab.pas',
+  DelphiUIAutomation.TabItem in '..\source\Controls\DelphiUIAutomation.TabItem.pas',
+  DelphiUIAutomation.TextBox in '..\source\Controls\DelphiUIAutomation.TextBox.pas',
+  DelphiUIAutomation.ControlTypeIDs in '..\source\Ids\DelphiUIAutomation.ControlTypeIDs.pas',
+  DelphiUIAutomation.PatternIDs in '..\source\Ids\DelphiUIAutomation.PatternIDs.pas',
+  DelphiUIAutomation.PropertyIDs in '..\source\Ids\DelphiUIAutomation.PropertyIDs.pas',
+  DelphiUIAutomation.Menu in '..\source\Controls\Menus\DelphiUIAutomation.Menu.pas',
+  DelphiUIAutomation.MenuItem in '..\source\Controls\Menus\DelphiUIAutomation.MenuItem.pas',
+  DelphiUIAutomation.Window in '..\source\Controls\DelphiUIAutomation.Window.pas',
+  DelphiUIAutomation.TreeView in '..\source\Controls\DelphiUIAutomation.TreeView.pas';
 
 var
-  wrapper: TUIAutoWrapper;
-  window: Pointer;
-  popup: Pointer;
-  tab: Pointer;
-  tb1, tb2 : Pointer;
-  check: Pointer;
-  cb1, cb2: Pointer;
-  grid: Pointer;
-  cellValue : String;
+  application: IAutomationApplication;
+  enquiry : IAutomationWindow;
+  tb1, tb2 : IAutomationEditBox;
+  eb0: IAutomationTextBox;
+  Tab: IAutomationTab;
+  Statusbar: IAutomationStatusBar;
+  check: IAutomationCheckBox;
+  radio: IAutomationRadioButton;
+//  eb2 : IAutomationEditBox;
+  cb1: IAutomationCombobox;
+  cb2: IAutomationCombobox;
+  tv1: IAutomationTreeView;
+  tvi: IAutomationTreeViewItem;
+  exit1: IAutomationMenuItem;
+  menu: IAutomationMenu;
 
 begin
-  WriteLn('Creating wrapper');
-  wrapper := TUIAutoWrapper.create;
-  WriteLn('Created wrapper');
+  ReportMemoryLeaksOnShutdown := DebugHook <> 0;
 
-  WriteLn('Press key to continue');
+  TUIAuto.CreateUIAuto;
+
+  // First launch the application
+  application := TAutomationApplication.LaunchOrAttach
+    ('..\..\democlient\Win32\Debug\Project1.exe', '');
+
+  application.WaitWhileBusy;
+
+  // Now wait for a very long time for the enquiry screen to come up
+  enquiry := TAutomationDesktop.GetDesktopWindow('Form1');
+  enquiry.Focus;
+
+  // Select the correct tab
+  Tab := enquiry.GetTabByIndex(0);
+  Tab.SelectTabPage('Second Tab'); // 3 is the magic number
+
+  tb1 := Tab.GetEditBoxByIndex(0);
+  writeln(tb1.Text);
+
+  tb2 := enquiry.GetEditBoxByName('AutomatedEdit1');
+  writeln(tb2.Text);
+
+  check := enquiry.GetCheckboxByIndex(0);
+  check.toggle;
+
+  radio := enquiry.GetRadioButtonByIndex(2);
+  radio.Select;
+
+  // Now see whether we can get the statusbar
+  Statusbar := enquiry.Statusbar;
+  eb0 := Statusbar.GetTextBoxByIndex(1);
+  writeln('Text is ' + eb0.Text);
+
+  // Now get and set the text in an editbox, by name
+  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb1.Text);
+  cb1.Text := 'Replacements';
+  cb1 := enquiry.GetComboboxByName('AutomatedCombobox1');
+  writeln('Combo text is ' + cb1.Text);
+
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+  cb2.Text := 'First';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+  cb2.Text := 'No there';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+
+  cb2.Text := 'Third';
+  cb2 := enquiry.GetComboboxByName('AutomatedCombobox2');
+  writeln('Combo2 text is ' + cb2.Text);
+
+  // Now try and get stuff from TreeView
+  tv1 := enquiry.getTreeViewByIndex(0);
+  tvi := tv1.GetItem('Sub-SubItem');
+  tvi.select;
+
+  menu := enquiry.GetMainMenu;
+  exit1 := menu.MenuItem('File|Exit');
+
+  if assigned(exit1) then
+    exit1.Click;
+
+  WriteLn('Press key to exit');
   ReadLn;
 
-  try
-    ReportMemoryLeaksOnShutdown := DebugHook <> 0;
-    // Should do something here
-
-    wrapper.Launch('..\..\democlient\Win32\Debug\Project1.exe', '');
-
-    wrapper.Initialize;
-
-    wrapper.WaitWhileBusy;
-
-    // Now wait for a very long time for the enquiry screen to come up
-    window := wrapper.GetDesktopWindow('Form1');
-    wrapper.Focus(window);
-    wrapper.Maximize(window);
-
-    tab := wrapper.GetTab(window, 0);
-    wrapper.SelectTab(tab, 'Second Tab');
-
-    tb1 := wrapper.GetEditBox(tab, 0);
-    writeLn(wrapper.GetText(tb1));
-
-    tb2 := wrapper.GetEditBox(window, 'AutomatedEdit1');
-    writeLn(wrapper.GetText(tb2));
-
-    check := wrapper.GetCheckBox(window, 0);
-    wrapper.Toggle(check);
-
-    wrapper.SelectRadioButton(window, 2);
-
-    writeln('Getting status bar, etc.');
-
-    // Now see whether we can get the statusbar and associated text
-
-    writeln('Text is ' + wrapper.GetStatusBarText(window, 1));
-
-    writeln('Getting Combobox');
-
-    cb1 := wrapper.GetComboBox(window, 'AutomatedCombobox1');
-    writeln('Got combobox');
-    writeLn(wrapper.GetText(cb1));
-
-    wrapper.SetText(cb1, 'Helloo');
-    writeLn('Value is now - ' + wrapper.GetText(cb1));
-
-    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
-    writeln('Combo2 text is ' + wrapper.GetText(cb2));
-    wrapper.SetText(cb2, 'First');
-    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
-    writeln('Combo2 text is ' + wrapper.GetText(cb2));
-    wrapper.SetText(cb2, 'No there');
-    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
-    writeln('Combo2 text is ' + wrapper.GetText(cb2));
-
-    wrapper.SetText(cb2, 'Third');
-    cb2 := wrapper.GetComboBox(window, 'AutomatedCombobox2');
-    writeln('Combo2 text is ' + wrapper.GetText(cb2));
-
-    // Now try and get stuff to a TreeView
-
-    wrapper.SelectTreeViewItem (window, 0, 'Sub-SubItem');
-
-    wrapper.ClickMenu(window, 'File|Exit');
-
-    // Now look for the popup
-
-    writeln('Finding Window');
-
-    popup := wrapper.GetWindow(window, 'Project1');
-
-    writeln('Found Window');
-    wrapper.ClickButton(popup, 'OK');
-    writeln('clicked button');
-
-    writeln('Data grid');
-
-    // Get window again
-    window := wrapper.GetDesktopWindow('Form1');
-
-    grid := wrapper.GetDataGrid(window, 0);
-    writeln('Got datagrid');
-    cellValue := wrapper.GetCellValue(grid, 3,3);
-
-    writeln('Value is = "' + cellValue + '"');
-
-    WriteLn('Press key to continue');
-    ReadLn;
-
-  finally
-    WriteLn('About to kill');
-    wrapper.Kill;
-    WriteLn('Killed');
-
-    wrapper.Finalize;
-    wrapper.free;
-  end;
-
+  application.Kill;
 end.
