@@ -15,6 +15,12 @@
         <Projects Include="AutomationDemo.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\tests\AutomationTests.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="AutomationLibraryDemo.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +65,32 @@
     <Target Name="AutomationDemo:Make">
         <MSBuild Projects="AutomationDemo.dproj" Targets="Make"/>
     </Target>
+    <Target Name="AutomationTests">
+        <MSBuild Projects="..\tests\AutomationTests.dproj"/>
+    </Target>
+    <Target Name="AutomationTests:Clean">
+        <MSBuild Projects="..\tests\AutomationTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AutomationTests:Make">
+        <MSBuild Projects="..\tests\AutomationTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="AutomationLibraryDemo">
+        <MSBuild Projects="AutomationLibraryDemo.dproj"/>
+    </Target>
+    <Target Name="AutomationLibraryDemo:Clean">
+        <MSBuild Projects="AutomationLibraryDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AutomationLibraryDemo:Make">
+        <MSBuild Projects="AutomationLibraryDemo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="AutomatedControls;Project1;UIAutomation;AutomationDemo"/>
+        <CallTarget Targets="AutomatedControls;Project1;UIAutomation;AutomationDemo;AutomationTests;AutomationLibraryDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="AutomatedControls:Clean;Project1:Clean;UIAutomation:Clean;AutomationDemo:Clean"/>
+        <CallTarget Targets="AutomatedControls:Clean;Project1:Clean;UIAutomation:Clean;AutomationDemo:Clean;AutomationTests:Clean;AutomationLibraryDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="AutomatedControls:Make;Project1:Make;UIAutomation:Make;AutomationDemo:Make"/>
+        <CallTarget Targets="AutomatedControls:Make;Project1:Make;UIAutomation:Make;AutomationDemo:Make;AutomationTests:Make;AutomationLibraryDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

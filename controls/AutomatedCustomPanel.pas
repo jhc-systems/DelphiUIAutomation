@@ -27,8 +27,10 @@ uses
   UIAutomationCore_TLB,
   messages,
   ActiveX,
+  System.SysUtils, System.Classes, Vcl.Controls, Vcl.ExtCtrls;
 
 type
+  TAutomatedCustomPanel = class(TCustomPanel,
         IValueProvider,
         IRawElementProviderSimple)
   private
