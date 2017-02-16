@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-17 JHC Systems Limited                              }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -43,7 +43,13 @@ type
   private
     FRawElementProviderSimple : IRawElementProviderSimple;
     procedure WMGetObject(var Message: TMessage); message WM_GETOBJECT;
-
+  protected
+    function getCol: Integer; virtual;
+    function getRow: Integer; virtual;
+    function getColumnCount: integer; virtual;
+    function getRowCount: integer; virtual;
+    function getCell(column: integer; row: integer) : String; virtual;
+    function getCanMultipleSelect: Integer; virtual;
   public
     // IRawElementProviderSimple
     function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
@@ -111,13 +117,13 @@ begin
   if (self.FixedRows <> 0) then
   begin
     bounds[0].lLbound := 0;
-    bounds[0].cElements := self.ColCount;
+    bounds[0].cElements := self.getColumnCount;
 
     outBuffer := SafeArrayCreate(VT_UNKNOWN, 1, @Bounds);
 
-    for count := 0 to self.ColCount -1 do
+    for count := 0 to self.getColumnCount -1 do
     begin
-      intf := TAutomationStringGridItem.create(self, count, 0,  self.Cells[count, 0], self.CellRect(count, 0));
+      intf := TAutomationStringGridItem.create(self, count, 0,  self.getCell(count, 0), self.CellRect(count, 0));
 
       if intf <> nil then
       begin
@@ -145,6 +151,11 @@ begin
 
 end;
 
+function TAutomationStringGrid.getCell(column: integer; row: integer) : String;
+begin
+  result := self.Cells[column, row];
+end;
+
 function TAutomationStringGrid.GetItem(row, column: SYSINT;
   out pRetVal: IRawElementProviderSimple): HResult;
 var
@@ -153,7 +164,7 @@ var
 begin
   result := S_OK;
 
-  intf := TAutomationStringGridItem.create(self, column, row, self.Cells[column, row], self.CellRect(column, row));
+  intf := TAutomationStringGridItem.create(self, column, row, self.getCell(column, row), self.CellRect(column, row));
 
   pRetVal := intf;
 end;
@@ -212,44 +223,43 @@ function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
   intf : TAutomationStringGridItem;
   outBuffer : PSafeArray;
-  offset : integer;
   unk : IUnknown;
-  iRow, iCol : integer;
   Bounds : array [0..0] of TSafeArrayBound;
+  count : integer;
+  iRow : integer;
 
 begin
   pRetVal := nil;
-  result := S_FALSE;
-
   iRow := Self.Row;
-  iCol := Self.Col;
 
   // is a cell selected?
-  if (iRow > -1) and (iCol > -1) then
+  if (iRow > -1) then
   begin
-    intf := TAutomationStringGridItem.create(self, iCol, iRow,  self.Cells[self.Col, self.Row], self.CellRect(iCol, iRow));
-
     bounds[0].lLbound := 0;
-    bounds[0].cElements := 1;
+    bounds[0].cElements := self.getColumnCount;
+
     outBuffer := SafeArrayCreate(VT_UNKNOWN, 1, @Bounds);
 
-    if intf <> nil then
+    for count := 0 to self.getColumnCount -1 do
     begin
-      offset := 0;
-      unk := intf as IUnknown;
-      Result := SafeArrayPutElement(&outBuffer, offset, Pointer(unk)^);
-      if Result <> S_OK then
+      intf := TAutomationStringGridItem.create(self, count, iRow,  self.getCell(count, iRow), self.CellRect(count, iRow));
+
+      if intf <> nil then
       begin
-        SafeArrayDestroy(outBuffer);
-        pRetVal := nil;
-        result := E_OUTOFMEMORY;
-      end
-      else
-      begin
-        pRetVal := outBuffer;
-        result := S_OK;
+        unk := intf as IUnknown;
+        Result := SafeArrayPutElement(&outBuffer, count, Pointer(unk)^);
+        if Result <> S_OK then
+        begin
+          SafeArrayDestroy(outBuffer);
+          pRetVal := nil;
+          result := E_OUTOFMEMORY;
+          exit;
+        end
       end;
     end;
+
+    pRetVal := outBuffer;
+    result := S_OK;
   end
   else
   begin
@@ -258,15 +268,21 @@ begin
   end;
 end;
 
+
+function TAutomationStringGrid.getCanMultipleSelect: Integer;
+begin
+  result := 0;
+end;
+
 function TAutomationStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
 begin
-  pRetVal := 0;
+  pRetVal := self.getCanMultipleSelect;
   result := S_OK;
 end;
 
 function TAutomationStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
 begin
-  pRetVal := self.ColCount;
+  pRetVal := self.getColumnCount;
   result := S_OK;
 end;
 
@@ -290,8 +306,18 @@ end;
 
 function TAutomationStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
 begin
-  pretVal := self.RowCount;
+  pretVal := self.getRowCount;
   result := S_OK;
+end;
+
+function TAutomationStringGrid.getRowCount: integer;
+begin
+  result := self.rowCount;
+end;
+
+function TAutomationStringGrid.getColumnCount: integer;
+begin
+  result := self.colCount;
 end;
 
 function TAutomationStringGrid.Get_RowOrColumnMajor(
@@ -315,8 +341,18 @@ end;
 
 function TAutomationStringGrid.Get_Value(out pRetVal: WideString): HResult;
 begin
-  pRetVal := self.Cells[self.Col, self.Row];
+  pRetVal := self.getCell(self.Col, self.Row);
   result := S_OK;
+end;
+
+function TAutomationStringGrid.getCol: Integer;
+begin
+  result := self.Col;
+end;
+
+function TAutomationStringGrid.getRow: Integer;
+begin
+  result := self.Row;
 end;
 
 function TAutomationStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
