@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2015 JHC Systems Limited                              }
+{           Copyright 2015-17 JHC Systems Limited                           }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -26,7 +26,14 @@ interface
 uses
   ActiveX,
   types,
-  UIAutomationCore_TLB, classes;
+  UIAutomationCore_TLB,
+  classes;
+
+type
+  IAutomationStringGridItem = interface
+    ['{86427F3B-A5DD-4553-84DE-2A724D9E4DA5}']
+    function asIRawElementProviderSimple: IRawElementProviderSimple;
+  end;
 
 type
   TAutomationStringGridItem = class (TInterfacedPersistent,
@@ -34,8 +41,12 @@ type
                                     ISelectionItemProvider,
                                     IValueProvider,
                                     IRawElementProviderFragment,
-                                    IGridItemProvider)
+                                    IGridItemProvider,
+                                    IInvokeProvider,
+                                    IAutomationStringGridItem,
+                                    IRawElementProviderSimple2)
   strict private
+    FOwner : TComponent;
     FValue: string;
     FRow: integer;
     FColumn: integer;
@@ -50,12 +61,16 @@ type
     function GetSelected : boolean;
     function GetTheValue: string;
 
+  protected
+    procedure SelectCell; virtual;
+
   public
     property Row : integer read FRow write SetRow;
     property Column : integer read FColumn write SetColumn;
     property Value : string read GetTheValue write SetTheValue;
     property Selected : boolean read GetSelected write SetSelected;
     property CellRect : TRect read FCellRect write FCellRect;
+    property Owner : TComponent read FOwner write FOwner;
 
     // IRawElementProviderSimple
     function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
@@ -63,12 +78,18 @@ type
     function GetPropertyValue(propertyId: SYSINT; out pRetVal: OleVariant): HResult; stdcall;
     function Get_HostRawElementProvider(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
 
+    // IInvokeProvider
+    function Invoke: HResult; virtual; stdcall;
+
     // ISelectionItemProvider
     function Select: HResult; stdcall;
     function AddToSelection: HResult; stdcall;
     function RemoveFromSelection: HResult; stdcall;
     function Get_IsSelected(out pRetVal: Integer): HResult; stdcall;
     function Get_SelectionContainer(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
+
+    // IRawElementProviderSimple2
+    function ShowContextMenu: HResult; virtual; stdcall;
 
     // IValueProvider
     function Get_Value(out pRetVal: WideString): HResult; stdcall;
@@ -91,6 +112,9 @@ type
     function Get_FragmentRoot(out pRetVal: IRawElementProviderFragmentRoot): HResult; stdcall;
 
     constructor Create(AOwner: TComponent; ACol, ARow : integer; AValue : String; ACellRect : TRect);
+
+    function asIRawElementProviderSimple: IRawElementProviderSimple;
+
   end;
 
 implementation
@@ -110,6 +134,7 @@ constructor TAutomationStringGridItem.Create(AOwner: TComponent; ACol, ARow : in
 begin
   inherited create;
 
+  self.Owner := AOwner;
   self.CellRect := ACellRect;
   self.Column := ACol;
   self.Row := ARow;
@@ -131,11 +156,17 @@ begin
 
   if ((patternID = UIA_SelectionItemPatternId) or
       (patternID = UIA_GridItemPatternId) or
+      (patternID = UIA_InvokePatternId) or
       (patternID = UIA_ValuePatternId)) then
   begin
     pRetVal := self;
     result := S_OK;
   end
+end;
+
+function TAutomationStringGridItem.Invoke: HResult;
+begin
+  result := S_OK;
 end;
 
 function TAutomationStringGridItem.GetPropertyValue(propertyId: SYSINT;
@@ -198,6 +229,11 @@ begin
   result := S_OK;
 end;
 
+function TAutomationStringGridItem.ShowContextMenu: HResult;
+begin
+  result := S_FALSE;
+end;
+
 function TAutomationStringGridItem.Get_IsReadOnly(
   out pRetVal: Integer): HResult;
 begin
@@ -239,9 +275,14 @@ begin
   result := (self as ISelectionItemProvider).RemoveFromSelection;
 end;
 
+procedure TAutomationStringGridItem.SelectCell;
+begin
+  self.FSelected := true;
+end;
+
 function TAutomationStringGridItem.Select: HResult;
 begin
-  self.Selected := true;
+  self.SelectCell;
   result := S_OK;
 end;
 
@@ -262,8 +303,6 @@ end;
 
 procedure TAutomationStringGridItem.SetSelected(const Value: boolean);
 begin
-//  (FOwner as TAutomationStringGrid).Row := self.Row;
-
   FSelected := Value;
 end;
 
@@ -321,17 +360,9 @@ begin
   result := S_FALSE;
 end;
 
-(*
-function TAutomationStringGridItem.Get_FragmentRoot(
-  out pRetVal: IRawElementProviderFragmentRoot): HResult;
+function TAutomationStringGridItem.asIRawElementProviderSimple: IRawElementProviderSimple;
 begin
-  result := S_FALSE;
+  result := (self as IRawElementProviderSimple);
 end;
-*)
-
-//procedure TAutomationStringGridItem.WMGetObject(var Message: TMessage);
-//begin
-//  ?????
-//end;
 
 end.
