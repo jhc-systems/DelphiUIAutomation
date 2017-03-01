@@ -40,7 +40,8 @@ type
                       ITableProvider,
                       IInvokeProvider,
                       IValueProvider,
-                      IRawElementProviderSimple)
+                      IRawElementProviderSimple,
+                      IRawElementProviderSimple2)
   private
     FRawElementProviderSimple : IRawElementProviderSimple;
     procedure WMGetObject(var Message: TMessage); message WM_GETOBJECT;
@@ -69,6 +70,9 @@ type
 
     // IInvokeProvider
     function Invoke: HResult; stdcall;
+
+    // IRawElementProviderSimple2
+    function ShowContextMenu: HResult; virtual; stdcall;
 
     // IValueProvider
     function SetValue(val: PWideChar): HResult; stdcall;
@@ -358,6 +362,12 @@ end;
 function TAutomationStringGrid.getRow: Integer;
 begin
   result := self.Row;
+end;
+
+function TAutomationStringGrid.ShowContextMenu: HResult;
+begin
+  // Descendant classes can implement this
+  result := S_OK;
 end;
 
 function TAutomationStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
