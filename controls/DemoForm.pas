@@ -11,7 +11,7 @@ uses
 
 type
   TForm2 = class(TForm)
-    StringGrid1: TAutomationStringGrid;
+    StringGrid1: TAutomatedStringGrid;
     PopupMenu1: TPopupMenu;
     Hello1: TMenuItem;
     here1: TMenuItem;

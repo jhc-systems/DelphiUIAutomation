@@ -34,12 +34,13 @@ requires
 contains
   UIAutomationCore_TLB in 'UIAutomationCore_TLB.pas',
   AutomatedStringGrid in 'AutomatedStringGrid.pas',
-  StringGridItem in 'StringGridItem.pas',
   AutomatedEdit in 'AutomatedEdit.pas',
   AutomatedCombobox in 'AutomatedCombobox.pas',
   AutomatedMaskEdit in 'AutomatedMaskEdit.pas',
   AutomatedStaticText in 'AutomatedStaticText.pas',
-  AutomatedCustomPanel in 'AutomatedCustomPanel.pas';
+  AutomatedCustomPanel in 'AutomatedCustomPanel.pas',
+  AutomatedButton in 'AutomatedButton.pas',
+  AutomatedStringGridItem in 'AutomatedStringGridItem.pas';
 
 end.
 

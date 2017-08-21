@@ -24,7 +24,7 @@ unit AutomatedStringGrid;
 interface
 
 uses
-  StringGridItem,
+  AutomatedStringGridItem,
   UIAutomationCore_TLB,
   windows,
   messages,
@@ -33,8 +33,7 @@ uses
   grids;
 
 type
-
-  TAutomationStringGrid = class(TStringGrid,
+  TAutomatedStringGrid = class(TStringGrid,
                       ISelectionProvider,
                       IGridProvider,
                       ITableProvider,
@@ -52,7 +51,7 @@ type
     function GetRowCount: integer; virtual;
     function GetCell(column: integer; row: integer) : String; virtual;
     function GetCanMultipleSelect: Integer; virtual;
-    function CreateCell(ACount, ARow: integer; AValue: String;  ARect: TRect) : IAutomationStringGridItem; virtual;
+    function CreateCell(ACount, ARow: integer; AValue: String;  ARect: TRect) : IAutomatedStringGridItem; virtual;
   public
     // IRawElementProviderSimple
     function Get_ProviderOptions(out pRetVal: ProviderOptions): HResult; stdcall;
@@ -101,15 +100,15 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Automation', [TAutomationStringGrid]);
+  RegisterComponents('Automation', [TAutomatedStringGrid]);
 end;
 
 { TAutomationStringGrid }
 
-function TAutomationStringGrid.GetColumnHeaders(
+function TAutomatedStringGrid.GetColumnHeaders(
   out pRetVal: PSafeArray): HResult;
 var
-  intf : IAutomationStringGridItem;
+  intf : IAutomatedStringGridItem;
   outBuffer : PSafeArray;
   unk : IUnknown;
   Bounds : array [0..0] of TSafeArrayBound;
@@ -156,12 +155,12 @@ begin
 
 end;
 
-function TAutomationStringGrid.getCell(column: integer; row: integer) : String;
+function TAutomatedStringGrid.getCell(column: integer; row: integer) : String;
 begin
   result := self.Cells[column, row];
 end;
 
-function TAutomationStringGrid.GetItem(row, column: SYSINT;
+function TAutomatedStringGrid.GetItem(row, column: SYSINT;
   out pRetVal: IRawElementProviderSimple): HResult;
 var
   intf : IRawElementProviderSimple;
@@ -174,7 +173,7 @@ begin
   pRetVal := intf;
 end;
 
-function TAutomationStringGrid.GetPatternProvider(patternId: SYSINT;
+function TAutomatedStringGrid.GetPatternProvider(patternId: SYSINT;
   out pRetVal: IInterface): HResult;
 begin
   result := S_OK;
@@ -191,7 +190,7 @@ begin
 
 end;
 
-function TAutomationStringGrid.GetPropertyValue(propertyId: SYSINT;
+function TAutomatedStringGrid.GetPropertyValue(propertyId: SYSINT;
   out pRetVal: OleVariant): HResult;
 begin
   if(propertyId = UIA_ClassNamePropertyId) then
@@ -218,20 +217,20 @@ begin
 
 end;
 
-function TAutomationStringGrid.GetRowHeaders(out pRetVal: PSafeArray): HResult;
+function TAutomatedStringGrid.GetRowHeaders(out pRetVal: PSafeArray): HResult;
 begin
   pRetVal := nil;
   result := S_FALSE;
 end;
 
-function TAutomationStringGrid.CreateCell(ACount, ARow: integer; AValue: String;  ARect: TRect) : IAutomationStringGridItem;
+function TAutomatedStringGrid.CreateCell(ACount, ARow: integer; AValue: String;  ARect: TRect) : IAutomatedStringGridItem;
 begin
-  result := TAutomationStringGridItem.create(self, ACount, ARow, AValue, ARect);
+  result := TAutomatedStringGridItem.create(self, ACount, ARow, AValue, ARect);
 end;
 
-function TAutomationStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
+function TAutomatedStringGrid.GetSelection(out pRetVal: PSafeArray): HResult;
 var
-  intf : IAutomationStringGridItem;
+  intf : IAutomatedStringGridItem;
   outBuffer : PSafeArray;
   unk : IUnknown;
   Bounds : array [0..0] of TSafeArrayBound;
@@ -278,106 +277,106 @@ begin
   end;
 end;
 
-function TAutomationStringGrid.getCanMultipleSelect: Integer;
+function TAutomatedStringGrid.getCanMultipleSelect: Integer;
 begin
   result := 0;
 end;
 
-function TAutomationStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
+function TAutomatedStringGrid.Get_CanSelectMultiple(out pRetVal: Integer): HResult;
 begin
   pRetVal := self.getCanMultipleSelect;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
+function TAutomatedStringGrid.Get_ColumnCount(out pRetVal: SYSINT): HResult;
 begin
   pRetVal := self.getColumnCount;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_HostRawElementProvider(
+function TAutomatedStringGrid.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
   result := UiaHostProviderFromHwnd (self.Handle, pRetVal);
 end;
 
-function TAutomationStringGrid.Get_IsSelectionRequired(out pRetVal: Integer): HResult;
+function TAutomatedStringGrid.Get_IsSelectionRequired(out pRetVal: Integer): HResult;
 begin
   pRetVal := 0;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_ProviderOptions(out pRetVal: ProviderOptions): HResult;
+function TAutomatedStringGrid.Get_ProviderOptions(out pRetVal: ProviderOptions): HResult;
 begin
   pRetVal:= ProviderOptions_ServerSideProvider;
   Result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
+function TAutomatedStringGrid.Get_RowCount(out pRetVal: SYSINT): HResult;
 begin
   pretVal := self.getRowCount;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.getRowCount: integer;
+function TAutomatedStringGrid.getRowCount: integer;
 begin
   result := self.rowCount;
 end;
 
-function TAutomationStringGrid.getColumnCount: integer;
+function TAutomatedStringGrid.getColumnCount: integer;
 begin
   result := self.colCount;
 end;
 
-function TAutomationStringGrid.Get_RowOrColumnMajor(
+function TAutomatedStringGrid.Get_RowOrColumnMajor(
   out pRetVal: RowOrColumnMajor): HResult;
 begin
   pRetVal := RowOrColumnMajor_RowMajor;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Invoke: HResult;
+function TAutomatedStringGrid.Invoke: HResult;
 begin
   PostMessage(self.Handle, WM_LBUTTONDBLCLK, Integer(self),0);
   result := S_OK;
 end;
 
-function TAutomationStringGrid.SetValue(val: PWideChar): HResult;
+function TAutomatedStringGrid.SetValue(val: PWideChar): HResult;
 begin
   self.Cells[self.Col, self.Row] := val;
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_Value(out pRetVal: WideString): HResult;
+function TAutomatedStringGrid.Get_Value(out pRetVal: WideString): HResult;
 begin
   pRetVal := self.getCell(self.Col, self.Row);
   result := S_OK;
 end;
 
-function TAutomationStringGrid.getCol: Integer;
+function TAutomatedStringGrid.getCol: Integer;
 begin
   result := self.Col;
 end;
 
-function TAutomationStringGrid.getRow: Integer;
+function TAutomatedStringGrid.getRow: Integer;
 begin
   result := self.Row;
 end;
 
-function TAutomationStringGrid.ShowContextMenu: HResult;
+function TAutomatedStringGrid.ShowContextMenu: HResult;
 begin
   // Descendant classes can implement this
   result := S_OK;
 end;
 
-function TAutomationStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
+function TAutomatedStringGrid.Get_IsReadOnly(out pRetVal: Integer): HResult;
 begin
 //  pRetVal := self
   pRetVal := 0;
   result := S_OK;
 end;
 
-procedure TAutomationStringGrid.WMGetObject(var Message: TMessage);
+procedure TAutomatedStringGrid.WMGetObject(var Message: TMessage);
 begin
   if (Message.Msg = WM_GETOBJECT) then
   begin
