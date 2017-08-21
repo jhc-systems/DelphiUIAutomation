@@ -17,7 +17,7 @@ object Form2: TForm2
     506)
   PixelsPerInch = 96
   TextHeight = 13
-  object StringGrid1: TAutomationStringGrid
+  object StringGrid1: TAutomatedStringGrid
     Left = 8
     Top = 8
     Width = 668

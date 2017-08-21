@@ -12,16 +12,16 @@ unit UIAutomationCore_TLB;
 // ************************************************************************ //
 
 // $Rev: 52393 $
-// File generated on 30/04/2015 11:43:19 from Type Library described below.
+// File generated on 26/02/2017 17:21:58 from Type Library described below.
 
 // ************************************************************************  //
-// Type Lib: UIAutomationCore.tlb (1)
+// Type Lib: C:\Windows\SysWOW64\UIAutomationCore.dll\3 (1)
 // LIBID: {930299CE-9965-4DEC-B0F4-A54848D4B667}
 // LCID: 0
 // Helpfile:
 // HelpString:
 // DepndLst:
-//   (1) v2.0 stdole, (C:\Windows\System32\stdole2.tlb)
+//   (1) v2.0 stdole, (C:\Windows\SysWOW64\stdole2.tlb)
 // SYS_KIND: SYS_WIN32
 // Errors:
 //   Hint: Parameter 'unit' of ITextRangeProvider.ExpandToEnclosingUnit changed to 'unit_'
@@ -30,9 +30,7 @@ unit UIAutomationCore_TLB;
 //   Hint: Symbol 'type' renamed to 'type_'
 //   Hint: Parameter 'type' of IUIAutomationPatternInstance.GetProperty changed to 'type_'
 //   Hint: Parameter 'property' of IUIAutomationRegistrar.RegisterProperty changed to 'property_'
-//   Error creating palette bitmap of (TCUIAutomationRegistrar) : Server C:\Windows\System32\uiautomationcore.dll contains no icons
-// Cmdline:
-//   "c:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin64\tlibimp.exe"  -P -FtUIAutomationCore_TLB UIAutomationCore.tlb
+//   Error creating palette bitmap of (TCUIAutomationRegistrar) : Server C:\Windows\SysWOW64\uiautomationcore.dll contains no icons
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers.
 {$WARN SYMBOL_PLATFORM OFF}
@@ -43,6 +41,7 @@ unit UIAutomationCore_TLB;
 interface
 
 uses Winapi.Windows, System.Classes, System.Variants, System.Win.StdVCL, Vcl.Graphics, Vcl.OleServer, Winapi.ActiveX;
+
 
 // *********************************************************************//
 // GUIDS declared in the TypeLibrary. Following prefixes are used:
@@ -61,12 +60,17 @@ const
   IID_IRawElementProviderSimple: TGUID = '{D6DD68D1-86FD-4332-8666-9ABEDEA2D24C}';
   IID_IAccessibleEx: TGUID = '{F8B80ADA-2C44-48D0-89BE-5FF23C9CD875}';
   IID_IAccessible: TGUID = '{618736E0-3C3D-11CF-810C-00AA00389B71}';
+  IID_IRawElementProviderSimple2: TGUID = '{A0A839A9-8DA1-4A82-806A-8E0D44E79F56}';
+  IID_IRawElementProviderSimple3: TGUID = '{FCF5D820-D7EC-4613-BDF6-42A84CE7DAAF}';
   IID_IRawElementProviderFragmentRoot: TGUID = '{620CE2A5-AB8F-40A9-86CB-DE3C75599B58}';
   IID_IRawElementProviderFragment: TGUID = '{F7063DA8-8359-439C-9297-BBC5299A7D87}';
   IID_IRawElementProviderAdviseEvents: TGUID = '{A407B27B-0F6D-4427-9292-473C7BF93258}';
   IID_IRawElementProviderHwndOverride: TGUID = '{1D5DF27C-8947-4425-B8D9-79787BB460B8}';
   IID_IProxyProviderWinEventSink: TGUID = '{4FD82B78-A43E-46AC-9803-0A6969C7C183}';
   IID_IProxyProviderWinEventHandler: TGUID = '{89592AD4-F4E0-43D5-A3B6-BAD7E111B435}';
+  IID_IRawElementProviderWindowlessSite: TGUID = '{0A2A93CC-BFAD-42AC-9B2E-0991FB0D3EA0}';
+  IID_IAccessibleHostingElementProviders: TGUID = '{33AC331B-943E-4020-B295-DB37784974A3}';
+  IID_IRawElementProviderHostingAccessibles: TGUID = '{24BE0B07-D37D-487A-98CF-A13ED465E9B3}';
   IID_IDockProvider: TGUID = '{159BC72C-4AD3-485E-9637-D7052EDF0146}';
   IID_IExpandCollapseProvider: TGUID = '{D847D3A5-CAB0-4A98-8C32-ECB45C59AD24}';
   IID_IGridProvider: TGUID = '{B17D6187-0907-464B-A168-0EF17A1572B1}';
@@ -88,8 +92,21 @@ const
   IID_ILegacyIAccessibleProvider: TGUID = '{E44C3566-915D-4070-99C6-047BFF5A08F5}';
   IID_IItemContainerProvider: TGUID = '{E747770B-39CE-4382-AB30-D8FB3F336F24}';
   IID_IVirtualizedItemProvider: TGUID = '{CB98B665-2D35-4FAC-AD35-F3C60D0C0B8B}';
+  IID_IObjectModelProvider: TGUID = '{3AD86EBD-F5EF-483D-BB18-B1042A475D64}';
+  IID_IAnnotationProvider: TGUID = '{F95C7E80-BD63-4601-9782-445EBFF011FC}';
+  IID_IStylesProvider: TGUID = '{19B6B649-F5D7-4A6D-BDCB-129252BE588A}';
+  IID_ISpreadsheetProvider: TGUID = '{6F6B5D35-5525-4F80-B758-85473832FFC7}';
+  IID_ISpreadsheetItemProvider: TGUID = '{EAED4660-7B3D-4879-A2E6-365CE603F3D0}';
+  IID_ITransformProvider2: TGUID = '{4758742F-7AC2-460C-BC48-09FC09308A93}';
+  IID_IDragProvider: TGUID = '{6AA7BBBB-7FF9-497D-904F-D20B897929D8}';
+  IID_IDropTargetProvider: TGUID = '{BAE82BFD-358A-481C-85A0-D8B4D90A5D61}';
   IID_ITextRangeProvider: TGUID = '{5347AD7B-C355-46F8-AFF5-909033582F63}';
   IID_ITextProvider: TGUID = '{3589C92C-63F3-4367-99BB-ADA653B77CF2}';
+  IID_ITextProvider2: TGUID = '{0DC5E6ED-3E16-4BF1-8F9A-A979878BC195}';
+  IID_ITextEditProvider: TGUID = '{EA3605B4-3A05-400E-B5F9-4E91B40F6176}';
+  IID_ITextRangeProvider2: TGUID = '{9BBCE42C-1921-4F18-89CA-DBA1910A0386}';
+  IID_ITextChildProvider: TGUID = '{4C2DE2B9-C88F-4F88-A111-F1D336B7D1A9}';
+  IID_ICustomNavigationProvider: TGUID = '{2062A28A-8C07-4B94-8E12-7037C622AEB8}';
   IID_IUIAutomationPatternInstance: TGUID = '{C03A7FE4-9431-409F-BED8-AE7C2299BC8D}';
   IID_IUIAutomationPatternHandler: TGUID = '{D97022F3-A947-465E-8B2A-AC4315FA54E8}';
   IID_IUIAutomationRegistrar: TGUID = '{8609C4EC-4A1A-4D88-A357-5A66E060E1CF}';
@@ -108,6 +125,9 @@ const
   ProviderOptions_OverrideProvider = $00000008;
   ProviderOptions_ProviderOwnsSetFocus = $00000010;
   ProviderOptions_UseComThreading = $00000020;
+  ProviderOptions_RefuseNonClientSupport = $00000040;
+  ProviderOptions_HasNativeIAccessible = $00000080;
+  ProviderOptions_UseClientCoordinates = $00000100;
 
 // Constants for enum NavigateDirection
 type
@@ -205,6 +225,16 @@ const
   WindowInteractionState_BlockedByModalWindow = $00000003;
   WindowInteractionState_NotResponding = $00000004;
 
+// Constants for enum ZoomUnit
+type
+  ZoomUnit = TOleEnum;
+const
+  ZoomUnit_NoAmount = $00000000;
+  ZoomUnit_LargeDecrement = $00000001;
+  ZoomUnit_SmallDecrement = $00000002;
+  ZoomUnit_LargeIncrement = $00000003;
+  ZoomUnit_SmallIncrement = $00000004;
+
 // Constants for enum TextPatternRangeEndpoint
 type
   TextPatternRangeEndpoint = TOleEnum;
@@ -276,12 +306,17 @@ type
   IAccessibleEx = interface;
   IAccessible = interface;
   IAccessibleDisp = dispinterface;
+  IRawElementProviderSimple2 = interface;
+  IRawElementProviderSimple3 = interface;
   IRawElementProviderFragmentRoot = interface;
   IRawElementProviderFragment = interface;
   IRawElementProviderAdviseEvents = interface;
   IRawElementProviderHwndOverride = interface;
   IProxyProviderWinEventSink = interface;
   IProxyProviderWinEventHandler = interface;
+  IRawElementProviderWindowlessSite = interface;
+  IAccessibleHostingElementProviders = interface;
+  IRawElementProviderHostingAccessibles = interface;
   IDockProvider = interface;
   IExpandCollapseProvider = interface;
   IGridProvider = interface;
@@ -303,8 +338,21 @@ type
   ILegacyIAccessibleProvider = interface;
   IItemContainerProvider = interface;
   IVirtualizedItemProvider = interface;
+  IObjectModelProvider = interface;
+  IAnnotationProvider = interface;
+  IStylesProvider = interface;
+  ISpreadsheetProvider = interface;
+  ISpreadsheetItemProvider = interface;
+  ITransformProvider2 = interface;
+  IDragProvider = interface;
+  IDropTargetProvider = interface;
   ITextRangeProvider = interface;
   ITextProvider = interface;
+  ITextProvider2 = interface;
+  ITextEditProvider = interface;
+  ITextRangeProvider2 = interface;
+  ITextChildProvider = interface;
+  ICustomNavigationProvider = interface;
   IUIAutomationPatternInstance = interface;
   IUIAutomationPatternHandler = interface;
   IUIAutomationRegistrar = interface;
@@ -352,6 +400,7 @@ type
     y: Double;
   end;
 
+{$ALIGN 4}
   UIAutomationParameter = record
     type_: UIAutomationType;
     pData: Pointer;
@@ -394,7 +443,7 @@ type
 
 // *********************************************************************//
 // Interface: IRawElementProviderSimple
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {D6DD68D1-86FD-4332-8666-9ABEDEA2D24C}
 // *********************************************************************//
   IRawElementProviderSimple = interface(IUnknown)
@@ -494,8 +543,28 @@ type
   end;
 
 // *********************************************************************//
+// Interface: IRawElementProviderSimple2
+// Flags:     (256) OleAutomation
+// GUID:      {A0A839A9-8DA1-4A82-806A-8E0D44E79F56}
+// *********************************************************************//
+  IRawElementProviderSimple2 = interface(IRawElementProviderSimple)
+    ['{A0A839A9-8DA1-4A82-806A-8E0D44E79F56}']
+    function ShowContextMenu: HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IRawElementProviderSimple3
+// Flags:     (256) OleAutomation
+// GUID:      {FCF5D820-D7EC-4613-BDF6-42A84CE7DAAF}
+// *********************************************************************//
+  IRawElementProviderSimple3 = interface(IRawElementProviderSimple2)
+    ['{FCF5D820-D7EC-4613-BDF6-42A84CE7DAAF}']
+    function GetMetadataValue(targetId: SYSINT; metadataId: SYSINT; out returnVal: OleVariant): HResult; stdcall;
+  end;
+
+// *********************************************************************//
 // Interface: IRawElementProviderFragmentRoot
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {620CE2A5-AB8F-40A9-86CB-DE3C75599B58}
 // *********************************************************************//
   IRawElementProviderFragmentRoot = interface(IUnknown)
@@ -506,7 +575,7 @@ type
 
 // *********************************************************************//
 // Interface: IRawElementProviderFragment
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {F7063DA8-8359-439C-9297-BBC5299A7D87}
 // *********************************************************************//
   IRawElementProviderFragment = interface(IUnknown)
@@ -521,7 +590,7 @@ type
 
 // *********************************************************************//
 // Interface: IRawElementProviderAdviseEvents
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {A407B27B-0F6D-4427-9292-473C7BF93258}
 // *********************************************************************//
   IRawElementProviderAdviseEvents = interface(IUnknown)
@@ -532,7 +601,7 @@ type
 
 // *********************************************************************//
 // Interface: IRawElementProviderHwndOverride
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {1D5DF27C-8947-4425-B8D9-79787BB460B8}
 // *********************************************************************//
   IRawElementProviderHwndOverride = interface(IUnknown)
@@ -543,7 +612,7 @@ type
 
 // *********************************************************************//
 // Interface: IProxyProviderWinEventSink
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {4FD82B78-A43E-46AC-9803-0A6969C7C183}
 // *********************************************************************//
   IProxyProviderWinEventSink = interface(IUnknown)
@@ -558,7 +627,7 @@ type
 
 // *********************************************************************//
 // Interface: IProxyProviderWinEventHandler
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {89592AD4-F4E0-43D5-A3B6-BAD7E111B435}
 // *********************************************************************//
   IProxyProviderWinEventHandler = interface(IUnknown)
@@ -568,8 +637,42 @@ type
   end;
 
 // *********************************************************************//
+// Interface: IRawElementProviderWindowlessSite
+// Flags:     (256) OleAutomation
+// GUID:      {0A2A93CC-BFAD-42AC-9B2E-0991FB0D3EA0}
+// *********************************************************************//
+  IRawElementProviderWindowlessSite = interface(IUnknown)
+    ['{0A2A93CC-BFAD-42AC-9B2E-0991FB0D3EA0}']
+    function GetAdjacentFragment(direction: NavigateDirection;
+                                 out ppParent: IRawElementProviderFragment): HResult; stdcall;
+    function GetRuntimeIdPrefix(out pRetVal: PSafeArray): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IAccessibleHostingElementProviders
+// Flags:     (256) OleAutomation
+// GUID:      {33AC331B-943E-4020-B295-DB37784974A3}
+// *********************************************************************//
+  IAccessibleHostingElementProviders = interface(IUnknown)
+    ['{33AC331B-943E-4020-B295-DB37784974A3}']
+    function GetEmbeddedFragmentRoots(out pRetVal: PSafeArray): HResult; stdcall;
+    function GetObjectIdForProvider(const pProvider: IRawElementProviderSimple;
+                                    out pidObject: Integer): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IRawElementProviderHostingAccessibles
+// Flags:     (256) OleAutomation
+// GUID:      {24BE0B07-D37D-487A-98CF-A13ED465E9B3}
+// *********************************************************************//
+  IRawElementProviderHostingAccessibles = interface(IUnknown)
+    ['{24BE0B07-D37D-487A-98CF-A13ED465E9B3}']
+    function GetEmbeddedAccessibles(out pRetVal: PSafeArray): HResult; stdcall;
+  end;
+
+// *********************************************************************//
 // Interface: IDockProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {159BC72C-4AD3-485E-9637-D7052EDF0146}
 // *********************************************************************//
   IDockProvider = interface(IUnknown)
@@ -580,7 +683,7 @@ type
 
 // *********************************************************************//
 // Interface: IExpandCollapseProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {D847D3A5-CAB0-4A98-8C32-ECB45C59AD24}
 // *********************************************************************//
   IExpandCollapseProvider = interface(IUnknown)
@@ -592,7 +695,7 @@ type
 
 // *********************************************************************//
 // Interface: IGridProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {B17D6187-0907-464B-A168-0EF17A1572B1}
 // *********************************************************************//
   IGridProvider = interface(IUnknown)
@@ -604,7 +707,7 @@ type
 
 // *********************************************************************//
 // Interface: IGridItemProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {D02541F1-FB81-4D64-AE32-F520F8A6DBD1}
 // *********************************************************************//
   IGridItemProvider = interface(IUnknown)
@@ -618,7 +721,7 @@ type
 
 // *********************************************************************//
 // Interface: IInvokeProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {54FCB24B-E18E-47A2-B4D3-ECCBE77599A2}
 // *********************************************************************//
   IInvokeProvider = interface(IUnknown)
@@ -628,7 +731,7 @@ type
 
 // *********************************************************************//
 // Interface: IMultipleViewProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {6278CAB1-B556-4A1A-B4E0-418ACC523201}
 // *********************************************************************//
   IMultipleViewProvider = interface(IUnknown)
@@ -641,7 +744,7 @@ type
 
 // *********************************************************************//
 // Interface: IRangeValueProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {36DC7AEF-33E6-4691-AFE1-2BE7274B3D33}
 // *********************************************************************//
   IRangeValueProvider = interface(IUnknown)
@@ -657,7 +760,7 @@ type
 
 // *********************************************************************//
 // Interface: IScrollItemProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {2360C714-4BF1-4B26-BA65-9B21316127EB}
 // *********************************************************************//
   IScrollItemProvider = interface(IUnknown)
@@ -667,7 +770,7 @@ type
 
 // *********************************************************************//
 // Interface: ISelectionProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {FB8B03AF-3BDF-48D4-BD36-1A65793BE168}
 // *********************************************************************//
   ISelectionProvider = interface(IUnknown)
@@ -679,7 +782,7 @@ type
 
 // *********************************************************************//
 // Interface: IScrollProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {B38B8077-1FC3-42A5-8CAE-D40C2215055A}
 // *********************************************************************//
   IScrollProvider = interface(IUnknown)
@@ -696,7 +799,7 @@ type
 
 // *********************************************************************//
 // Interface: ISelectionItemProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {2ACAD808-B2D4-452D-A407-91FF1AD167B2}
 // *********************************************************************//
   ISelectionItemProvider = interface(IUnknown)
@@ -710,7 +813,7 @@ type
 
 // *********************************************************************//
 // Interface: ISynchronizedInputProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {29DB1A06-02CE-4CF7-9B42-565D4FAB20EE}
 // *********************************************************************//
   ISynchronizedInputProvider = interface(IUnknown)
@@ -721,7 +824,7 @@ type
 
 // *********************************************************************//
 // Interface: ITableProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {9C860395-97B3-490A-B52A-858CC22AF166}
 // *********************************************************************//
   ITableProvider = interface(IUnknown)
@@ -733,7 +836,7 @@ type
 
 // *********************************************************************//
 // Interface: ITableItemProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {B9734FA6-771F-4D78-9C90-2517999349CD}
 // *********************************************************************//
   ITableItemProvider = interface(IUnknown)
@@ -744,7 +847,7 @@ type
 
 // *********************************************************************//
 // Interface: IToggleProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {56D00BD0-C4F4-433C-A836-1A52A57E0892}
 // *********************************************************************//
   IToggleProvider = interface(IUnknown)
@@ -755,7 +858,7 @@ type
 
 // *********************************************************************//
 // Interface: ITransformProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {6829DDC4-4F91-4FFA-B86F-BD3E2987CB4C}
 // *********************************************************************//
   ITransformProvider = interface(IUnknown)
@@ -770,7 +873,7 @@ type
 
 // *********************************************************************//
 // Interface: IValueProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {C7935180-6FB3-4201-B174-7DF73ADBF64A}
 // *********************************************************************//
   IValueProvider = interface(IUnknown)
@@ -782,7 +885,7 @@ type
 
 // *********************************************************************//
 // Interface: IWindowProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {987DF77B-DB06-4D77-8F8A-86A9C3BB90B9}
 // *********************************************************************//
   IWindowProvider = interface(IUnknown)
@@ -800,7 +903,7 @@ type
 
 // *********************************************************************//
 // Interface: ILegacyIAccessibleProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {E44C3566-915D-4070-99C6-047BFF5A08F5}
 // *********************************************************************//
   ILegacyIAccessibleProvider = interface(IUnknown)
@@ -823,7 +926,7 @@ type
 
 // *********************************************************************//
 // Interface: IItemContainerProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {E747770B-39CE-4382-AB30-D8FB3F336F24}
 // *********************************************************************//
   IItemContainerProvider = interface(IUnknown)
@@ -834,7 +937,7 @@ type
 
 // *********************************************************************//
 // Interface: IVirtualizedItemProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {CB98B665-2D35-4FAC-AD35-F3C60D0C0B8B}
 // *********************************************************************//
   IVirtualizedItemProvider = interface(IUnknown)
@@ -843,8 +946,109 @@ type
   end;
 
 // *********************************************************************//
+// Interface: IObjectModelProvider
+// Flags:     (256) OleAutomation
+// GUID:      {3AD86EBD-F5EF-483D-BB18-B1042A475D64}
+// *********************************************************************//
+  IObjectModelProvider = interface(IUnknown)
+    ['{3AD86EBD-F5EF-483D-BB18-B1042A475D64}']
+    function GetUnderlyingObjectModel(out ppUnknown: IUnknown): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IAnnotationProvider
+// Flags:     (256) OleAutomation
+// GUID:      {F95C7E80-BD63-4601-9782-445EBFF011FC}
+// *********************************************************************//
+  IAnnotationProvider = interface(IUnknown)
+    ['{F95C7E80-BD63-4601-9782-445EBFF011FC}']
+    function Get_AnnotationTypeId(out retVal: SYSINT): HResult; stdcall;
+    function Get_AnnotationTypeName(out retVal: WideString): HResult; stdcall;
+    function Get_Author(out retVal: WideString): HResult; stdcall;
+    function Get_DateTime(out retVal: WideString): HResult; stdcall;
+    function Get_Target(out retVal: IRawElementProviderSimple): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IStylesProvider
+// Flags:     (256) OleAutomation
+// GUID:      {19B6B649-F5D7-4A6D-BDCB-129252BE588A}
+// *********************************************************************//
+  IStylesProvider = interface(IUnknown)
+    ['{19B6B649-F5D7-4A6D-BDCB-129252BE588A}']
+    function Get_StyleId(out retVal: SYSINT): HResult; stdcall;
+    function Get_StyleName(out retVal: WideString): HResult; stdcall;
+    function Get_FillColor(out retVal: SYSINT): HResult; stdcall;
+    function Get_FillPatternStyle(out retVal: WideString): HResult; stdcall;
+    function Get_Shape(out retVal: WideString): HResult; stdcall;
+    function Get_FillPatternColor(out retVal: SYSINT): HResult; stdcall;
+    function Get_ExtendedProperties(out retVal: WideString): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ISpreadsheetProvider
+// Flags:     (256) OleAutomation
+// GUID:      {6F6B5D35-5525-4F80-B758-85473832FFC7}
+// *********************************************************************//
+  ISpreadsheetProvider = interface(IUnknown)
+    ['{6F6B5D35-5525-4F80-B758-85473832FFC7}']
+    function GetItemByName(Name: PWideChar; out pRetVal: IRawElementProviderSimple): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ISpreadsheetItemProvider
+// Flags:     (256) OleAutomation
+// GUID:      {EAED4660-7B3D-4879-A2E6-365CE603F3D0}
+// *********************************************************************//
+  ISpreadsheetItemProvider = interface(IUnknown)
+    ['{EAED4660-7B3D-4879-A2E6-365CE603F3D0}']
+    function Get_Formula(out pRetVal: WideString): HResult; stdcall;
+    function GetAnnotationObjects(out pRetVal: PSafeArray): HResult; stdcall;
+    function GetAnnotationTypes(out pRetVal: PSafeArray): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ITransformProvider2
+// Flags:     (256) OleAutomation
+// GUID:      {4758742F-7AC2-460C-BC48-09FC09308A93}
+// *********************************************************************//
+  ITransformProvider2 = interface(ITransformProvider)
+    ['{4758742F-7AC2-460C-BC48-09FC09308A93}']
+    function Zoom(Zoom: Double): HResult; stdcall;
+    function Get_CanZoom(out pRetVal: Integer): HResult; stdcall;
+    function Get_ZoomLevel(out pRetVal: Double): HResult; stdcall;
+    function Get_ZoomMinimum(out pRetVal: Double): HResult; stdcall;
+    function Get_ZoomMaximum(out pRetVal: Double): HResult; stdcall;
+    function ZoomByUnit(ZoomUnit: ZoomUnit): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IDragProvider
+// Flags:     (256) OleAutomation
+// GUID:      {6AA7BBBB-7FF9-497D-904F-D20B897929D8}
+// *********************************************************************//
+  IDragProvider = interface(IUnknown)
+    ['{6AA7BBBB-7FF9-497D-904F-D20B897929D8}']
+    function Get_IsGrabbed(out pRetVal: Integer): HResult; stdcall;
+    function Get_DropEffect(out pRetVal: WideString): HResult; stdcall;
+    function Get_DropEffects(out pRetVal: PSafeArray): HResult; stdcall;
+    function GetGrabbedItems(out pRetVal: PSafeArray): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: IDropTargetProvider
+// Flags:     (256) OleAutomation
+// GUID:      {BAE82BFD-358A-481C-85A0-D8B4D90A5D61}
+// *********************************************************************//
+  IDropTargetProvider = interface(IUnknown)
+    ['{BAE82BFD-358A-481C-85A0-D8B4D90A5D61}']
+    function Get_DropTargetEffect(out pRetVal: WideString): HResult; stdcall;
+    function Get_DropTargetEffects(out pRetVal: PSafeArray): HResult; stdcall;
+  end;
+
+// *********************************************************************//
 // Interface: ITextRangeProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {5347AD7B-C355-46F8-AFF5-909033582F63}
 // *********************************************************************//
   ITextRangeProvider = interface(IUnknown)
@@ -878,7 +1082,7 @@ type
 
 // *********************************************************************//
 // Interface: ITextProvider
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {3589C92C-63F3-4367-99BB-ADA653B77CF2}
 // *********************************************************************//
   ITextProvider = interface(IUnknown)
@@ -893,8 +1097,62 @@ type
   end;
 
 // *********************************************************************//
+// Interface: ITextProvider2
+// Flags:     (256) OleAutomation
+// GUID:      {0DC5E6ED-3E16-4BF1-8F9A-A979878BC195}
+// *********************************************************************//
+  ITextProvider2 = interface(ITextProvider)
+    ['{0DC5E6ED-3E16-4BF1-8F9A-A979878BC195}']
+    function RangeFromAnnotation(const annotationElement: IRawElementProviderSimple;
+                                 out pRetVal: ITextRangeProvider): HResult; stdcall;
+    function GetCaretRange(out isActive: Integer; out pRetVal: ITextRangeProvider): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ITextEditProvider
+// Flags:     (256) OleAutomation
+// GUID:      {EA3605B4-3A05-400E-B5F9-4E91B40F6176}
+// *********************************************************************//
+  ITextEditProvider = interface(ITextProvider)
+    ['{EA3605B4-3A05-400E-B5F9-4E91B40F6176}']
+    function GetActiveComposition(out pRetVal: ITextRangeProvider): HResult; stdcall;
+    function GetConversionTarget(out pRetVal: ITextRangeProvider): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ITextRangeProvider2
+// Flags:     (256) OleAutomation
+// GUID:      {9BBCE42C-1921-4F18-89CA-DBA1910A0386}
+// *********************************************************************//
+  ITextRangeProvider2 = interface(ITextRangeProvider)
+    ['{9BBCE42C-1921-4F18-89CA-DBA1910A0386}']
+    function ShowContextMenu: HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ITextChildProvider
+// Flags:     (256) OleAutomation
+// GUID:      {4C2DE2B9-C88F-4F88-A111-F1D336B7D1A9}
+// *********************************************************************//
+  ITextChildProvider = interface(IUnknown)
+    ['{4C2DE2B9-C88F-4F88-A111-F1D336B7D1A9}']
+    function Get_TextContainer(out pRetVal: IRawElementProviderSimple): HResult; stdcall;
+    function Get_TextRange(out pRetVal: ITextRangeProvider): HResult; stdcall;
+  end;
+
+// *********************************************************************//
+// Interface: ICustomNavigationProvider
+// Flags:     (256) OleAutomation
+// GUID:      {2062A28A-8C07-4B94-8E12-7037C622AEB8}
+// *********************************************************************//
+  ICustomNavigationProvider = interface(IUnknown)
+    ['{2062A28A-8C07-4B94-8E12-7037C622AEB8}']
+    function Navigate(direction: NavigateDirection; out pRetVal: IRawElementProviderSimple): HResult; stdcall;
+  end;
+
+// *********************************************************************//
 // Interface: IUIAutomationPatternInstance
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {C03A7FE4-9431-409F-BED8-AE7C2299BC8D}
 // *********************************************************************//
   IUIAutomationPatternInstance = interface(IUnknown)
@@ -905,7 +1163,7 @@ type
 
 // *********************************************************************//
 // Interface: IUIAutomationPatternHandler
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {D97022F3-A947-465E-8B2A-AC4315FA54E8}
 // *********************************************************************//
   IUIAutomationPatternHandler = interface(IUnknown)
@@ -918,7 +1176,7 @@ type
 
 // *********************************************************************//
 // Interface: IUIAutomationRegistrar
-// Flags:     (0)
+// Flags:     (256) OleAutomation
 // GUID:      {8609C4EC-4A1A-4D88-A357-5A66E060E1CF}
 // *********************************************************************//
   IUIAutomationRegistrar = interface(IUnknown)
@@ -1019,7 +1277,7 @@ const
 procedure Register;
 
 resourcestring
-  dtlServerPage = 'Servers';
+  dtlServerPage = 'ActiveX';
 
   dtlOcxPage = 'ActiveX';
 
