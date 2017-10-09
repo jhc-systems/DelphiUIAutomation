@@ -2,7 +2,7 @@
 {                                                                           }
 {           DelphiUIAutomation                                              }
 {                                                                           }
-{           Copyright 2016 JHC Systems Limited                              }
+{           Copyright 2016-17 JHC Systems Limited                           }
 {                                                                           }
 {***************************************************************************}
 {                                                                           }
@@ -41,6 +41,8 @@ type
 
   protected
     { Protected declarations }
+    function GetValue:String; virtual;
+    procedure SetTheValue(const AValue: String); virtual;
   public
     { Public declarations }
 
@@ -116,6 +118,16 @@ begin
     result := S_FALSE;
 end;
 
+function TAutomatedCustomPanel.GetValue: String;
+begin
+  result := self.Text;
+end;
+
+procedure TAutomatedCustomPanel.SetTheValue (const AValue: String);
+begin
+  self.SetValue(PWideChar(AValue));
+end;
+
 function TAutomatedCustomPanel.Get_HostRawElementProvider(
   out pRetVal: IRawElementProviderSimple): HResult;
 begin
@@ -138,7 +150,7 @@ end;
 function TAutomatedCustomPanel.Get_Value(out pRetVal: WideString): HResult;
 begin
   Result := S_OK;
-  pRetVal := self.Text;
+  pRetVal := self.GetValue;
 end;
 
 function TAutomatedCustomPanel.SetValue(val: PWideChar): HResult;
